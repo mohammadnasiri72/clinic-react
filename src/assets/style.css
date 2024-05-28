@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    text-align: center;
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+
+.bg-register{
+    background-image: url('./../../public/images/bg-register.jpg');
+}
+@font-face{
+    font-family: "iransans";
+    src: url("./../../public/fonts/IRANSansWeb\(FaNum\)_Light.ttf");
+}
+@font-face {
+    font-family: "IranNastaliq";
+    src: url('./../../public/fonts/IranNastaliq.ttf') ;
+}
+*{
+    font-family: "iransans" !important;
+}
+.bg-login{
+    background-image: url('./../../public/images/bg.jpeg');
+}
+.toast-modal{
+    margin-top: 70px;
+}
+.swal2-container {
+    z-index: 99999999999999999999999;
+  }
+.textfield-style{
+    color: white !important;
+    font-size: 20px !important;
+}
+
+.box-avatar:hover img{
+    filter: brightness(50%);
+}
+.font-nastaligh{
+    font-family: 'IranNastaliq' !important;
+}
+.text-cancel{
+    color: #b71d18 !important;
+}
+.text-waiting{
+    color: #ba740a !important;
+}
+.text-record{
+   color: #798793 !important;
+}
+.text-doing{
+   color: #7635dc !important;
+}
+.text-done{
+    color: #1b925d !important;
+}
+.bg-done{
+    background-color: #1b925d !important;
+}
+.text-white{
+    color: white !important;
+}
