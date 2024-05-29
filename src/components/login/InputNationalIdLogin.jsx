@@ -1,9 +1,16 @@
 import { TextField } from '@mui/material';
+import { useEffect } from 'react';
 import useSettings from '../../hooks/useSettings';
 
-export default function InputNationalIdLogin({ nationalId, setNationalId }) {
+export default function InputNationalIdLogin({ nationalId, setNationalId , setIsfocusInpMobile}) {
   const{themeDirection} = useSettings()
   const paternNationalId = /^[0-9]{10}$/;
+  useEffect(()=>{
+    if (nationalId.match(paternNationalId)) {
+      setIsfocusInpMobile(true)
+    }
+  },[nationalId])
+  
   let colorNationId = '';
   if (nationalId.match(paternNationalId)) {
     colorNationId = 'success';
@@ -19,6 +26,7 @@ export default function InputNationalIdLogin({ nationalId, setNationalId }) {
         
             <div className="mt-2" dir={themeDirection}>
               <TextField
+              autoFocus
                 className="w-full"
                 onChange={(e) => setNationalId(e.target.value)}
                 id="outlined-multiline-flexible"

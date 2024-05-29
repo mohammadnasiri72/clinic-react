@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import NationalIdLogin from './nationalIdLogin';
 import MobileLogin from './mobileLogin';
 import SimpleBackdrop from '../backdrop';
+import Page from '../Page';
 
 export default function MainLoginPage() {
   const [abroad, setAbroad] = useState(false);
   const [isLoading , setIsLoading] = useState(false)
+
+  
+  
   
   return (
     <>

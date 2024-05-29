@@ -39,12 +39,9 @@ const MainStyle = styled('main', {
 
 // ----------------------------------------------------------------------
 
-
-
-
-export default function DashboardLayout({account}) {
+export default function DashboardLayout({ account, flagNotification, setFlagNotification }) {
   const { collapseClick, isCollapse } = useCollapseDrawer();
-  
+
   const { themeLayout } = useSettings();
 
   const isDesktop = useResponsive('up', 'lg');
@@ -56,7 +53,13 @@ export default function DashboardLayout({account}) {
   if (verticalLayout) {
     return (
       <>
-        <DashboardHeader onOpenSidebar={() => setOpen(true)} verticalLayout={verticalLayout} account={account}/>
+        <DashboardHeader
+          flagNotification={flagNotification}
+          setFlagNotification={setFlagNotification}
+          onOpenSidebar={() => setOpen(true)}
+          verticalLayout={verticalLayout}
+          account={account}
+        />
 
         {isDesktop ? (
           <NavbarHorizontal />
@@ -91,7 +94,13 @@ export default function DashboardLayout({account}) {
         minHeight: { lg: 1 },
       }}
     >
-      <DashboardHeader isCollapse={isCollapse} onOpenSidebar={() => setOpen(true)} account={account}/>
+      <DashboardHeader
+        flagNotification={flagNotification}
+        setFlagNotification={setFlagNotification}
+        isCollapse={isCollapse}
+        onOpenSidebar={() => setOpen(true)}
+        account={account}
+      />
 
       <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
 

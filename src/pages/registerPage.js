@@ -13,11 +13,11 @@ function Register() {
     <>
     {
         !isRegister&&
-        <MainRegisterPage setIsRegister={setIsRegister} setRegisterModel={setRegisterModel} setIsLoading={setIsLoading}/>
+        <MainRegisterPage setIsRegister={setIsRegister} setRegisterModel={setRegisterModel} setIsLoading={setIsLoading} isRegister={isRegister}/>
     }
     {
         isRegister&& 
-        <SecoundRegisterPage registerModel={registerModel} setIsRegister={setIsRegister} setIsLoading={setIsLoading}/>
+        <SecoundRegisterPage registerModel={registerModel} setIsRegister={setIsRegister} setIsLoading={setIsLoading} isRegister={isRegister}/>
     }
     {
         isLoading && 

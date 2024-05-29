@@ -67,7 +67,6 @@ export default function SelectAge({ setDateOfBirthFaPatient }) {
                 value={mount}
                 onChange={(e) => {
                   setMount(e);
-                  console.log(toEnglishNumber(e.format('MM')) * 1);
                   setNumMount(toEnglishNumber(e.format('MM')) * 1);
                 }}
               />

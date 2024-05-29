@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import useSettings from '../../hooks/useSettings';
 
-export default function InputNationalId({ nationalId, setNationalId }) {
+export default function InputNationalId({ nationalId, setNationalId , inpNationalRef}) {
   const { themeDirection } = useSettings();
   const paternNationalId = /^[0-9]{10}$/;
   let colorNationId = '';
@@ -18,11 +18,13 @@ export default function InputNationalId({ nationalId, setNationalId }) {
       <div className="px-5 lg:w-2/3 w-full mx-auto mt-4">
         <div className="mt-2" dir={themeDirection}>
           <TextField
+          
+          autoFocus
+          ref={inpNationalRef}
             className="w-full"
             onChange={(e) => setNationalId(e.target.value)}
             id="outlined-multiline-flexible"
             label="کد ملی"
-            multiline
             value={nationalId}
             color={colorNationId}
             maxRows={4}

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoMdArrowRoundForward } from 'react-icons/io';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import Swal from 'sweetalert2';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import InputFillCode from './fillCode';
 import InputLastName from './inputLName';
 import InputName from './inputName';
@@ -12,6 +12,7 @@ import SelectGender from './selectGender';
 import InputPassword from './inputPassword';
 import { mainDomain } from '../../utils/mainDomain';
 import SelectAge from './SelectAge';
+import Page from '../Page';
 
 export default function SecoundRegisterPage({
   registerModel,
@@ -28,17 +29,27 @@ export default function SecoundRegisterPage({
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [dateOfBirthFaPatient, setDateOfBirthFaPatient] = useState('');
+  const [disableEnter, setDisableEnter] = useState(false);
 
-  const url = '/api/Patient/Register'
+  const navigate = useNavigate();
+  const url = '/api/Patient/Register';
 
   const btnSubmit = useRef(null);
+  
 
-  document.body.addEventListener('keypress',  (ev) => {
-    const direction = ev.keyCode;
-    if (direction === 13) {
-      btnSubmit.current.click();
-    }
-  });
+  // useEffect(() => {
+  //   if (btnSubmit.current) {
+  //     document.body.addEventListener('keypress', (ev) => {
+  //       const direction = ev.keyCode;
+  //       if (isRegister) {
+  //         if (direction === 13) {
+  //           btnSubmit.current.click();
+  //         }
+          
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   // const paternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   const Toast = Swal.mixin({
@@ -48,6 +59,7 @@ export default function SecoundRegisterPage({
     timer: 3000,
     timerProgressBar: true,
   });
+
   const submitHandler = (e) => {
     e.preventDefault();
     registerModel.fristName = firstName;
@@ -75,13 +87,13 @@ export default function SecoundRegisterPage({
             localStorage.setItem('refreshToken', response.data.refreshToken);
             localStorage.setItem('roles', response.data.roles);
             localStorage.setItem('expiration', response.data.expiration);
+            setDisableEnter(false)
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام شما با موفقیت انجام شد',
             });
             setTimeout(() => {
-              // route.replace('/dashboard');
-              <Navigate to="/login" replace />
+              navigate('/dashboard')
             }, 1000);
           }
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
@@ -90,6 +102,7 @@ export default function SecoundRegisterPage({
           //   maxAge:60*60*24
           // }))
           else {
+            setDisableEnter(false)
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام بیمار با موفقیت انجام شد',
@@ -105,6 +118,7 @@ export default function SecoundRegisterPage({
         })
         .catch((err) => {
           setIsLoading(false);
+          setDisableEnter(false)
           Toast.fire({
             icon: 'error',
             text: err.response ? err.response.data : 'خطای شبکه',
@@ -145,7 +159,13 @@ export default function SecoundRegisterPage({
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen">
+      <Page 
+      // onKeyDown={(e) => {
+      //     if (e.keyCode === 13 && !disableEnter) {
+      //       btnSubmit.current.click();
+      //     }
+      //   }} 
+        className="flex justify-center items-center min-h-screen">
         <div className="lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen">
           <div className="flex justify-center">
             <img src={'/favicon/favicon.ico'} alt="" />
@@ -161,7 +181,9 @@ export default function SecoundRegisterPage({
               <span>مرحله قبل</span>
             </button> */}
             <Tooltip title="مرحله قبل">
-              <IconButton onClick={() => setIsRegister(false)}>
+              <IconButton onClick={() => {
+                setIsRegister(false)}
+              } >
                 <IoMdArrowRoundForward className="text-3xl" />
               </IconButton>
             </Tooltip>
@@ -173,7 +195,7 @@ export default function SecoundRegisterPage({
             <SelectGender gender={gender} setGender={setGender} />
             <SelectAge setDateOfBirthFaPatient={setDateOfBirthFaPatient} />
             {registerModel.abroad && <InputPassword setPassword={setPassword} password={password} />}
-            <InputFillCode setCode={setCode} btnSubmit={btnSubmit} />
+            <InputFillCode setCode={setCode} btnSubmit={btnSubmit} setDisableEnter={setDisableEnter}/>
             <div className="px-5 mx-auto lg:w-2/3 w-full mt-4">
               <div className="px-2 rounded-md flex items-center">
                 <Button
@@ -200,7 +222,7 @@ export default function SecoundRegisterPage({
           </div>
         </div>
         <div className="lg:w-1/2 w-0 h-screen bg-login bg-cover bg-no-repeat bg-[#0008] bg-blend-multiply" />
-      </div>
+      </Page>
     </>
   );
 }

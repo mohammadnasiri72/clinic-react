@@ -1,39 +1,62 @@
-import PropTypes from 'prop-types';
-import { noCase } from 'change-case';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 // @mui
 import {
-  Box,
-  List,
   Badge,
+  Box,
   Button,
-  Avatar,
-  Tooltip,
   Divider,
-  Typography,
+  List,
+  ListItemButton,
   ListItemText,
   ListSubheader,
-  ListItemAvatar,
-  ListItemButton,
+  Typography
 } from '@mui/material';
 // utils
-import { fToNow } from '../../../utils/formatTime';
+import { mainDomain } from '../../../utils/mainDomain';
 // _mock_
 import { _notifications } from '../../../_mock';
 // components
 import Iconify from '../../../components/Iconify';
-import Scrollbar from '../../../components/Scrollbar';
 import MenuPopover from '../../../components/MenuPopover';
+import Scrollbar from '../../../components/Scrollbar';
 import { IconButtonAnimate } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 
-export default function NotificationsPopover() {
+export default function NotificationsPopover({ flagNotification, setFlagNotification }) {
   const [notifications, setNotifications] = useState(_notifications);
-
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
-
+  const [totalUnRead, setTotalUnRead] = useState('');
+  const [messageUnread, setMessageUnread] = useState([]);
   const [open, setOpen] = useState(null);
+  // const [flag, setFlag] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`${mainDomain}/api/Message/UnRead/Count`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setTotalUnRead(res.data);
+      })
+      .catch((err) => {});
+
+    axios
+      .get(`${mainDomain}/api/Message/UnRead/GetList`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setMessageUnread(res.data);
+      })
+      .catch((err) => {});
+  }, [flagNotification]);
+
+  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -41,6 +64,7 @@ export default function NotificationsPopover() {
 
   const handleClose = () => {
     setOpen(null);
+    setFlagNotification((e) => !e);
   };
 
   const handleMarkAllAsRead = () => {
@@ -51,6 +75,8 @@ export default function NotificationsPopover() {
       }))
     );
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -66,49 +92,35 @@ export default function NotificationsPopover() {
         onClose={handleClose}
         sx={{ width: 360, p: 0, mt: 1.5, ml: 0.75 }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5, overflowY: 'auto' }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1">Notifications</Typography>
+            <Typography variant="subtitle1">پیغام ها</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {totalUnRead} unread messages
+              شما {totalUnRead} پیام خوانده نشده دارید
             </Typography>
           </Box>
 
-          {totalUnRead > 0 && (
-            <Tooltip title=" Mark all as read">
-              <IconButtonAnimate color="primary" onClick={handleMarkAllAsRead}>
-                <Iconify icon="eva:done-all-fill" width={20} height={20} />
-              </IconButtonAnimate>
-            </Tooltip>
-          )}
+          <Box title="مشاهده همه پیغام ها">
+            <IconButtonAnimate color="primary" onClick={handleMarkAllAsRead}>
+              <Iconify icon="eva:done-all-fill" width={20} height={20} />
+            </IconButtonAnimate>
+          </Box>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
+        <Scrollbar sx={{ height: 340 }}>
           <List
             disablePadding
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                New
+                پیغام‌های جدید
+                {totalUnRead === 0 && <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>}
               </ListSubheader>
             }
           >
-            {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
-            ))}
-          </List>
-
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                Before that
-              </ListSubheader>
-            }
-          >
-            {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {messageUnread.map((message) => (
+              <NotificationItem key={message.messageId} message={message} />
             ))}
           </List>
         </Scrollbar>
@@ -116,8 +128,15 @@ export default function NotificationsPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
-            View All
+          <Button
+            fullWidth
+            disableRipple
+            onClick={() => {
+              navigate('/dashboard/mymessage');
+              handleClose()
+            }}
+          >
+            مشاهده همه پیام ها
           </Button>
         </Box>
       </MenuPopover>
@@ -127,37 +146,47 @@ export default function NotificationsPopover() {
 
 // ----------------------------------------------------------------------
 
-NotificationItem.propTypes = {
-  notification: PropTypes.shape({
-    createdAt: PropTypes.instanceOf(Date),
-    id: PropTypes.string,
-    isUnRead: PropTypes.bool,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    type: PropTypes.string,
-    avatar: PropTypes.any,
-  }),
-};
+// NotificationItem.propTypes = {
+//   message: PropTypes.shape({
+//     createdAt: PropTypes.instanceOf(Date),
+//     id: PropTypes.string,
+//     isUnRead: PropTypes.bool,
+//     subject: PropTypes.string,
+//     description: PropTypes.string,
+//     type: PropTypes.string,
+//     avatar: PropTypes.any,
+//   }),
+// };
 
-function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
+function NotificationItem({ message }) {
+  const { avatar, subject } = renderContent(message);
+  const [bgColor, setbgColor] = useState('#edeff2');
 
   return (
     <ListItemButton
+      onClick={() => {
+        setbgColor('');
+        axios
+          .get(`${mainDomain}/api/Message/Get/${message.messageId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          })
+          .then((res) => {})
+          .catch((err) => {});
+      }}
       sx={{
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
-          bgcolor: 'action.selected',
-        }),
+        bgcolor: bgColor,
       }}
     >
-      <ListItemAvatar>
+      {/* <ListItemAvatar>
         <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
-      </ListItemAvatar>
+      </ListItemAvatar> */}
       <ListItemText
-        primary={title}
+        primary={subject}
         secondary={
           <Typography
             variant="caption"
@@ -169,7 +198,7 @@ function NotificationItem({ notification }) {
             }}
           >
             <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {fToNow(notification.createdAt)}
+            {/* {fToNow(message.createdAt)} */}
           </Typography>
         }
       />
@@ -179,62 +208,62 @@ function NotificationItem({ notification }) {
 
 // ----------------------------------------------------------------------
 
-function renderContent(notification) {
-  const title = (
+function renderContent(message) {
+  const subject = (
     <Typography variant="subtitle2">
-      {notification.title}
+      {message.subject}
       <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
+        &nbsp; {message.body}
       </Typography>
     </Typography>
   );
 
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_package.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_shipping.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_mail.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
-        />
-      ),
-      title,
-    };
-  }
+  // if (message.type === 'order_placed') {
+  //   return {
+  //     avatar: (
+  //       <img
+  //         alt={message.title}
+  //         src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_package.svg"
+  //       />
+  //     ),
+  //     subject,
+  //   };
+  // }
+  // if (message.type === 'order_shipped') {
+  //   return {
+  //     avatar: (
+  //       <img
+  //         alt={message.title}
+  //         src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_shipping.svg"
+  //       />
+  //     ),
+  //     subject,
+  //   };
+  // }
+  // if (message.type === 'mail') {
+  //   return {
+  //     avatar: (
+  //       <img
+  //         alt={message.title}
+  //         src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_mail.svg"
+  //       />
+  //     ),
+  //     subject,
+  //   };
+  // }
+  // if (message.type === 'chat_message') {
+  //   return {
+  //     avatar: (
+  //       <img
+  //         alt={message.title}
+  //         src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
+  //       />
+  //     ),
+  //     subject,
+  //   };
+  // }
   return {
-    avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
-    title,
+    // avatar: message.avatar ? <img alt={message.title} src={message.avatar} /> : null,
+    subject,
   };
 }

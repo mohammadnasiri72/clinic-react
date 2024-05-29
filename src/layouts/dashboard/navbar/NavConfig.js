@@ -29,6 +29,7 @@ const sidebarConfig = [
       { title: 'لیست بیماری های من', path: '/dashboard/sicknessList', icon: <CiViewList /> },
       { title: 'مشاوره آنلاین', path: '/dashboard/counseling', icon: <MdSupportAgent /> },
       { title: 'سابقه پذیرش', path: '/dashboard/historyVisit', icon: <MdSupportAgent /> },
+      { title: 'پیام های من', path: '/dashboard/mymessage', icon: <MdSupportAgent /> },
     ],
   },
 

@@ -26,6 +26,7 @@ import ManagDoctor from '../pages/ManagDoctor';
 import ManagReserve from '../pages/ManagReserve';
 import ManagInformation from '../pages/ManagInformation';
 import ManagInsuranceCompany from '../pages/ManagInsuranceCompany';
+import Mymessage from '../pages/Mymessage';
 
 // ----------------------------------------------------------------------
 
@@ -41,80 +42,84 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
-  // const [show, setShow] = useState(false);
   const [account, setAccount] = useState('');
   const [change, setChang] = useState(false);
+  const [flagNotification, setFlagNotification] = useState(false);
 
-const url = useLocation()
-const navigate = useNavigate();
-// console.log(url.pathname);
-  
+  const url = useLocation();
+  const navigate = useNavigate();
 
-useEffect(() => {
-  let role = localStorage.getItem('roles')? localStorage.getItem('roles') : 'patient'
-  if (role.includes('Doctor')) {
-    role= 'Doctor'
-  }
-  
-  const token = localStorage.getItem('token');
-  if (!token) {
-    if (url.pathname.includes('/dashboard')) {
-      navigate('/login');
+  useEffect(() => {
+    let role = localStorage.getItem('roles') ? localStorage.getItem('roles') : 'patient';
+    if (role.includes('Doctor')) {
+      role = 'Doctor';
     }
-  } else {
-    axios
-      .get(`${mainDomain}/api/${role}/Get`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setAccount(res.data);
-        } else {
-          navigate('/login');
-        }
-      })
-      .catch(() => {
-        if (url.pathname.includes('/dashboard')) {
-          navigate('/login');
-        }
-      });
-  }
-  
-}, [url, change , navigate]);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      if (url.pathname.includes('/dashboard')) {
+        navigate('/login');
+      }
+    } else {
+      axios
+        .get(`${mainDomain}/api/${role}/Get`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            setAccount(res.data);
+          } else {
+            navigate('/login');
+          }
+        })
+        .catch(() => {
+          if (url.pathname.includes('/dashboard')) {
+            navigate('/login');
+          }
+        });
+    }
+  }, [url, change, navigate]);
 
   return useRoutes([
     {
       path: '/',
-      element: localStorage.getItem('token')? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />,
+      element: localStorage.getItem('token') ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />,
     },
     {
       path: '/register',
-      element: <Register />
-      
+      element: <Register />,
     },
     {
       path: '/login',
-      element: <MainLoginPage />
-      
+      element: <MainLoginPage />,
     },
     {
       path: '/dashboard',
-      element: <DashboardLayout account={account}/>,
+      element: (
+        <DashboardLayout
+          account={account}
+          flagNotification={flagNotification}
+          setFlagNotification={setFlagNotification}
+        />
+      ),
       children: [
         { element: <Navigate to="/dashboard/home" replace />, index: true },
-        { path: 'home', element: <HomePage account={account}/> },
-        { path: 'updateProfile', element: <UpdateProfile account={account} setChang={setChang}/> },
-        { path: 'reserve', element: <MainPageReserve account={account}/> },
-        { path: 'viewReservation', element: <ViewReservation account={account}/> },
+        { path: 'home', element: <HomePage account={account} /> },
+        {
+          path: 'updateProfile',
+          element: <UpdateProfile account={account} setChang={setChang} />,
+        },
+        { path: 'reserve', element: <MainPageReserve account={account} /> },
+        { path: 'viewReservation', element: <ViewReservation account={account} /> },
         { path: 'sicknessList', element: <SicknessList /> },
-        { path: 'counseling', element: <Counseling account={account}/> },
-        { path: 'historyVisit', element: <HistoryVisit account={account}/> },
-        { path: 'visit', element: <Visit account={account}/> },
-        { path: 'patientListStaff', element: <PatientListStaff account={account}/> },
-        { path: 'reception', element: <Reception account={account}/> },
-        { path: 'manageDrug', element: <ManageDrug/> },
+        { path: 'counseling', element: <Counseling account={account} /> },
+        { path: 'historyVisit', element: <HistoryVisit account={account} /> },
+        { path: 'visit', element: <Visit account={account} /> },
+        { path: 'patientListStaff', element: <PatientListStaff account={account} /> },
+        { path: 'reception', element: <Reception account={account} /> },
+        { path: 'manageDrug', element: <ManageDrug /> },
         { path: 'manageServices', element: <ManageServices /> },
         { path: 'managStaff', element: <ManagStaff /> },
         { path: 'managDoctor', element: <ManagDoctor /> },
@@ -122,29 +127,32 @@ useEffect(() => {
         { path: 'managInformation', element: <ManagInformation /> },
         { path: 'managInsuranceCompany', element: <ManagInsuranceCompany /> },
         {
-          path: 'test',
-          children: [
-            { element: <Navigate to="/dashboard/test/one" replace />, index: true },
-            { path: 'one', element: <PageTestOne /> },
-            { path: 'two', element: <PageTestTwo /> },
-            { path: 'three', element: <PageTestThree /> },
-          ],
+          path: 'mymessage',
+          element: <Mymessage flagNotification={flagNotification} setFlagNotification={setFlagNotification} />,
         },
-        {
-          path: 'overMenu',
-          children: [
-            { element: <Navigate to="/dashboard/overMenu/one" replace />, index: true },
-            { path: 'one', element: <PageFive /> },
-            
-            { path: 'three', element: <PageSeven /> },
-          ],
-        },
-        
+        // {
+        //   path: 'test',
+        //   children: [
+        //     { element: <Navigate to="/dashboard/test/one" replace />, index: true },
+        //     { path: 'one', element: <PageTestOne /> },
+        //     { path: 'two', element: <PageTestTwo /> },
+        //     { path: 'three', element: <PageTestThree /> },
+        //   ],
+        // },
+        // {
+        //   path: 'overMenu',
+        //   children: [
+        //     { element: <Navigate to="/dashboard/overMenu/one" replace />, index: true },
+        //     { path: 'one', element: <PageFive /> },
+
+        //     { path: 'three', element: <PageSeven /> },
+        //   ],
+        // },
       ],
     },
     // {
     //   path: '/register',
-    //   element: 
+    //   element:
     // },
     {
       path: '*',
@@ -159,10 +167,5 @@ useEffect(() => {
 }
 
 // Dashboard
-const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
-const PageSeven = Loadable(lazy(() => import('../pages/pageSeven')));
-// const PageEight = Loadable(lazy(() => import('../pages/PageEight')));
-const PageTestOne = Loadable(lazy(() => import('../pages/PageTestOne')));
-const PageTestTwo = Loadable(lazy(() => import('../pages/pageTestTwo')));
-const PageTestThree = Loadable(lazy(() => import('../pages/PageTestThree')));
+
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));

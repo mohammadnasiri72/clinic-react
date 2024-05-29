@@ -20,7 +20,6 @@ export default function InputEmailLogin({setEmail , email}) {
           className="w-full"
           id="outlined-multiline-flexible"
           label={'ایمیل'}
-          multiline
           color={colorEmail}
           maxRows={4}
           // InputProps={{className:'textfield-style'}}

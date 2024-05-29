@@ -1,9 +1,11 @@
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SelectAbroadLogin from './SelectAbroadLogin';
+import Page from '../Page';
 
 export default function MobileLoginPageOne({
   mobileNumber,
@@ -14,7 +16,17 @@ export default function MobileLoginPageOne({
   setIsLoading,
 }) {
   const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
-  const url = '/api/Authenticate/SendOtp'
+  const url = '/api/Authenticate/SendOtp';
+  const btnNextRef = useRef(null);
+  const inpNumMob = useRef(null);
+
+  useEffect(() => {
+    if (mobileNumber.match(paternMobile)) {
+      btnNextRef.current.focus();
+    }
+  }, [mobileNumber]);
+
+  // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -22,6 +34,8 @@ export default function MobileLoginPageOne({
     timer: 3000,
     timerProgressBar: true,
   });
+
+  // swt color input mobile
   let colorMobile;
   if (mobileNumber.match(paternMobile)) {
     colorMobile = 'success';
@@ -30,22 +44,21 @@ export default function MobileLoginPageOne({
   } else {
     colorMobile = 'error';
   }
-  const mobileNumberData = new FormData();
-  mobileNumberData.append('mobileNumber', mobileNumber);
+
   const sendData = () => {
     if (mobileNumber.match(paternMobile)) {
       setIsLoading(true);
+      const mobileNumberData = new FormData();
+      mobileNumberData.append('mobileNumber', mobileNumber);
       axios
-        .post(mainDomain + url , mobileNumberData)
+        .post(mainDomain + url, mobileNumberData)
         .then((res) => {
           setIsLoading(false);
-          if (res.status === 200) {
-            setIsValiedMobile(true);
-            Toast.fire({
-              icon: 'success',
-              text: 'لطفا کد 6 رقمی ارسال شده را وارد کنید',
-            });
-          }
+          setIsValiedMobile(true);
+          Toast.fire({
+            icon: 'success',
+            text: 'لطفا کد 6 رقمی ارسال شده را وارد کنید',
+          });
         })
         .catch((err) => {
           setIsLoading(false);
@@ -61,25 +74,35 @@ export default function MobileLoginPageOne({
       });
     }
   };
+
   return (
     <>
-      <h2 className="text-3xl">صفحه ورود</h2>
+    
+     <Page onKeyDown={(e)=>{
+      if (e.keyCode === 13) {
+        btnNextRef.current.click()
+      }
+     }}>
+
+     <h2 className="text-3xl">صفحه ورود</h2>
       <SelectAbroadLogin abroad={abroad} setAbroad={setAbroad} />
       <div className="px-5 lg:w-2/3 w-full mx-auto mt-5">
         <TextField
+          autoFocus
           onChange={(e) => setMobileNumber(e.target.value)}
           value={mobileNumber}
           className="w-full text-white"
-          id="outlined-multiline-flexible"
+          id="outlined-basic"
           label={'شماره موبایل'}
-          multiline
+          ref={inpNumMob}
           color={colorMobile}
-          maxRows={4}
+          maxRows={1}
           // InputProps={{className:'textfield-style'}}
         />
         <div>
           <div className=" mt-4">
             <Button
+              ref={btnNextRef}
               sx={{
                 py: 1,
                 fontSize: 20,
@@ -114,6 +137,7 @@ export default function MobileLoginPageOne({
           </div>
         </div>
       </div>
+     </Page>
     </>
   );
 }

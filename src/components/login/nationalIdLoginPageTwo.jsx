@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { IoMdArrowRoundForward } from 'react-icons/io';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import InputEmailLogin from './inputEmailLogin';
 import { mainDomain } from '../../utils/mainDomain';
+import Page from '../Page';
 
 export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading }) {
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
   const [email, setEmail] = useState('');
+
+  const inpPassRef = useRef(null)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -45,7 +48,7 @@ export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading
         });
     } else {
       Toast.fire({
-        icon: 'success',
+        icon: 'error',
         text: 'لطفا ایمیل خود را به درستی وارد کنید',
       });
     }
@@ -53,7 +56,12 @@ export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading
 
   return (
     <>
-      <div>
+     <Page onKeyDown={(e)=>{
+      if (e.keyCode === 13) {
+        inpPassRef.current.click()
+      }
+     }}>
+     <div>
         <div className="text-start">
          
           <Tooltip title="مرحله قبل">
@@ -68,6 +76,7 @@ export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading
       <div className="px-5 mt-5 lg:w-2/3 w-full mx-auto">
         
         <Button
+        ref={inpPassRef}
               sx={{
                 py: 1,
                 fontSize: 20,
@@ -83,6 +92,7 @@ export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading
                بازگردانی رمز عبور
             </Button>
       </div>
+     </Page>
     </>
   );
 }

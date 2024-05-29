@@ -20,7 +20,6 @@ export default function InputLastName({lastName , setLastName}) {
                 className="w-full text-end pl-20"
                 id="outlined-multiline-flexible"
                 label="نام خانوادگی"
-                multiline
                 dir="rtl"
                 maxRows={4}
                 color={colorLName}

@@ -10,10 +10,12 @@ import InputTimerLogin from './InputTimerLogin';
 
 
 export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, setMobileNumber, setIsLoading }) {
+  const [code, setCode] = useState('');
   const navigate = useNavigate();
   
   const btnSubmit = useRef(null)
   const url = '/api/Authenticate/LoginOtp'
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -21,7 +23,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
     timer: 3000,
     timerProgressBar: true,
   });
-  const [code, setCode] = useState('');
+
   const submitHandler = () => {
     const data = {
       mobile: mobileNumber,
@@ -60,6 +62,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
       });
     }
   };
+
   return (
     <>
       <h2 className="text-3xl font-semibold text-white">تایید کد ارسالی</h2>
@@ -70,7 +73,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
           </IconButton>
         </Tooltip>
       </div>
-      <InputFillCode setCode={setCode} btnSubmit={btnSubmit}/>
+      <InputFillCode setCode={setCode} btnSubmit={btnSubmit} login/>
 
       <div className="lg:w-2/3 w-full mx-auto px-5 mt-4">
         <Button

@@ -57,7 +57,14 @@ DashboardHeader.propTypes = {
   verticalLayout: PropTypes.bool,
 };
 
-export default function DashboardHeader({ onOpenSidebar, isCollapse = false, verticalLayout = false  , account}) {
+export default function DashboardHeader({
+  onOpenSidebar,
+  isCollapse = false,
+  verticalLayout = false,
+  account,
+  flagNotification,
+  setFlagNotification,
+}) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
   const isDesktop = useResponsive('up', 'lg');
@@ -83,9 +90,12 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
-          <NotificationsPopover />
+          <NotificationsPopover  
+          flagNotification = {flagNotification}
+          setFlagNotification = {setFlagNotification}
+          />
           <ContactsPopover />
-          <AccountPopover account={account}/>
+          <AccountPopover account={account} />
         </Stack>
       </Toolbar>
     </RootStyle>
