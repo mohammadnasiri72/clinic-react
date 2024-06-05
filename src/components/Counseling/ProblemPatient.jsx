@@ -98,7 +98,7 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
   };
   return (
     <>
-      <div className="w-1/2 mx-auto">
+      <div className="lg:w-1/2 sm:w-3/4 w-full mx-auto">
         <h2 className="text-start mb-5 text-xl">لطفا مشکل خود را وارد کنید</h2>
         <div className="px-4 w-full" dir="rtl">
           <Stack spacing={3}>
@@ -116,7 +116,7 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
             />
           </Stack>
         </div>
-        <div className="mt-10 px-5">
+        <div className="mt-5 px-5">
           <TextField
             onChange={(e) => setDesc(e.target.value)}
             className="w-full"

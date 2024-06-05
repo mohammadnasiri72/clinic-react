@@ -1,9 +1,6 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-export default function InputSelectDoctor({doctors , expertise , doctor , setDoctor}) {
-    
+export default function InputSelectDoctor({ doctors, expertise, doctor, setDoctor }) {
   return (
     <>
       <FormControl fullWidth>
@@ -13,23 +10,24 @@ export default function InputSelectDoctor({doctors , expertise , doctor , setDoc
           id="demo-simple-select"
           value={doctor}
           label="انتخاب دکتر"
-          onChange={(e)=>  setDoctor(e.target.value)}
+          onChange={(e) => setDoctor(e.target.value)}
         >
-            {
-                expertise !== 'همه' &&
-                doctors.filter((doctor)=> doctor.specialization === expertise).map((doctor)=>(
-                    <MenuItem key={doctor.doctorId} value={doctor.doctorId}>{doctor.firstName} {doctor.lastName}</MenuItem>
-                ))
-            }
-            {
-                expertise === 'همه' &&
-                doctors.map((doctor)=>(
-                    <MenuItem key={doctor.doctorId} value={doctor.doctorId}>{doctor.firstName} {doctor.lastName}</MenuItem>
-                ))
-            }
-          
+          {expertise !== 'همه' &&
+            doctors
+              .filter((doctor) => doctor.specialization === expertise)
+              .map((doctor) => (
+                <MenuItem key={doctor.doctorId} value={doctor.doctorId}>
+                  {doctor.firstName} {doctor.lastName}
+                </MenuItem>
+              ))}
+          {expertise === 'همه' &&
+            doctors.map((doctor) => (
+              <MenuItem key={doctor.doctorId} value={doctor.doctorId}>
+                {doctor.firstName} {doctor.lastName}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </>
-  )
+  );
 }

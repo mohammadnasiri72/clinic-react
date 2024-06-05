@@ -1,6 +1,4 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 
 export default function InputExpertise({expertises , expertise , setExpertise}) {
   

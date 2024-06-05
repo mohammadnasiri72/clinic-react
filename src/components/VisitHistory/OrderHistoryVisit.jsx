@@ -30,7 +30,9 @@ export default function OrderHistoryVisit({ receptionSelected, setIsLoading }) {
     <>
       <div>
         <h3 className="text-teal-500 font-semibold">اردر های پزشک</h3>
-        {listOrder.map((e, i) => (
+        {
+        listOrder.length>0 &&
+        listOrder.map((e, i) => (
           <div
             key={e.orderId}
             className="px-3 flex justify-between items-center rounded-lg hover:bg-slate-50 duration-300 mt-2"
@@ -70,6 +72,10 @@ export default function OrderHistoryVisit({ receptionSelected, setIsLoading }) {
             </Tooltip>
           </div>
         ))}
+        {
+           listOrder.length===0 &&
+           <p className="text-sm mt-2">موردی ثبت نشده است</p>
+        }
       </div>
     </>
   );

@@ -1,39 +1,40 @@
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { FaArrowRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { Link, Navigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 import { mainDomain } from '../../utils/mainDomain';
+import Page from '../Page';
 import InputMobilEmail from './inputMobil_Email';
 import InputNationalId from './inputNationalId';
 import SelectAbroad from './selectAbroad';
-import InputDelete from './inputDelete';
-import Page from '../Page';
 // import { useRouter } from 'next/router';
 // import { Button } from '@mui/material';
 
-export default function MainRegisterPage({ setIsRegister, setRegisterModel, setIsLoading, isRegister }) {
+export default function MainRegisterPage({ setIsRegister, setRegisterModel, setIsLoading ,setPageState}) {
   const [abroad, setAbroad] = useState(false);
   const [nationalId, setNationalId] = useState('');
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [isfocusInpMobile, setIsfocusInpMobile] = useState(false);
+  const [isfocusInpEmail, setIsfocusInpEmail] = useState(true);
   const paternNationalId = /^[0-9]{10}$/;
   const paternMobile = /09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/;
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
 
-  const url = '/api/Patient/PreRegister';
-  const inpNationalRef = useRef(null);
   const inpNextRef = useRef(null);
 
   useEffect(() => {
     if (nationalId.match(paternNationalId)) {
       setIsfocusInpMobile(true);
-    }
-    if (mobile.match(paternMobile)) {
-      inpNextRef.current.focus();
+      setIsfocusInpEmail(false)
     }
   }, [nationalId, mobile]);
+  useEffect(()=>{
+    setIsfocusInpMobile(false);
+    setIsfocusInpEmail(true)
+  },[abroad])
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -65,7 +66,7 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
       setIsLoading(true);
       setRegisterModel(registerModel);
       axios
-        .post(mainDomain + url, registerModel)
+        .post(`${mainDomain}/api/Patient/PreRegister`, registerModel)
         .then(() => {
           setIsLoading(false);
           setIsRegister(true);
@@ -117,7 +118,7 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
           </div>
           <h1 className="text-3xl mt-4">ثبت نام بیمار</h1>
           <SelectAbroad abroad={abroad} setAbroad={setAbroad} setMobile={setMobile} setEmail={setEmail} />
-          <InputNationalId nationalId={nationalId} setNationalId={setNationalId} inpNationalRef={inpNationalRef} />
+          <InputNationalId nationalId={nationalId} setNationalId={setNationalId} isfocusInpEmail={isfocusInpEmail}/>
           <InputMobilEmail
             abroad={abroad}
             email={email}
@@ -146,6 +147,8 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
               </Button>
             </div>
           </div>
+          {
+            !setPageState && 
           <div className="px-3 mt-5 text-start lg:w-2/3 w-full mx-auto">
             <Button
               size="medium"
@@ -163,10 +166,30 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
               <Link to={'/login'}>قبلا حساب ساخته ام</Link>
             </Button>
           </div>
+          }
+          {setPageState && 
+            <div className="px-3 mt-5 text-start lg:w-2/3 w-full mx-auto">
+            <Button
+              sx={{
+                py: 1,
+                fontSize: 16,
+                backgroundColor: 'rgb(20 184 166)',
+                '&:hover': {
+                  backgroundColor: 'rgb(13 148 136)',
+                },
+              }}
+              className="rounded-md duration-300 mt-2"
+              onClick={() => setPageState(0)}
+              variant="contained"
+            >
+              <FaArrowRight className='text-white'/>
+              <span className="px-2 text-white">برگشت به صفحه قبل</span>
+            </Button>
+          </div>
+          }
         </div>
         <div className="lg:w-1/2 w-0 h-screen bg-login bg-cover bg-no-repeat bg-[#0008] bg-blend-multiply" />
       </Page>
-      {/* <InputDelete /> */}
     </>
   );
 }

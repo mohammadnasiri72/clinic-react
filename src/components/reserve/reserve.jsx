@@ -17,6 +17,7 @@ export default function Reserve({ setPageState , account}) {
   const [dateReserved, setDateReserved] = useState('');
   const [isLoading , setIsLoading] = useState(false)
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/BasicInfo/Specialization/GetList`, {
         headers: {
@@ -24,11 +25,15 @@ export default function Reserve({ setPageState , account}) {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setExpertises(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, []);
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/Doctor/GetList`, {
         headers: {
@@ -36,10 +41,13 @@ export default function Reserve({ setPageState , account}) {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setDoctors(res.data);
         setDoctor(res.data[0].doctorId);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, []);
   return (
     <>
@@ -68,6 +76,7 @@ export default function Reserve({ setPageState , account}) {
             dateReserved={dateReserved}
             account={account}
             setPageState={setPageState}
+            isLoading={isLoading}
           />
         </div>
       </div>

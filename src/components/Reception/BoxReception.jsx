@@ -1,9 +1,10 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import CardReception from './CardReception';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function BoxReception({
   receptions,
-  patientList,
   statusCondition,
   setChangStatusCondition,
   setPageStateReception,
@@ -12,6 +13,25 @@ export default function BoxReception({
   setIsEditStartTime,
   setIsEditEndTime,
 }) {
+  const [patientList , setPatientList] = useState([])
+
+  useEffect(() => {
+   
+      axios
+        .get(`${mainDomain}/api/Patient/GetList`, {
+          
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setPatientList(res.data);
+        })
+        .catch((err) => {});
+    
+  }, []);
+
+
   return (
     <>
       <div className="flex flex-wrap justify-start items-start">

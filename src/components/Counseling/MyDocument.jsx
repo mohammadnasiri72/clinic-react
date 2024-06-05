@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+import { Button, Card, CardActions, CardContent, IconButton, Tooltip, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -110,94 +110,167 @@ export default function MyDocumentSend({
 
   return (
     <>
-      <div className="border rounded-xl p-4">
+      <div className="md:border rounded-xl p-4">
         {filesUpload.length === 0 && <p>صفحه مدارک خالی است</p>}
         {filesUpload.length !== 0 && (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ردیف</TableCell>
-                  <TableCell>توضیحات</TableCell>
-                  <TableCell align="center">نوع فایل</TableCell>
-                  <TableCell align="center">مشاهده فایل</TableCell>
-                  <TableCell align="center">عملیات</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filesUpload.map((file, index) => (
-                  <TableRow key={file.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>
-                      <span className="pr-5 font-semibold">{index + 1}</span>
-                    </TableCell>
-                    <TableCell component="th" scope="file">
-                      {file.description}
-                    </TableCell>
-                    <TableCell align="center">{file.medicalItemName}</TableCell>
-                    <TableCell align="center">
-                      <div className="flex justify-center">
-                        {file.medicalItemName === 'ویدئو' && (
-                          <Tooltip title="مشاهده ویدئو">
-                            <IconButton
-                              onClick={() => {
-                                setIsShowVideo(true);
-                                setSrcVideo(file.attachmentSrc);
-                              }}
-                            >
-                              <RiFileVideoLine className="hover:text-green-700 duration-300" />
+          <div>
+            <div className="md:block hidden">
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ردیف</TableCell>
+                      <TableCell>توضیحات</TableCell>
+                      <TableCell align="center">نوع فایل</TableCell>
+                      <TableCell align="center">مشاهده فایل</TableCell>
+                      <TableCell align="center">عملیات</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filesUpload.map((file, index) => (
+                      <TableRow key={file.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell>
+                          <span className="pr-5 font-semibold">{index + 1}</span>
+                        </TableCell>
+                        <TableCell component="th" scope="file">
+                          {file.description}
+                        </TableCell>
+                        <TableCell align="center">{file.medicalItemName}</TableCell>
+                        <TableCell align="center">
+                          <div className="flex justify-center">
+                            {file.medicalItemName === 'ویدئو' && (
+                              <Tooltip title="مشاهده ویدئو">
+                                <IconButton
+                                  onClick={() => {
+                                    setIsShowVideo(true);
+                                    setSrcVideo(file.attachmentSrc);
+                                  }}
+                                >
+                                  <RiFileVideoLine className="hover:text-green-700 duration-300" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                            {file.medicalItemName === 'سند' && (
+                              <Tooltip title="مشاهده سند">
+                                <IconButton>
+                                  <a target="_blank" rel="noreferrer" href={mainDomain + file.attachmentSrc}>
+                                    <IoIosDocument className="hover:text-green-700 duration-300" />
+                                  </a>
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                            {file.medicalItemName === 'تصویر' && (
+                              <Tooltip title="مشاهده تصویر">
+                                <IconButton
+                                  onClick={() => {
+                                    setIsShowImg(true);
+                                    setSrc(file.attachmentSrc);
+                                  }}
+                                >
+                                  <FaImage className="hover:text-green-700 duration-300" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                            {file.medicalItemName === 'صوت' && (
+                              <Tooltip title="پخش صوت">
+                                <IconButton
+                                  onClick={() => {
+                                    setIsShowAudio(true);
+                                    setSrcAudio(file.attachmentSrc);
+                                  }}
+                                >
+                                  <MdAudioFile className="hover:text-green-700 duration-300" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Tooltip title="حذف">
+                            <IconButton onClick={() => deleteFileHandler(file)}>
+                              <FaTrashAlt className="hover:text-red-500 duration-300" />
                             </IconButton>
                           </Tooltip>
-                        )}
-                        {file.medicalItemName === 'سند' && (
-                          <Tooltip title="مشاهده سند">
-                            <IconButton>
-                              <a target="_blank" rel="noreferrer" href={mainDomain + file.attachmentSrc}>
-                                <IoIosDocument className="hover:text-green-700 duration-300" />
-                              </a>
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        {file.medicalItemName === 'تصویر' && (
-                          <Tooltip title="مشاهده تصویر">
-                            <IconButton
-                              onClick={() => {
-                                setIsShowImg(true);
-                                setSrc(file.attachmentSrc);
-                              }}
-                            >
-                              <FaImage className="hover:text-green-700 duration-300" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                        {file.medicalItemName === 'صوت' && (
-                          <Tooltip title="پخش صوت">
-                            <IconButton
-                              onClick={() => {
-                                setIsShowAudio(true);
-                                setSrcAudio(file.attachmentSrc);
-                              }}
-                            >
-                              <MdAudioFile className="hover:text-green-700 duration-300" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Tooltip title="حذف">
-                        <IconButton onClick={() => deleteFileHandler(file)}>
-                          <FaTrashAlt className="hover:text-red-500 duration-300" />
-                        </IconButton>
-                      </Tooltip>
-                      {/* <div className="flex justify-center">
+                          {/* <div className="flex justify-center">
                         <FaTrashAlt onClick={() => deleteFileHandler(file)} className="text-2xl cursor-pointer" />
                       </div> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            <div className="md:hidden block">
+             <div className='flex flex-wrap'>
+             {filesUpload.map((file, index) => (
+                <div key={file.id} className='sm:w-1/2 w-full p-2'>
+                  <Card >
+                  <CardContent>
+                    <Typography variant="h5" component="div">
+                      {file.medicalItemName}
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {file.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <div className="flex justify-center">
+                      {file.medicalItemName === 'ویدئو' && (
+                        <Button
+                          onClick={() => {
+                            setIsShowVideo(true);
+                            setSrcVideo(file.attachmentSrc);
+                          }}
+                        >
+                          <RiFileVideoLine className="hover:text-green-700 duration-300" />
+                          <span className="px-1">مشاهده ویدئو</span>
+                        </Button>
+                      )}
+                      {file.medicalItemName === 'سند' && (
+                         <a target="_blank" rel="noreferrer" href={mainDomain + file.attachmentSrc}>
+                        <Button>
+                         
+                            <IoIosDocument className="hover:text-green-700 duration-300" />
+                          
+                          <span className="px-1">مشاهده سند</span>
+                        </Button>
+                        </a>
+                      )}
+                      {file.medicalItemName === 'تصویر' && (
+                        <Button
+                          onClick={() => {
+                            setIsShowImg(true);
+                            setSrc(file.attachmentSrc);
+                          }}
+                        >
+                          <FaImage className="hover:text-green-700 duration-300" />
+                          <span className="px-1">مشاهده تصویر</span>
+                        </Button>
+                      )}
+                      {file.medicalItemName === 'صوت' && (
+                        <Button
+                          onClick={() => {
+                            setIsShowAudio(true);
+                            setSrcAudio(file.attachmentSrc);
+                          }}
+                        >
+                          <MdAudioFile className="hover:text-green-700 duration-300" />
+                          <span className="px-1">پخش صوت</span>
+                        </Button>
+                      )}
+                    </div>
+                    <Button sx={{color:'red'}} >
+                      <FaTrashAlt  />
+                      <span>حذف</span>
+                    </Button>
+                  </CardActions>
+                </Card>
+                </div>
+              ))}
+             </div>
+            </div>
+          </div>
         )}
 
         <BoxImg isShowImg={isShowImg} setIsShowImg={setIsShowImg} src={src} filesUpload={filesUpload} setSrc={setSrc} />

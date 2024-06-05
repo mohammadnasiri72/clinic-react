@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -53,7 +54,7 @@ export default function NavbarAccount({ isCollapse , account}) {
             {account.firstName} {account.lastName}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {localStorage.getItem("roles")==='Patient'? 'بیمار' : 'منشی'}
+            {localStorage.getItem("roles")==='Patient'? 'بیمار' :localStorage.getItem("roles")==='Staff'? 'منشی': localStorage.getItem("roles").includes('Doctor')? 'دکتر' : localStorage.getItem("roles")==='Admin'? 'ادمین':''}
           </Typography>
         </Box>
       </RootStyle>

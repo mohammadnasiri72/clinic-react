@@ -11,7 +11,7 @@ import {
   ListItemButton,
   ListItemText,
   ListSubheader,
-  Typography
+  Typography,
 } from '@mui/material';
 // utils
 import { mainDomain } from '../../../utils/mainDomain';
@@ -25,12 +25,24 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 
-export default function NotificationsPopover({ flagNotification, setFlagNotification }) {
+export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
   const [notifications, setNotifications] = useState(_notifications);
-  const [totalUnRead, setTotalUnRead] = useState('');
+  const [totalUnRead, setTotalUnRead] = useState(0);
   const [messageUnread, setMessageUnread] = useState([]);
   const [open, setOpen] = useState(null);
   // const [flag, setFlag] = useState(false);
+
+  useEffect(() => {
+    const intervalNotif = setInterval(() => {
+      if (localStorage.getItem('token')) {
+        setFlagNotif((e) => !e);
+      } else {
+        clearInterval(intervalNotif);
+      }
+    }, 120000);
+  }, []);
+
+  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
   useEffect(() => {
     axios
@@ -44,6 +56,33 @@ export default function NotificationsPopover({ flagNotification, setFlagNotifica
       })
       .catch((err) => {});
 
+    // axios
+    //   .get(`${mainDomain}/api/Message/UnRead/GetList`, {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     setMessageUnread(res.data);
+    //   })
+    //   .catch((err) => {});
+  }, [flagNotif]);
+
+  const handleOpen = (event) => {
+    setOpen(event.currentTarget);
+    setFlagNotif((e) => !e);
+
+    axios
+    .get(`${mainDomain}/api/Message/UnRead/Count`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+    .then((res) => {
+      setTotalUnRead(res.data);
+    })
+    .catch((err) => {});
+
     axios
       .get(`${mainDomain}/api/Message/UnRead/GetList`, {
         headers: {
@@ -54,17 +93,10 @@ export default function NotificationsPopover({ flagNotification, setFlagNotifica
         setMessageUnread(res.data);
       })
       .catch((err) => {});
-  }, [flagNotification]);
-
-  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
-
-  const handleOpen = (event) => {
-    setOpen(event.currentTarget);
   };
 
   const handleClose = () => {
     setOpen(null);
-    setFlagNotification((e) => !e);
   };
 
   const handleMarkAllAsRead = () => {
@@ -115,12 +147,17 @@ export default function NotificationsPopover({ flagNotification, setFlagNotifica
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
                 پیغام‌های جدید
-                {totalUnRead === 0 && <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>}
               </ListSubheader>
             }
           >
-            {messageUnread.map((message) => (
-              <NotificationItem key={message.messageId} message={message} />
+            {
+              messageUnread.length===0 &&
+              <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>
+            }
+            {
+            messageUnread.length>0 &&
+            messageUnread.map((message) => (
+              <NotificationItem key={message.messageId} message={message} setFlagNotif={setFlagNotif} />
             ))}
           </List>
         </Scrollbar>
@@ -133,7 +170,7 @@ export default function NotificationsPopover({ flagNotification, setFlagNotifica
             disableRipple
             onClick={() => {
               navigate('/dashboard/mymessage');
-              handleClose()
+              handleClose();
             }}
           >
             مشاهده همه پیام ها
@@ -158,7 +195,7 @@ export default function NotificationsPopover({ flagNotification, setFlagNotifica
 //   }),
 // };
 
-function NotificationItem({ message }) {
+function NotificationItem({ message, setFlagNotif }) {
   const { avatar, subject } = renderContent(message);
   const [bgColor, setbgColor] = useState('#edeff2');
 
@@ -172,7 +209,9 @@ function NotificationItem({ message }) {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
-          .then((res) => {})
+          .then((res) => {
+            setFlagNotif((e) => !e);
+          })
           .catch((err) => {});
       }}
       sx={{

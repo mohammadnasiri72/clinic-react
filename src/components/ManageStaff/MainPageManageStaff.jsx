@@ -23,7 +23,6 @@ export default function MainPageManageStaff() {
   const [jobStaff, setJobStaff] = useState('');
   const [flag, setFlag] = useState(false);
   const [staffId, setStaffId] = useState('');
-  // console.log(jobList);
 
   const paternNationalId = /^[0-9]{10}$/;
   const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;

@@ -40,6 +40,8 @@ export default function MainPageManageDrug() {
   const [descNewCategory, setDescNewCategory] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState('');
+  const [drugList, setDrugList] = useState([]);
+  const [query, setQuery] = useState('');
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -140,7 +142,6 @@ export default function MainPageManageDrug() {
             setValDrugUseCycle({});
             setisActive(true);
             setPriority(0);
-            // setShowManageDrug(false);
             setValCategoryDrug('');
             setIsLoading(false);
             setFlag((e) => !e);
@@ -187,7 +188,6 @@ export default function MainPageManageDrug() {
               icon: 'success',
               text: 'دسته بندی جدید با موفقیت ثبت شد',
             });
-            // setValCategoryDrug(categoryDrug.find((ev) => ev.title === titleNewCategory).medicationCategoryId);
             setIsLoading(false);
             setFlag((e) => !e);
             setTitleNewCategory('');
@@ -253,26 +253,66 @@ export default function MainPageManageDrug() {
       });
   };
 
+  // get list drug
+  useEffect(() => {
+    if (query.length > 0) {
+      axios
+        .get(`${mainDomain}/api/Medication/GetList`, {
+          params: {
+            query,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setDrugList(res.data);
+        })
+        .catch((err) => {});
+    }else{
+      setDrugList([])
+    }
+  }, [flag , query]);
+
   return (
     <>
       <div className="text-start relative">
         {!isEdit && (
-          <Button
-            sx={{
-              py: 2,
-              boxShadow: 'none',
-              backgroundColor: 'rgb(16 185 129)',
-              '&:hover': {
-                backgroundColor: 'rgb(5 150 105)',
-              },
-            }}
-            onClick={() => setShowManageDrug(!showManageDrug)}
-            className="sticky top-5 flex items-center text-white px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600"
-          >
-            <span className="px-2">{showManageDrug ? 'بستن' : 'افزودن دارو'}</span>
-            {!showManageDrug && <FaPlus />}
-            {showManageDrug && <MdOutlineMinimize />}
-          </Button>
+          <div className="flex">
+            <div>
+              <Button
+                sx={{
+                  py: 2,
+                  boxShadow: 'none',
+                  backgroundColor: 'rgb(16 185 129)',
+                  '&:hover': {
+                    backgroundColor: 'rgb(5 150 105)',
+                  },
+                }}
+                onClick={() => setShowManageDrug(!showManageDrug)}
+                className="sticky flex items-center text-white px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600"
+              >
+                <span className="px-2">{showManageDrug ? 'بستن' : 'افزودن دارو'}</span>
+                {!showManageDrug && <FaPlus />}
+                {showManageDrug && <MdOutlineMinimize />}
+              </Button>
+            </div>
+            <div className="min-w-80 pr-3">
+              <Autocomplete
+                // value={
+                //   userSelected.nationalId
+                //     ? `${userSelected.firstName} ${userSelected.lastName} (  ${userSelected.nationalId} )`
+                //     : ''
+                // }
+                // onChange={(event, newValue) => changValPatientHandler(event, newValue)}
+                freeSolo
+                options={drugList.map((option) => option.name)}
+                renderInput={(params) => (
+                  <TextField onChange={(e) => setQuery(e.target.value)} {...params} label={'لیست دارو ها'} />
+                )}
+              />
+            </div>
+          </div>
         )}
         <div
           style={{
@@ -288,11 +328,11 @@ export default function MainPageManageDrug() {
             <Button
               sx={{
                 py: 1,
-                position:'absolute',
-                bottom:'0',
+                position: 'absolute',
+                bottom: '0',
                 left: '50%',
-                transform:'translate(-50% , 50%)',
-                borderRadius:'100%',
+                transform: 'translate(-50% , 50%)',
+                borderRadius: '100%',
                 boxShadow: 'none',
                 backgroundColor: 'rgb(226 232 240)',
                 '&:hover': {
@@ -330,14 +370,14 @@ export default function MainPageManageDrug() {
             {!isEdit && (
               <div className="px-2 flex">
                 <Button
-                 sx={{
-                  py: 2,
-                  boxShadow: 'none',
-                  backgroundColor: 'rgb(16 185 129)',
-                  '&:hover': {
-                    backgroundColor: 'rgb(5 150 105)',
-                  },
-                }}
+                  sx={{
+                    py: 2,
+                    boxShadow: 'none',
+                    backgroundColor: 'rgb(16 185 129)',
+                    '&:hover': {
+                      backgroundColor: 'rgb(5 150 105)',
+                    },
+                  }}
                   onClick={() => setShowManageCategoryDrug(!showManageCategoryDrug)}
                   className="text-white rounded-md p-4 bg-green-500 duration-300 hover:bg-green-600"
                 >
@@ -389,14 +429,14 @@ export default function MainPageManageDrug() {
               className="duration-300"
             >
               <Button
-               sx={{
-                py: 2,
-                boxShadow: 'none',
-                backgroundColor: 'rgb(16 185 129)',
-                '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
-                },
-              }}
+                sx={{
+                  py: 2,
+                  boxShadow: 'none',
+                  backgroundColor: 'rgb(16 185 129)',
+                  '&:hover': {
+                    backgroundColor: 'rgb(5 150 105)',
+                  },
+                }}
                 onClick={setNewCategoryHandler}
                 className="p-4 rounded-md bg-green-500 duration-300 hover:bg-green-600 text-white"
               >
@@ -489,13 +529,13 @@ export default function MainPageManageDrug() {
           {!isEdit && (
             <div className="mt-3">
               <Button
-               sx={{
-                boxShadow: 'none',
-                backgroundColor: 'rgb(16 185 129)',
-                '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
-                },
-              }}
+                sx={{
+                  boxShadow: 'none',
+                  backgroundColor: 'rgb(16 185 129)',
+                  '&:hover': {
+                    backgroundColor: 'rgb(5 150 105)',
+                  },
+                }}
                 onClick={newDrugHandler}
                 className="px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600 text-white font-semibold"
               >
@@ -507,13 +547,13 @@ export default function MainPageManageDrug() {
             <div className="flex mt-3">
               <div className="px-2">
                 <Button
-                 sx={{
-                  boxShadow: 'none',
-                  backgroundColor: 'rgb(16 185 129)',
-                  '&:hover': {
-                    backgroundColor: 'rgb(5 150 105)',
-                  },
-                }}
+                  sx={{
+                    boxShadow: 'none',
+                    backgroundColor: 'rgb(16 185 129)',
+                    '&:hover': {
+                      backgroundColor: 'rgb(5 150 105)',
+                    },
+                  }}
                   onClick={editDrugHandler}
                   className="bg-green-500 hover:bg-green-600 duration-300 px-5 py-2 rounded-md text-white"
                 >
@@ -522,13 +562,13 @@ export default function MainPageManageDrug() {
               </div>
               <div className="px-2">
                 <Button
-                 sx={{
-                  boxShadow: 'none',
-                  backgroundColor: 'rgb(239 68 68)',
-                  '&:hover': {
-                    backgroundColor: 'rgb(220 38 38)',
-                  },
-                }}
+                  sx={{
+                    boxShadow: 'none',
+                    backgroundColor: 'rgb(239 68 68)',
+                    '&:hover': {
+                      backgroundColor: 'rgb(220 38 38)',
+                    },
+                  }}
                   onClick={() => {
                     setIsEdit(false);
                     setNameDrug('');

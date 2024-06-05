@@ -17,6 +17,7 @@ export default function MainPageVisitHistory({ account }) {
   const [receptionSelected, setReceptionSelected] = useState({});
 
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/Appointment/GetList`, {
         params: {
@@ -32,9 +33,12 @@ export default function MainPageVisitHistory({ account }) {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setHistoryReception(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [account, valType, fromPersianDate, toPersianDate]);
   return (
     <>
@@ -47,7 +51,7 @@ export default function MainPageVisitHistory({ account }) {
           <hr className="mt-3" />
           <div className="flex flex-wrap px-5">
             {historyReception.map((e) => (
-              <div key={e.appointmentId} className="lg:w-1/3 px-3 mt-3">
+              <div key={e.appointmentId} className="lg:w-1/3 sm:w-1/2 w-full px-3 mt-3">
                 <BoxReceptionPatient
                   reception={e}
                   setPageStateVisitHistory={setPageStateVisitHistory}
@@ -64,6 +68,7 @@ export default function MainPageVisitHistory({ account }) {
           receptionSelected={receptionSelected}
           setIsLoading={setIsLoading}
           account={account}
+          isLoading={isLoading}
         />
       )}
 

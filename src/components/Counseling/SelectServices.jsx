@@ -9,19 +9,17 @@ export default function SelectServices({ setPageNumber, valDoctor, setValDoctor,
 
   return (
     <>
-      <div className="w-1/2 mx-auto">
+      <div className="md:w-1/2 sm:w-2/3 w-full mx-auto pb-10">
         <h2 className="text-2xl font-semibold">لطفا خدمات مد نظر خود را وارد کنید</h2>
         <SelectExpertises expertise={expertise} setExpertise={setExpertise} />
         <SelecDoctor expertise={expertise} valDoctor={valDoctor} setValDoctor={setValDoctor} />
         <SelectServicesNotPersonal service={service} setService={setService} />
 
         <div className="flex justify-between mt-5 px-4">
-          {/* <button onClick={()=> setPageNumber(0)} className='px-5 py-2 rounded-md bg-red-500 text-white duration-300 hover:bg-red-600'>برگشت به صفحه قبل</button> */}
           <Button
             sx={{
               py: 1,
               boxShadow: 'none',
-              // fontSize: 20,
               backgroundColor: 'rgb(6 182 212)',
               '&:hover': {
                 backgroundColor: 'rgb(8 145 178)',
@@ -33,12 +31,10 @@ export default function SelectServices({ setPageNumber, valDoctor, setValDoctor,
           >
             برگشت به صفحه قبل
           </Button>
-          {/* <button onClick={()=> setPageNumber(2)} className='px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600'>مرحله بعد</button> */}
           <Button
             sx={{
               py: 1,
               boxShadow: 'none',
-              // fontSize: 20,
               backgroundColor: 'rgb(16 185 129)',
               '&:hover': {
                 backgroundColor: 'rgb(5 150 105)',

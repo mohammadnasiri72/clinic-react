@@ -4,13 +4,18 @@ import useSettings from '../hooks/useSettings';
 import MainPageMyMessage from '../components/MyMessage/MainPageMyMessage';
 // ----------------------------------------------------------------------
 
-export default function Mymessage({ flagNotification, setFlagNotification }) {
+export default function Mymessage({ flagNotification, setFlagNotification, flagNotif, setFlagNotif }) {
   const { themeStretch } = useSettings();
   return (
     <>
       <Page title="view reservation">
         <Container maxWidth={themeStretch ? false : 'xl'}>
-          <MainPageMyMessage flagNotification={flagNotification} setFlagNotification={setFlagNotification} />
+          <MainPageMyMessage
+            flagNotification={flagNotification}
+            setFlagNotification={setFlagNotification}
+            flagNotif={flagNotif}
+            setFlagNotif={setFlagNotif}
+          />
         </Container>
       </Page>
     </>

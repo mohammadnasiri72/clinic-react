@@ -20,14 +20,21 @@ export default function FilesHistoryVisit({ medicalRecord, receptionSelected }) 
 
   useEffect(() => {
     document.body.style.overflow = isShowVideo ? 'hidden' : 'auto';
+  }, [isShowVideo]);
+  useEffect(() => {
     document.body.style.overflow = isShowImg ? 'hidden' : 'auto';
+  }, [isShowImg]);
+  useEffect(() => {
     document.body.style.overflow = isShowAudio ? 'hidden' : 'auto';
-  }, [isShowVideo, isShowImg, isShowAudio]);
+  }, [isShowAudio]);
 
   return (
     <>
       <h3 className="text-teal-500 font-semibold">فایلهای ارسال شده</h3>
-      {medicalRecord
+      {
+      medicalRecord
+      .filter((e) => e.typeId === 6).length>0 &&
+      medicalRecord
         .filter((e) => e.typeId === 6)
         .map((e, i) => (
           <div key={e.id} className="px-3">
@@ -104,11 +111,15 @@ export default function FilesHistoryVisit({ medicalRecord, receptionSelected }) 
                     </IconButton>
                   </Tooltip>
                 )}
-
               </div>
             </div>
           </div>
         ))}
+        {
+           medicalRecord
+           .filter((e) => e.typeId === 6).length===0 &&
+           <p className="text-sm mt-2">موردی ثبت نشده است</p>
+        }
 
       <BoxVideo srcVideo={srcVideo} isShowVideo={isShowVideo} setIsShowVideo={setIsShowVideo} />
       <BoxImg isShowImg={isShowImg} setIsShowImg={setIsShowImg} src={src} filesUpload={medicalRecord} setSrc={setSrc} />

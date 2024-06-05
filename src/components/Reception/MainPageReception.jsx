@@ -12,7 +12,6 @@ import BoxChangDate from './BoxChangDate';
 import BoxReception from './BoxReception';
 import CheckBoxDoctor from './CheckBoxDoctor';
 import FilterCondition from './FilterCondition';
-import InputCondition from './InputCondition';
 import InputConditionReception from './InputConditionReception';
 import InputDate from './InputDate';
 import InputDoctorSelect from './InputDoctorSelect';
@@ -47,7 +46,6 @@ export default function MainPageReception({ account }) {
   const [notes, setNotes] = useState('');
   const [statusId, setStatusId] = useState(1);
   const [valType, setValType] = useState(1);
-  const [conditionVal, setConditionVal] = useState(-1);
   const [receptions, setReceptions] = useState([]);
   const [fromPersianDate, setFromPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [toPersianDate, setToPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));

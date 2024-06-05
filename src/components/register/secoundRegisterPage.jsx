@@ -1,18 +1,18 @@
-import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
-import { IoMdArrowRoundForward } from 'react-icons/io';
 import { Button, IconButton, Tooltip } from '@mui/material';
+import axios from 'axios';
+import { useRef, useState } from 'react';
+import { IoMdArrowRoundForward } from 'react-icons/io';
+import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
-import { Navigate, useNavigate } from 'react-router';
+import { mainDomain } from '../../utils/mainDomain';
+import Page from '../Page';
+import SelectAge from './SelectAge';
 import InputFillCode from './fillCode';
 import InputLastName from './inputLName';
 import InputName from './inputName';
+import InputPassword from './inputPassword';
 import InputTimer from './inputTimer';
 import SelectGender from './selectGender';
-import InputPassword from './inputPassword';
-import { mainDomain } from '../../utils/mainDomain';
-import SelectAge from './SelectAge';
-import Page from '../Page';
 
 export default function SecoundRegisterPage({
   registerModel,
@@ -29,27 +29,11 @@ export default function SecoundRegisterPage({
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [dateOfBirthFaPatient, setDateOfBirthFaPatient] = useState('');
-  const [disableEnter, setDisableEnter] = useState(false);
 
   const navigate = useNavigate();
   const url = '/api/Patient/Register';
 
   const btnSubmit = useRef(null);
-  
-
-  // useEffect(() => {
-  //   if (btnSubmit.current) {
-  //     document.body.addEventListener('keypress', (ev) => {
-  //       const direction = ev.keyCode;
-  //       if (isRegister) {
-  //         if (direction === 13) {
-  //           btnSubmit.current.click();
-  //         }
-          
-  //       }
-  //     });
-  //   }
-  // }, []);
 
   // const paternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   const Toast = Swal.mixin({
@@ -62,7 +46,7 @@ export default function SecoundRegisterPage({
 
   const submitHandler = (e) => {
     e.preventDefault();
-    registerModel.fristName = firstName;
+    registerModel.firstName = firstName;
     registerModel.lastName = lastName;
     registerModel.gender = gender;
     registerModel.password = password;
@@ -87,14 +71,13 @@ export default function SecoundRegisterPage({
             localStorage.setItem('refreshToken', response.data.refreshToken);
             localStorage.setItem('roles', response.data.roles);
             localStorage.setItem('expiration', response.data.expiration);
-            setDisableEnter(false)
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام شما با موفقیت انجام شد',
             });
             setTimeout(() => {
-              navigate('/dashboard')
-            }, 1000);
+              navigate('/dashboard');
+            }, 500);
           }
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
@@ -102,7 +85,6 @@ export default function SecoundRegisterPage({
           //   maxAge:60*60*24
           // }))
           else {
-            setDisableEnter(false)
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام بیمار با موفقیت انجام شد',
@@ -118,7 +100,6 @@ export default function SecoundRegisterPage({
         })
         .catch((err) => {
           setIsLoading(false);
-          setDisableEnter(false)
           Toast.fire({
             icon: 'error',
             text: err.response ? err.response.data : 'خطای شبکه',
@@ -159,43 +140,38 @@ export default function SecoundRegisterPage({
 
   return (
     <>
-      <Page 
-      // onKeyDown={(e) => {
-      //     if (e.keyCode === 13 && !disableEnter) {
-      //       btnSubmit.current.click();
-      //     }
-      //   }} 
-        className="flex justify-center items-center min-h-screen">
+      <Page
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) {
+            btnSubmit.current.click();
+          }
+        }}
+        className="flex justify-center items-center min-h-screen"
+      >
         <div className="lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen">
           <div className="flex justify-center">
             <img src={'/favicon/favicon.ico'} alt="" />
           </div>
           <div className="text-start px-5">
-            {/* <button
-              type="button"
-              onClick={() => setIsRegister(false)}
-              className="bg-blue-500 px-5 py-2 text-white rounded-md flex items-center duration-300 hover:bg-blue-600"
-            >
-              {' '}
-              <IoMdArrowRoundForward className="pt-2 text-3xl" />
-              <span>مرحله قبل</span>
-            </button> */}
+           
             <Tooltip title="مرحله قبل">
-              <IconButton onClick={() => {
-                setIsRegister(false)}
-              } >
+              <IconButton
+                onClick={() => {
+                  setIsRegister(false);
+                }}
+              >
                 <IoMdArrowRoundForward className="text-3xl" />
               </IconButton>
             </Tooltip>
           </div>
 
           <div className=" mt-5">
-            <InputName fristName={firstName} setFristName={setFirstName} />
+            <InputName firstName={firstName} setFirstName={setFirstName} />
             <InputLastName lastName={lastName} setLastName={setLastName} />
             <SelectGender gender={gender} setGender={setGender} />
             <SelectAge setDateOfBirthFaPatient={setDateOfBirthFaPatient} />
             {registerModel.abroad && <InputPassword setPassword={setPassword} password={password} />}
-            <InputFillCode setCode={setCode} btnSubmit={btnSubmit} setDisableEnter={setDisableEnter}/>
+            <InputFillCode setCode={setCode} />
             <div className="px-5 mx-auto lg:w-2/3 w-full mt-4">
               <div className="px-2 rounded-md flex items-center">
                 <Button

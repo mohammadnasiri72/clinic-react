@@ -8,7 +8,7 @@ export default function SelectExpertises({expertise , setExpertise}) {
  
   useEffect(() => {
     axios
-      .get(`mainDomain + '/api/BasicInfo/Specialization/GetList`, {
+      .get(`${mainDomain}/api/BasicInfo/Specialization/GetList`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

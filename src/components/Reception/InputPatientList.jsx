@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
 export default function InputPatientList({
@@ -11,27 +11,36 @@ export default function InputPatientList({
   userSelected,
   editeUser,
 }) {
+  const [query, setQuery] = useState('');
+
   useEffect(() => {
     if (!editeUser) {
       setUserSelected([]);
     }
-    if (editeUser?.length>0) {
+    if (editeUser?.length > 0) {
       setUserSelected(editeUser);
-      
     }
   }, [pageStateReception]);
+
   useEffect(() => {
-    axios
-      .get(`${mainDomain}/api/Patient/GetList`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setPatientList(res.data);
-      })
-      .catch((err) => {});
-  }, []);
+    if (query.length > 0) {
+      axios
+        .get(`${mainDomain}/api/Patient/GetList`, {
+          params:{
+            query
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setPatientList(res.data);
+        })
+        .catch((err) => {});
+    }else{
+      setPatientList([]);
+    }
+  }, [query]);
   const changValPatientHandler = (event, newValue) => {
     if (newValue) {
       setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
@@ -51,11 +60,13 @@ export default function InputPatientList({
           }
           onChange={(event, newValue) => changValPatientHandler(event, newValue)}
           freeSolo
-          options={patientList.map(
-            (option) => `${option.firstName} ${option.lastName} ( ${option.nationalId} ) `
-          )}
+          options={patientList.map((option) => `${option.firstName} ${option.lastName} ( ${option.nationalId} ) `)}
           renderInput={(params) => (
-            <TextField {...params} label={pageStateReception === 0 ? 'لیست بیماران' : 'انتخاب بیمار'} />
+            <TextField
+              onChange={(e) => setQuery(e.target.value)}
+              {...params}
+              label={pageStateReception === 0 ? 'لیست بیماران' : 'انتخاب بیمار'}
+            />
           )}
         />
       </div>

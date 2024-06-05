@@ -44,7 +44,7 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
   const [account, setAccount] = useState('');
   const [change, setChang] = useState(false);
-  const [flagNotification, setFlagNotification] = useState(false);
+  const [flagNotif, setFlagNotif] = useState(false);
 
   const url = useLocation();
   const navigate = useNavigate();
@@ -97,13 +97,8 @@ export default function Router() {
     },
     {
       path: '/dashboard',
-      element: (
-        <DashboardLayout
-          account={account}
-          flagNotification={flagNotification}
-          setFlagNotification={setFlagNotification}
-        />
-      ),
+      element: <DashboardLayout account={account} flagNotif={flagNotif} setFlagNotif={setFlagNotif} />,
+
       children: [
         { element: <Navigate to="/dashboard/home" replace />, index: true },
         { path: 'home', element: <HomePage account={account} /> },
@@ -126,28 +121,7 @@ export default function Router() {
         { path: 'managReserve', element: <ManagReserve /> },
         { path: 'managInformation', element: <ManagInformation /> },
         { path: 'managInsuranceCompany', element: <ManagInsuranceCompany /> },
-        {
-          path: 'mymessage',
-          element: <Mymessage flagNotification={flagNotification} setFlagNotification={setFlagNotification} />,
-        },
-        // {
-        //   path: 'test',
-        //   children: [
-        //     { element: <Navigate to="/dashboard/test/one" replace />, index: true },
-        //     { path: 'one', element: <PageTestOne /> },
-        //     { path: 'two', element: <PageTestTwo /> },
-        //     { path: 'three', element: <PageTestThree /> },
-        //   ],
-        // },
-        // {
-        //   path: 'overMenu',
-        //   children: [
-        //     { element: <Navigate to="/dashboard/overMenu/one" replace />, index: true },
-        //     { path: 'one', element: <PageFive /> },
-
-        //     { path: 'three', element: <PageSeven /> },
-        //   ],
-        // },
+        { path: 'mymessage', element: <Mymessage flagNotif={flagNotif} setFlagNotif={setFlagNotif} /> },
       ],
     },
     // {

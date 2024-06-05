@@ -1,10 +1,10 @@
 import { TextField } from '@mui/material';
 
-export default function InputName({ fristName, setFristName }) {
+export default function InputName({ firstName, setFirstName }) {
   let colorName = '';
-  if (fristName.length > 2) {
+  if (firstName.length > 2) {
     colorName = 'success';
-  } else if (fristName.length === 0) {
+  } else if (firstName.length === 0) {
     colorName = 'primary';
   } else {
     colorName = 'error';
@@ -16,7 +16,7 @@ export default function InputName({ fristName, setFristName }) {
         <TextField
         autoFocus
         //  inputRef={input => input && input.focus()}
-          onChange={(e) => setFristName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
           className="w-full"
           id="outlined-multiline-flexible"
           label="نام"

@@ -13,16 +13,16 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    linkTo: '/',
+    label: 'خانه',
+    linkTo: '/dashboard/home',
   },
   {
-    label: 'Profile',
-    linkTo: '/',
+    label: 'پروفایل',
+    linkTo: '/dashboard/updateProfile',
   },
   {
-    label: 'Settings',
-    linkTo: '/',
+    label: 'پیامهای من',
+    linkTo: '/dashboard/mymessage',
   },
 ];
 
@@ -97,7 +97,7 @@ export default function AccountPopover({ account }) {
             {account.firstName} {account.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            rayan.moran@gmail.com
+           {account.status}
           </Typography>
         </Box>
 
@@ -105,7 +105,10 @@ export default function AccountPopover({ account }) {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} to={option.linkTo} onClick={handleClose}>
+            <MenuItem key={option.label} onClick={()=>{
+              handleClose()
+              navigate(option.linkTo);
+            }}>
               {option.label}
             </MenuItem>
           ))}

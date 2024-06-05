@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 
 export default function InputNameUpdateProfile({ name , setName , setWidth}) {
   const inpName = useRef(null)
-  // setWidth(inpName.current.clientWidth);
   window.addEventListener("resize", ()=>{
     if (inpName.current) {
       setWidth(inpName.current.clientWidth);

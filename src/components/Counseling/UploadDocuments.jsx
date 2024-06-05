@@ -159,43 +159,43 @@ export default function UploadDocuments({
             <h2 className="text-2xl font-semibold pb-4">در صورت داشتن مدارک پزشکی آن را برای دکتر ارسال کنید</h2>
           </div>
         )}
-        <div className="px-4 w-full flex justify-start items-center" dir="rtl">
-          <FormControl color="primary" className="w-36">
-            <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-              نوع فایل
-            </InputLabel>
-            <Select
-              onChange={changTypeFileHandler}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="نوع فایل"
-              color="primary"
-              value={fileVal}
-            >
-              {fileType.map((e) => (
-                <MenuItem key={e.itemId} value={e.itemId}>
-                  {e.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <div>
-            <div className=" text-start px-2 w-96" dir="rtl">
-              <TextField
-                onChange={(e) => setDesc(e.target.value)}
-                className="w-full text-end"
-                id="outlined-multiline-flexible"
-                label="توضیحات"
-                multiline
-                dir="rtl"
-                maxRows={4}
-                value={desc}
-              />
-            </div>
+        <div className="px-4 w-full flex flex-wrap justify-start items-center" dir="rtl">
+          <div className="lg:w-32 w-full text-start">
+            <FormControl className="w-32" color="primary">
+              <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
+                نوع فایل
+              </InputLabel>
+              <Select
+                onChange={changTypeFileHandler}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="نوع فایل"
+                color="primary"
+                value={fileVal}
+              >
+                {fileType.map((e) => (
+                  <MenuItem key={e.itemId} value={e.itemId}>
+                    {e.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="lg:mt-0 mt-3 text-start lg:px-2 w-96" dir="rtl">
+            <TextField
+              onChange={(e) => setDesc(e.target.value)}
+              className="w-full text-end"
+              id="outlined-multiline-flexible"
+              label="توضیحات"
+              multiline
+              dir="rtl"
+              maxRows={4}
+              value={desc}
+            />
           </div>
           <input className="opacity-0 invisible absolute" ref={inpRef} type="file" onChange={uploadDocumentHandler} />
 
-          <div className="px-3">
+          <div className="lg:px-3 lg:mt-0 mt-3 lg:w-auto w-full text-start">
             {/* <button
               onClick={selectFileHandler}
               className="p-3 flex justify-center items-center bg-slate-100 hover:bg-slate-300 duration-300 rounded-full"

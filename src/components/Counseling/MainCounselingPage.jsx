@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { Button, Skeleton } from '@mui/material';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa6';
-import SelectServices from './SelectServices';
+import { mainDomain } from '../../utils/mainDomain';
 import PatientListVisit from './PatientListVisit';
 import ProblemPatient from './ProblemPatient';
-import UploadDocuments from './UploadDocuments';
-import { mainDomain } from '../../utils/mainDomain';
-import TableReqPatient from './TableReqPatient';
+import SelectServices from './SelectServices';
 import StepperService from './StepperService';
+import TableReqPatient from './TableReqPatient';
+import UploadDocuments from './UploadDocuments';
+import SimpleBackdrop from '../backdrop';
+import DetailsRequest from './DetailsRequest';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function MainCounselingPage({account}) {
+export default function MainCounselingPage({ account }) {
   const [pageNumber, setPageNumber] = useState(0);
   const [valDoctor, setValDoctor] = useState([]);
   const [service, setService] = useState([]);
@@ -25,8 +28,10 @@ export default function MainCounselingPage({account}) {
   const [src, setSrc] = useState('');
   const [srcVideo, setSrcVideo] = useState('');
   const [srcAudio, setSrcAudio] = useState('');
-
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowDetails, setIsShowDetails] = useState(false);
+  const [appointmentId, setAppointmentId] = useState('');
+  const [receptionSelected, setReceptionSelected] = useState({});
 
   useEffect(() => {
     setActiveStep(pageNumber - 1);
@@ -35,6 +40,7 @@ export default function MainCounselingPage({account}) {
     setPageNumber(1);
   };
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${mainDomain}/api/AppointmentCounseling/GetList`, {
         params: {
@@ -49,9 +55,12 @@ export default function MainCounselingPage({account}) {
         },
       })
       .then((res) => {
+        setIsLoading(false);
         setReqPatient(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   }, [flagUpload]);
   return (
     <>
@@ -60,7 +69,7 @@ export default function MainCounselingPage({account}) {
           <StepperService activeStep={activeStep} setActiveStep={setActiveStep} />
         </div>
       )}
-      {pageNumber === 0 && (
+      {pageNumber === 0 && !isShowDetails && (
         <div className="w-11/12 border rounded-md">
           <h3 className="bg-[#f4f6f8] rounded-t-md font-semibold text-xl text-gray-600 p-2">لیست درخواست های من</h3>
           <div className="text-start p-3">
@@ -68,7 +77,6 @@ export default function MainCounselingPage({account}) {
               sx={{
                 py: 1,
                 boxShadow: 'none',
-                // fontSize: 20,
                 backgroundColor: 'rgb(16 185 129)',
                 '&:hover': {
                   backgroundColor: 'rgb(5 150 105)',
@@ -82,7 +90,14 @@ export default function MainCounselingPage({account}) {
               <FaPlus />
             </Button>
           </div>
-          {reqPatient.length === 0 && <p>لیست درخواست های شما خالی است</p>}
+          {reqPatient.length === 0 && !isLoading && <p>لیست درخواست های شما خالی است</p>}
+          {reqPatient.length === 0 && isLoading && (
+            <div className="w-full">
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+            </div>
+          )}
           {reqPatient.length > 0 && (
             <TableReqPatient
               reqPatient={reqPatient}
@@ -91,9 +106,27 @@ export default function MainCounselingPage({account}) {
               setPageNumber={setPageNumber}
               setFlagUpload={setFlagUpload}
               flagUpload={flagUpload}
+              setIsLoading={setIsLoading}
+              setIsShowDetails={setIsShowDetails}
+              setAppointmentId={setAppointmentId}
+              setReceptionSelected={setReceptionSelected}
             />
           )}
         </div>
+      )}
+      {pageNumber === 0 && isShowDetails && (
+        // <DetailsRequest
+        //   setIsLoading={setIsLoading}
+        //   appointmentId={appointmentId}
+        //   setIsShowDetails={setIsShowDetails}
+        //   account={account}
+        // />
+        <FormHistoryVisit
+        setIsShowDetails={setIsShowDetails}
+          receptionSelected={receptionSelected}
+          setIsLoading={setIsLoading}
+          account={account}
+        />
       )}
       {pageNumber === 1 && (
         <SelectServices
@@ -123,21 +156,22 @@ export default function MainCounselingPage({account}) {
           flagUpload={flagUpload}
           setFlagUpload={setFlagUpload}
           filesUpload={filesUpload}
-        setFilesUpload={setFilesUpload}
-        isShowImg={isShowImg}
-        setIsShowImg={setIsShowImg}
-        isShowAudio={isShowAudio}
-        setIsShowAudio={setIsShowAudio}
-        isShowVideo={isShowVideo}
-        setIsShowVideo={setIsShowVideo}
-        src={src}
-        setSrc={setSrc}
-        srcVideo={srcVideo}
-        setSrcVideo={setSrcVideo}
-        srcAudio={srcAudio}
-        setSrcAudio={setSrcAudio}
+          setFilesUpload={setFilesUpload}
+          isShowImg={isShowImg}
+          setIsShowImg={setIsShowImg}
+          isShowAudio={isShowAudio}
+          setIsShowAudio={setIsShowAudio}
+          isShowVideo={isShowVideo}
+          setIsShowVideo={setIsShowVideo}
+          src={src}
+          setSrc={setSrc}
+          srcVideo={srcVideo}
+          setSrcVideo={setSrcVideo}
+          srcAudio={srcAudio}
+          setSrcAudio={setSrcAudio}
         />
       )}
+      {isLoading && <SimpleBackdrop />}
     </>
   );
 }

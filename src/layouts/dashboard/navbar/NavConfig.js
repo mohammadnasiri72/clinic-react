@@ -17,66 +17,49 @@ const ICONS = {
 };
 
 const sidebarConfig = [
-  // GENERAL
+  // General
   // ----------------------------------------------------------------------
   {
-    subheader: 'بیمار',
+    subheader: 'General',
     items: [
       { title: 'صفحه اصلی', path: '/dashboard/home', icon: ICONS.dashboard },
       { title: 'ویرایش پروفایل', path: '/dashboard/updateProfile', icon: <LiaUserEditSolid /> },
+      { title: 'پیام های من', path: '/dashboard/mymessage', icon: <MdSupportAgent /> },
+    ],
+  },
+  // Patient
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'Patient',
+    items: [
       { title: 'نوبت دهی اینترنتی', path: '/dashboard/reserve', icon: <FaRegCalendarCheck /> },
       { title: 'نوبت های من', path: '/dashboard/viewReservation', icon: <FaRegCalendarAlt /> },
       { title: 'لیست بیماری های من', path: '/dashboard/sicknessList', icon: <CiViewList /> },
       { title: 'مشاوره آنلاین', path: '/dashboard/counseling', icon: <MdSupportAgent /> },
       { title: 'سابقه پذیرش', path: '/dashboard/historyVisit', icon: <MdSupportAgent /> },
-      { title: 'پیام های من', path: '/dashboard/mymessage', icon: <MdSupportAgent /> },
     ],
   },
 
   // Staff
   // ----------------------------------------------------------------------
   {
-    subheader: 'staff',
+    subheader: 'Staff',
     items: [
       { title: 'لیست بیماران', path: '/dashboard/patientListStaff', icon: <MdSupportAgent /> },
       { title: 'پذیرش', path: '/dashboard/reception', icon: <MdSupportAgent /> },
-      // {
-      //   title: 'user',
-      //   path: '/dashboard/user',
-      //   icon: <FaRegUser />,
-      //   children: [
-      //     { title: 'Four', path: '/dashboard/user/four' },
-      //     { title: 'Five', path: '/dashboard/user/five' },
-      //     { title: 'Six', path: '/dashboard/user/six' },
-      //   ],
-      // },
     ],
   },
 
   // Doctor
   // ----------------------------------------------------------------------
   {
-    subheader: 'دکتر',
+    subheader: 'Doctor',
     items: [{ title: 'ویزیت', path: '/dashboard/visit', icon: <MdSupportAgent /> }],
   },
-  // {
-  //   subheader: 'management',
-  //   items: [
-  //     {
-  //       title: 'منوی 5',
-  //       path: '/dashboard/overMenu',
-  //       icon: ICONS.user,
-  //       children: [
-  //         { title: 'زیرمنوی 1', path: '/dashboard/overMenu/one' },
-  //         { title: 'زیرمنوی 2', path: '/dashboard/overMenu/two' },
-  //         { title: 'زیرمنوی 3', path: '/dashboard/overMenu/three' },
-  //       ],
-  //     },
-  //     { title: 'منوی 6', path: '/dashboard/five', icon: ICONS.analytics },
-  //   ],
-  // },
+  // Admin
+  // ----------------------------------------------------------------------
   {
-    subheader: 'admin',
+    subheader: 'Admin',
     items: [
       { title: 'مدیریت دارو', path: '/dashboard/manageDrug', icon: <MdSupportAgent /> },
       { title: 'مدیریت خدمات', path: '/dashboard/manageServices', icon: <MdSupportAgent /> },
@@ -85,8 +68,8 @@ const sidebarConfig = [
       { title: 'مدیریت رزرو', path: '/dashboard/managReserve', icon: <MdSupportAgent /> },
       { title: 'مدیریت اطلاعات پایه', path: '/dashboard/managInformation', icon: <MdSupportAgent /> },
       { title: 'مدیریت بیمه', path: '/dashboard/managInsuranceCompany', icon: <MdSupportAgent /> },
-    ]
-  }
+    ],
+  },
 ];
 
 export default sidebarConfig;

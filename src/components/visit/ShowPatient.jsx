@@ -45,6 +45,7 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [valDoing, setValDoing] = React.useState('');
+  console.log(patList);
   React.useEffect(() => {
     setValDoing(patSelected.appointmentId);
   }, [pageStateVisit, patSelected]);
@@ -93,7 +94,7 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
             onChange={(event, newEvent) => setValDoing(newEvent)}
           >
             {patList
-              .filter((e) => e.status === 'Doing')
+              .filter((e) => e.statusId === 3)
               .map((e) => (
                 <ToggleButton
                   onClick={() => setPatSelected(e)}
@@ -108,7 +109,7 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
         </TabPanel>
         <TabPanel className="max-h-[70vh] overflow-auto" value={value} index={1} dir={theme.direction}>
           {patList
-            .filter((e) => e.status === 'Waiting')
+            .filter((e) => e.statusId === 2)
             .map((e) => (
               <div key={e.appointmentId}>
                 <Button>{`${e.patientFirstName} ${e.patientLastName} ${e.patientNationalId}`}</Button>

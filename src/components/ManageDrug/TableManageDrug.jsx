@@ -1,7 +1,9 @@
 import {
   Chip,
   IconButton,
+  Pagination,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -39,9 +41,9 @@ export default function TableManageDrug({
   setShowManageCategoryDrug
 }) {
   const [drugList, setDrugList] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [numPages, setNumPages] = useState(1);
 
-
-  console.log(drugList);
   // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
@@ -54,16 +56,20 @@ export default function TableManageDrug({
 
   useEffect(() => {
     axios
-      .get(`${mainDomain}/api/Medication/GetList`, {
+      .get(`${mainDomain}/api/Medication/GetListPaged`, {
+        params:{
+          pageIndex:numPages
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       .then((res) => {
-        setDrugList(res.data);
+        setDrugList(res.data.items);
+        setTotalPages(res.data.totalPages);
       })
       .catch((err) => {});
-  }, [flag]);
+  }, [flag , numPages]);
 
   const deleteDrugHandler = (e) => {
     Swal.fire({
@@ -193,6 +199,11 @@ export default function TableManageDrug({
           </TableBody>
         </Table>
       </TableContainer>
+      <div className="flex justify-center">
+            <Stack spacing={2}>
+              <Pagination onChange={(e)=> setNumPages(Number(e.target.textContent))} count={totalPages} />
+            </Stack>
+          </div>
     </>
   );
 }

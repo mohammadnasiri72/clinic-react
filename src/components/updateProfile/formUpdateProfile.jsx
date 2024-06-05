@@ -32,7 +32,7 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
   const [width, setWidth] = useState('');
 
   useEffect(() => {
-   
+    if (account.firstName) {
       setName(account.firstName);
       setLastName(account.lastName);
       setFatherName(account.fatherName);
@@ -42,7 +42,7 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
       setProvince(account.province);
       setCity(account.city);
       setAddress(account.address);
-    
+    }
   }, [account]);
 
   // import sweet alert-2
@@ -54,10 +54,6 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-
-  
-  
- 
 
   // update profile
   const updateProfileHandler = () => {

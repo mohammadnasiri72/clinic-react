@@ -4,19 +4,52 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import { Pagination, Stack } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
-import SimpleBackdrop from '../backdrop';
 import OperationMenu from './OperationMenu';
+import SelectStatus from './SelectStatus';
 
-export default function TableReqPatient({ setPageState, setAccountUpdate , searchValue}) {
+export default function TableReqPatient({
+  setPageState,
+  setAccountUpdate,
+  searchValue,
+  setIsLoading,
+  valStatusFilter,
+  isLoading,
+  patient,
+  setPatient,
+  setReceptionSelected
+}) {
   const [patientList, setPatientList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [totalPages, setTotalPages] = useState(3);
+  const [numPages, setNumPages] = useState(1);
+  const [statusList, setStatusList] = useState([]);
 
+  // get status list
   useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get(`${mainDomain}/api/Patient/GetStatusList`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        setStatusList(Object.values(res.data));
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  // get list patient
+  useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${mainDomain}/api/Patient/GetList`, {
         headers: {
@@ -24,62 +57,101 @@ export default function TableReqPatient({ setPageState, setAccountUpdate , searc
         },
       })
       .then((res) => {
+        setIsLoading(false);
         setPatientList(res.data);
+        // setTotalPages(res.data.totalPages)
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   }, [flag]);
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ردیف</TableCell>
-              <TableCell>نام و نام خانوادگی</TableCell>
-              <TableCell align="center">نام پدر</TableCell>
-              <TableCell align="center">کد ملی</TableCell>
-              <TableCell align="center">جنسیت</TableCell>
-              <TableCell align="center">موبایل</TableCell>
-              <TableCell align="center">جزئیات</TableCell>
-              <TableCell align="center">عملیات</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {patientList.filter((ev)=> ev.firstName.includes(searchValue) || ev.lastName.includes(searchValue) || ev.nationalId.includes(searchValue)).map((pat, index) => (
-              <TableRow key={pat.patientId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>
-                  <span className="pr-2 font-semibold">{index + 1}</span>
-                </TableCell>
-                <TableCell component="th" scope="pat">
-                  {pat.firstName} {pat.lastName}
-                </TableCell>
-                <TableCell align="center">{pat.fatherName}</TableCell>
-                <TableCell align="center">{pat.nationalId}</TableCell>
-                <TableCell align="center">{pat.gender === 'm' ? 'مرد' : 'زن'}</TableCell>
-                <TableCell align="center">{pat.abroad ? pat.userEmail : pat.userPhoneNumber}</TableCell>
-                <TableCell align="center">
-                  <div className="flex justify-center">
-                    {/* < className="cursor-pointer" /> */}
-                  </div>
-                </TableCell>
-                <TableCell align="center">
-                  <OperationMenu
-                    setPageState={setPageState}
-                    setAccountUpdate={setAccountUpdate}
-                    pat={pat}
-                    setIsLoading={setIsLoading}
-                    setFlag={setFlag}
-                    flag={flag}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {isLoading && <SimpleBackdrop />}
+      {patientList.filter(
+        (ev) =>
+          ((ev.firstName.includes(searchValue) ||
+            ev.lastName.includes(searchValue) ||
+            ev.nationalId.includes(searchValue)) &&
+            ev.status === valStatusFilter) ||
+          valStatusFilter === 'همه'
+      ).length > 0 && (
+        <div>
+          <TableContainer className="mb-20" component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ردیف</TableCell>
+                  <TableCell>نام و نام خانوادگی</TableCell>
+                  <TableCell align="center">نام پدر</TableCell>
+                  <TableCell align="center">کد ملی</TableCell>
+                  <TableCell align="center">شماره پرونده</TableCell>
+                  <TableCell align="center">جنسیت</TableCell>
+                  <TableCell align="center">موبایل</TableCell>
+                  <TableCell align="center">وضعیت</TableCell>
+                  <TableCell align="center">عملیات</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {patientList
+                  .filter(
+                    (ev) =>
+                      ((ev.firstName.includes(searchValue) ||
+                        ev.lastName.includes(searchValue) ||
+                        ev.nationalId.includes(searchValue)) &&
+                        ev.status === valStatusFilter) ||
+                      valStatusFilter === 'همه'
+                  )
+                  .map((pat, index) => (
+                    <TableRow key={pat.patientId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell>
+                        <span className="pr-2 font-semibold">{index + 1}</span>
+                      </TableCell>
+                      <TableCell component="th" scope="pat">
+                        {pat.firstName} {pat.lastName}
+                      </TableCell>
+                      <TableCell align="center">{pat.fatherName}</TableCell>
+                      <TableCell align="center">{pat.nationalId}</TableCell>
+                      <TableCell align="center">{pat.fileNumber}</TableCell>
+                      <TableCell align="center">{pat.gender === 'm' ? 'مرد' : 'زن'}</TableCell>
+                      <TableCell align="center">{pat.abroad ? pat.userEmail : pat.userPhoneNumber}</TableCell>
+                      <TableCell align="center">
+                        <SelectStatus pat={pat} setIsLoading={setIsLoading} statusList={statusList} />
+                      </TableCell>
+                      <TableCell align="center">
+                        <OperationMenu
+                          setPageState={setPageState}
+                          setAccountUpdate={setAccountUpdate}
+                          pat={pat}
+                          setIsLoading={setIsLoading}
+                          setFlag={setFlag}
+                          flag={flag}
+                          patient={patient}
+                          setPatient={setPatient}
+                          setReceptionSelected={setReceptionSelected}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div className="flex justify-center">
+            <Stack spacing={2}>
+              <Pagination onChange={(e) => setNumPages(Number(e.target.textContent))} count={totalPages} />
+            </Stack>
+          </div>
+        </div>
+      )}
+      {patientList.filter(
+        (ev) =>
+          ((ev.firstName.includes(searchValue) ||
+            ev.lastName.includes(searchValue) ||
+            ev.nationalId.includes(searchValue)) &&
+            ev.status === valStatusFilter) ||
+          valStatusFilter === 'همه'
+      ).length === 0 &&
+        !isLoading && <p className="border p-3 rounded-lg">بیماری یافت نشد</p>}
     </>
   );
 }

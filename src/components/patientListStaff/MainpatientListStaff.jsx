@@ -1,4 +1,4 @@
-import { Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Button, IconButton, Pagination, Stack, Tooltip, Typography } from '@mui/material';
 import { FaArrowRight, FaChevronRight } from 'react-icons/fa';
 import { useState } from 'react';
 import SimpleBackdrop from '../backdrop';
@@ -10,6 +10,7 @@ import NavBarListPatient from './NavBarListPatient';
 import TableListPatient from './TableListPatient';
 import Reserve from '../reserve/reserve';
 import MyReservation from '../myReservation/myReservation';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
 export default function MainpatientListStaff() {
   const [pageState, setPageState] = useState(0);
@@ -19,18 +20,34 @@ export default function MainpatientListStaff() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [flag, setFlag] = useState(false);
-  
+  const [valStatusFilter, setValStatusFilter] = useState('همه');
+  const [receptionSelected, setReceptionSelected] = useState({});
+  const [patient, setPatient] = useState({});
+
   return (
     <>
       <div>
         {pageState === 0 && (
           <div>
-            <NavBarListPatient setPageState={setPageState} searchValue={searchValue} setSearchValue={setSearchValue} />
+            <NavBarListPatient
+              setPageState={setPageState}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              setIsLoading={setIsLoading}
+              valStatusFilter={valStatusFilter}
+              setValStatusFilter={setValStatusFilter}
+            />
             <div className="mt-5 w-11/12 mx-auto">
               <TableListPatient
+                setIsLoading={setIsLoading}
                 setPageState={setPageState}
                 setAccountUpdate={setAccountUpdate}
                 searchValue={searchValue}
+                valStatusFilter={valStatusFilter}
+                isLoading={isLoading}
+                patient={patient}
+                setPatient={setPatient}
+                setReceptionSelected={setReceptionSelected}
               />
             </div>
           </div>
@@ -76,36 +93,9 @@ export default function MainpatientListStaff() {
         )}
         {pageState === 2 && (
           <div>
-            {accountUpdate && (
-              <div className="px-3">
-                {/* <button
-                  onClick={() => setPageState(0)}
-                  className="bg-blue-500 px-5 py-2 rounded-md duration-300 text-white hover:bg-blue-600 flex items-center"
-                >
-                  <FaArrowRight />
-                  <span className="px-2">برگشت به صفخه قبل</span>
-                </button> */}
-                <Button
-                  sx={{
-                    py: 2,
-                    boxShadow: 'none',
-                    // fontSize: 20,
-                    backgroundColor: 'rgb(100 116 139)',
-                    '&:hover': {
-                      backgroundColor: 'rgb(71 85 105)',
-                    },
-                  }}
-                  className="rounded-md duration-300 mt-2"
-                  onClick={() => setPageState(0)}
-                  variant="contained"
-                >
-                  <FaArrowRight />
-                  <span className="px-2">برگشت به صفخه قبل</span>
-                </Button>
-              </div>
-            )}
             {!isRegister && (
               <MainRegisterPage
+                setPageState={setPageState}
                 setIsRegister={setIsRegister}
                 setRegisterModel={setRegisterModel}
                 setIsLoading={setIsLoading}
@@ -120,7 +110,6 @@ export default function MainpatientListStaff() {
                 setIsLoading={setIsLoading}
               />
             )}
-            {isLoading && <SimpleBackdrop />}
           </div>
         )}
         {pageState === 3 && (
@@ -218,7 +207,16 @@ export default function MainpatientListStaff() {
             <MyReservation account={accountUpdate} setPageState={setPageState} />
           </div>
         )}
+        {pageState === 5 && (
+          <FormHistoryVisit
+            setPageState={setPageState}
+            receptionSelected={receptionSelected}
+            setIsLoading={setIsLoading}
+            account={patient}
+          />
+        )}
       </div>
+      {isLoading && <SimpleBackdrop />}
     </>
   );
 }

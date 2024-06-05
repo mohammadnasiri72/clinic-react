@@ -159,7 +159,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
     <>
       <div
         style={{ zIndex: '1301', transform: isOpenAddRelative ? 'translateX(0)' : 'translateX(-100%)' }}
-        className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
+        className="fixed top-0 bottom-0 lg:right-2/3 sm:right-1/2 right-0 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
       >
         <div className="relative">
           {/* <button
@@ -211,7 +211,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
         <InputMobileRelative mobileRelative={mobileRelative} setMobileRelative={setMobileRelative} />
         <InputAddress addressRelative={addressRelative} setAddressRelative={setAddressRelative} />
         <InputDesc descRelative={descRelative} setDescRelative={setDescRelative} />
-        <div className="mt-6 text-start">
+        <div className="mt-6 text-start pb-10">
           {/* <button
             onClick={setNewRelativeHandler}
             className="text-white bg-green-500 rounded-md duration-300 hover:bg-green-600 px-5 py-2"
@@ -223,6 +223,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
           <Button
             sx={{
               py: 2,
+             mb:2,
               boxShadow: 'none',
               backgroundColor: 'rgb(16 185 129)',
               '&:hover': {

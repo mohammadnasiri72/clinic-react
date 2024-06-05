@@ -3,12 +3,12 @@ import React from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 import TablePatient from '../patientList/TablePatient';
 
-export default function InformationPatient({ infoPat }) {
+export default function InformationPatient({ infoPat, setIsLoading, isLoading }) {
   return (
     <>
       <div className="flex flex-wrap">
-      <div className='lg:w-1/6 w-full'>
-          <img className='w-20 h-20 rounded-full border' src={mainDomain+infoPat.avatar} alt="" />
+        <div className="lg:w-1/6 w-full">
+          <img className="w-20 h-20 rounded-full border" src={mainDomain + infoPat.avatar} alt="" />
         </div>
         <div className="lg:w-5/12 w-full">
           <div className=" text-start mt-3" dir="rtl">
@@ -98,10 +98,9 @@ export default function InformationPatient({ infoPat }) {
             />
           </div>
         </div>
-        
       </div>
-      <div className='w-5/6 mx-auto'>
-      <TablePatient infoPat={infoPat}/>
+      <div className="w-5/6 mx-auto">
+        <TablePatient infoPat={infoPat} setIsLoading={setIsLoading} isLoading={isLoading} />
       </div>
     </>
   );

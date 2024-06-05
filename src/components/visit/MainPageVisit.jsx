@@ -28,7 +28,6 @@ export default function MainPageVisit() {
   const [valCondition, setValCondition] = useState([]);
   const disabledChechBox = true;
 
-
   // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
@@ -39,10 +38,9 @@ export default function MainPageVisit() {
     customClass: 'toast-modal',
   });
 
-  
-  const doneHandler = ()=>{
+  const doneHandler = () => {
     // console.log(patSelected);
-    setIsLoading(true)
+    setIsLoading(true);
     const data = new FormData();
     data.append('appointmentId', patSelected.appointmentId);
     axios
@@ -52,23 +50,22 @@ export default function MainPageVisit() {
         },
       })
       .then((res) => {
-        setIsLoading(false)
-        setPageStateVisit(0)
-        setRefreshPatList((e)=>!e)
-        setPatSelected([])
+        setIsLoading(false);
+        setPageStateVisit(0);
+        setRefreshPatList((e) => !e);
+        setPatSelected([]);
         Toast.fire({
           icon: 'success',
           text: 'ویزیت با موفقیت انجام شد',
         });
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-
-  }
-  const backHandler = ()=>{
+  };
+  const backHandler = () => {
     // console.log(patSelected);
-    setIsLoading(true)
+    setIsLoading(true);
     const data = new FormData();
     data.append('appointmentId', patSelected.appointmentId);
     axios
@@ -78,20 +75,19 @@ export default function MainPageVisit() {
         },
       })
       .then((res) => {
-        setIsLoading(false)
-        setPageStateVisit(0)
-        setRefreshPatList((e)=>!e)
-        setPatSelected([])
+        setIsLoading(false);
+        setPageStateVisit(0);
+        setRefreshPatList((e) => !e);
+        setPatSelected([]);
         Toast.fire({
           icon: 'success',
           text: 'بیمار سمت منشی فرستاده شد',
         });
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-
-  }
+  };
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -170,17 +166,10 @@ export default function MainPageVisit() {
       {pageStateVisit === 1 && (
         <div>
           <div className="text-start mb-5 flex justify-between">
-            {/* <button
-              onClick={() => setPageStateVisit(0)}
-              className="bg-blue-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-blue-600"
-            >
-              برگشت به صفحه قبل
-            </button> */}
             <Button
               sx={{
                 py: 1,
                 boxShadow: 'none',
-                // fontSize: 20,
                 backgroundColor: 'rgb(20 184 166)',
                 '&:hover': {
                   backgroundColor: 'rgb(13 148 136)',
@@ -193,21 +182,16 @@ export default function MainPageVisit() {
               برگشت به صفحه قبل
             </Button>
             <CheckBoxDoctor
-            disabledChechBox={disabledChechBox}
+              disabledChechBox={disabledChechBox}
               valCondition={valCondition}
               setValCondition={setValCondition}
               medicalRecord={medicalRecord}
             />
             <div className="flex">
-              {/* <button onClick={()=> setShowNote(true)} className='px-3 py-2 rounded-md bg-slate-500 text-white duration-300 hover:bg-slate-600 flex justify-center items-center'>
-                <HiPencil />
-                <span className='px-2'>note</span>
-                </button> */}
               <Button
                 sx={{
                   py: 1,
                   boxShadow: 'none',
-                  // fontSize: 20,
                   backgroundColor: 'rgb(16 185 129)',
                   '&:hover': {
                     backgroundColor: 'rgb(5 150 105)',
@@ -227,9 +211,6 @@ export default function MainPageVisit() {
                 onChange={(event, newEvent) => setAlignment(newEvent)}
                 aria-label="Platform"
               >
-                {/* <ToggleButton onClick={()=> setShowNote(true)} value="note">
-                  <span className="text-slate-500">note</span>
-                </ToggleButton> */}
                 <ToggleButton onClick={backHandler} value="back">
                   <span className="text-red-500">back</span>
                 </ToggleButton>
@@ -239,7 +220,7 @@ export default function MainPageVisit() {
               </ToggleButtonGroup>
             </div>
           </div>
-          <SecoundPageVisit patSelected={patSelected} setIsLoading={setIsLoading} />
+          <SecoundPageVisit patSelected={patSelected} setIsLoading={setIsLoading} isLoading={isLoading} />
         </div>
       )}
       {isLoading && <SimpleBackdrop />}

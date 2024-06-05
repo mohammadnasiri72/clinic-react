@@ -50,7 +50,7 @@ function a11yProps(index) {
   };
 }
 
-export default function SecoundPageVisit({ patSelected, setIsLoading }) {
+export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading }) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [infoPat, setInfoPat] = React.useState({});
@@ -119,7 +119,7 @@ export default function SecoundPageVisit({ patSelected, setIsLoading }) {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <InformationPatient infoPat={infoPat} />
+            <InformationPatient infoPat={infoPat} setIsLoading={setIsLoading} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             <DiagnosisPatient patSelected={patSelected} setIsLoading={setIsLoading} />

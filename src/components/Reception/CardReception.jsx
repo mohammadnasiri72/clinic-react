@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Button, Chip, Menu, Tooltip } from '@mui/material';
 import Card from '@mui/material/Card';
@@ -46,12 +47,16 @@ export default function CardReception({
   // console.log(reception.patientNationalId);
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
+  // console.log(reception);
 
   const patient = [...patientList];
   useEffect(() => {
     setUser(patient.find((e) => e.nationalId === reception.patientNationalId));
   }, [patient, reception]);
+
+
+  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -113,19 +118,20 @@ export default function CardReception({
           />
         </Box>
         <Chip
-          className="absolute top-6 right-3"
+        size='small'
+          className="absolute top-6 right-1"
           label={reception.status}
-          // color={
-          //   reception.statusId === 5
-          //     ? 'error'
-          //     : reception.statusId === 4
-          //     ? 'success'
-          //     : reception.statusId === 3
-          //     ? 'primary'
-          //     : reception.statusId === 2
-          //     ? 'warning'
-          //     : 'info'
-          // }
+          color={
+            reception.statusId === 5
+              ? 'error'
+              : reception.statusId === 4
+              ? 'success'
+              : reception.statusId === 3
+              ? 'primary'
+              : reception.statusId === 2
+              ? 'warning'
+              : 'info'
+          }
           variant="filled"
         />
         <div className="absolute left-3 top-6">
@@ -201,7 +207,7 @@ export default function CardReception({
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
-          <p className="mt-2">ساعت ورود : {reception?.startTime}</p>
+          <p className="mt-2">ساعت ورود : {reception?.startTime.slice(0,5)}</p>
           <p className="mt-2">تاریخ ورود : {reception?.appointmentDateFA}</p>
           <p className="mt-2">
             نام دکتر : {reception?.doctorFirstName} {reception?.doctorLastName}
@@ -219,5 +225,6 @@ export default function CardReception({
         </CardContent>
       </Collapse>
     </Card>
+   
   );
 }

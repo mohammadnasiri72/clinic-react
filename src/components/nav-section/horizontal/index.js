@@ -26,9 +26,18 @@ function NavSectionHorizontal({ navConfig }) {
       <Stack direction="row" sx={{ ...hideScrollbar, py: 1 }}>
         {navConfig.map((group) => (
           <Stack key={group.subheader} direction="row" flexShrink={0}>
-            {group.items.map((list) => (
+            {
+            localStorage.getItem('roles').includes(group.subheader) &&
+            group.items.map((list) => (
               <NavListRoot key={list.title} list={list} />
             ))}
+            {
+            group.subheader==='General' &&
+            group.items.map((list) => (
+              <NavListRoot key={list.title} list={list} />
+              
+            ))
+          }
           </Stack>
         ))}
       </Stack>

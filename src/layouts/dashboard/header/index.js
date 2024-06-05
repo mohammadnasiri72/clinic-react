@@ -62,8 +62,9 @@ export default function DashboardHeader({
   isCollapse = false,
   verticalLayout = false,
   account,
-  flagNotification,
-  setFlagNotification,
+  flagNotif,
+  setFlagNotif,
+  setIsLoading,
 }) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
@@ -85,16 +86,16 @@ export default function DashboardHeader({
           </IconButtonAnimate>
         )}
 
-        <Searchbar />
+        {/* <Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
-          <NotificationsPopover  
-          flagNotification = {flagNotification}
-          setFlagNotification = {setFlagNotification}
-          />
-          <ContactsPopover />
+          <NotificationsPopover flagNotif={flagNotif} setFlagNotif={setFlagNotif} />
+          {
+            localStorage.getItem('roles') !== 'Patient' &&
+          <ContactsPopover account={account} setIsLoading={setIsLoading} />
+          }
           <AccountPopover account={account} />
         </Stack>
       </Toolbar>

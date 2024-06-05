@@ -13,6 +13,8 @@ import { HEADER, NAVBAR } from '../../config';
 import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
+import DashboardFooter from './footer';
+import SimpleBackdrop from '../../components/backdrop';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +41,9 @@ const MainStyle = styled('main', {
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ account, flagNotification, setFlagNotification }) {
+export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { collapseClick, isCollapse } = useCollapseDrawer();
 
   const { themeLayout } = useSettings();
@@ -54,15 +58,16 @@ export default function DashboardLayout({ account, flagNotification, setFlagNoti
     return (
       <>
         <DashboardHeader
-          flagNotification={flagNotification}
-          setFlagNotification={setFlagNotification}
           onOpenSidebar={() => setOpen(true)}
           verticalLayout={verticalLayout}
           account={account}
+          flagNotif={flagNotif}
+          setFlagNotif={setFlagNotif}
+          setIsLoading={setIsLoading}
         />
 
         {isDesktop ? (
-          <NavbarHorizontal />
+          <NavbarHorizontal account={account} />
         ) : (
           <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
         )}
@@ -83,6 +88,7 @@ export default function DashboardLayout({ account, flagNotification, setFlagNoti
         >
           <Outlet />
         </Box>
+        {isLoading && <SimpleBackdrop />}
       </>
     );
   }
@@ -95,11 +101,12 @@ export default function DashboardLayout({ account, flagNotification, setFlagNoti
       }}
     >
       <DashboardHeader
-        flagNotification={flagNotification}
-        setFlagNotification={setFlagNotification}
         isCollapse={isCollapse}
         onOpenSidebar={() => setOpen(true)}
+        flagNotif={flagNotif}
+        setFlagNotif={setFlagNotif}
         account={account}
+        setIsLoading={setIsLoading}
       />
 
       <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
@@ -107,6 +114,8 @@ export default function DashboardLayout({ account, flagNotification, setFlagNoti
       <MainStyle collapseClick={collapseClick}>
         <Outlet />
       </MainStyle>
+      <DashboardFooter />
+      {isLoading && <SimpleBackdrop />}
     </Box>
   );
 }

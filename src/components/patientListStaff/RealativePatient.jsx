@@ -17,7 +17,7 @@ export default function RelativePatient({isOpenAccompanying  , setIsOpenAddRelat
     <>
       <div
         style={{ zIndex: '1300', transform: isOpenAccompanying ? 'translateX(0)' : 'translateX(-100%)' }}
-        className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
+        className="fixed top-0 bottom-0 lg:right-2/3 sm:right-1/2 right-0 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
       >
         <div className='text-start mb-3'>
         {/* <button onClick={()=>{

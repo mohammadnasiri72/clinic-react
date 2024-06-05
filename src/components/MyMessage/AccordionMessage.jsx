@@ -1,9 +1,8 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
-import { IoCloseCircleOutline } from 'react-icons/io5';
-import { MdOutlineDone, MdDoneAll } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import axios from 'axios';
+import { useState } from 'react';
+import { MdDoneAll, MdOutlineDone } from 'react-icons/md';
 import { mainDomain } from '../../utils/mainDomain';
 
 export default function AccordionMessage({ message , setFlag}) {
@@ -36,6 +35,7 @@ export default function AccordionMessage({ message , setFlag}) {
         onChange={handleChange('panel1')}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+         
           <Typography>
             {message.seenDateTime ? (
               <MdDoneAll className="text-green-500 text-xl " />
@@ -44,10 +44,10 @@ export default function AccordionMessage({ message , setFlag}) {
             )}
           </Typography>
           <Typography sx={{ width: '33%', flexShrink: 0, fontWeight: '700' }}>{message.subject}</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>{message.createdDateTime.slice(0, 10)}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>{message.createdDateTimeFa.slice(0, 10)}</Typography>
 
           <Typography className="absolute left-10">
-            <span className="text-xs">مشاهده توضیحات</span>
+            <span className="text-xs">جزئیات</span>
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

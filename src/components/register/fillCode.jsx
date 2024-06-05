@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useRef, useState } from 'react';
 
-export default function InputFillCode({ setCode, btnSubmit, login , setDisableEnter}) {
+export default function InputFillCode({ setCode , login}) {
   const inpCode = useRef(new Array(6).fill('').map(() => createRef()));
   const [valueInputCode, setValueInputCode] = useState(new Array(6).fill(''));
   let numberCode = '';
@@ -17,10 +17,6 @@ export default function InputFillCode({ setCode, btnSubmit, login , setDisableEn
       setValueInputCode([...arrCode]);
       if (i < 5) {
         inpCode.current[i + 1].current.focus();
-      }
-      if (i === 5) {
-        btnSubmit.current.focus();
-        // setDisableEnter(true)
       }
       if (valueInputCode[i] === '') {
         inpCode.current[i].current.focus();
