@@ -6,29 +6,15 @@ import { mainDomain } from '../../utils/mainDomain';
 import BoxReceptionPatient from '../VisitHistory/BoxReceptionPatient';
 import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function DetailsPatient({ showDetailsPatient, setShowDetailsPatient, patient, setPageState , setReceptionSelected}) {
-  const [historyReception, setHistoryReception] = useState([]);
+export default function DetailsPatient({
+  showDetailsPatient,
+  setShowDetailsPatient,
+  patient,
+  setPageState,
+  setReceptionSelected,
+  historyReception,
+}) {
   
-
-  useEffect(() => {
-    axios
-      .get(`${mainDomain}/api/Appointment/GetList`, {
-        params: {
-          typeId: 1,
-          patientNationalId: patient.nationalId,
-          doctorMedicalSystemId: -1,
-
-          statusId: -1,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setHistoryReception(res.data);
-      })
-      .catch((err) => {});
-  }, []);
   return (
     <>
       <div
@@ -113,9 +99,11 @@ export default function DetailsPatient({ showDetailsPatient, setShowDetailsPatie
             />
           </div>
         </div>
-        <div>
+        <div className='mt-5'>
           <p className="text-xl font-semibold">اطلاعات پذیرش ها</p>
-          {historyReception.map((e) => (
+          {
+          historyReception.length>0 &&
+          historyReception.map((e) => (
             <div key={e.appointmentId} className="w-full px-3 mt-3">
               <BoxReceptionPatient
                 reception={e}

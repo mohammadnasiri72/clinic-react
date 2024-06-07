@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, Paper, TextField } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -77,7 +77,7 @@ export default function MobileLoginPageOne({
 
   return (
     <>
-      <Page
+      <Paper
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             btnNextRef.current.click();
@@ -88,6 +88,7 @@ export default function MobileLoginPageOne({
         <SelectAbroadLogin abroad={abroad} setAbroad={setAbroad} />
         <div className="px-5 lg:w-2/3 w-full mx-auto mt-5">
           <TextField
+          type='number'
             autoFocus
             onChange={(e) => setMobileNumber(e.target.value)}
             value={mobileNumber}
@@ -137,7 +138,7 @@ export default function MobileLoginPageOne({
             </div>
           </div>
         </div>
-      </Page>
+      </Paper>
     </>
   );
 }

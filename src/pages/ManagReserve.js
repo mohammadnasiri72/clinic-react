@@ -8,7 +8,7 @@ export default function ManagReserve({ account }) {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="مدیریت نوبت">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageManageReserve />
         </Container>

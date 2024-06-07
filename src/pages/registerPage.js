@@ -1,32 +1,14 @@
-import React, { useState } from "react";
-import MainRegisterPage from "../components/register/mainRegisterPage";
-import SecoundRegisterPage from "../components/register/secoundRegisterPage";
-import SimpleBackdrop from "../components/backdrop";
-
+import Page from '../components/Page';
+import MainPageRegister from '../components/register/MainPageRegister';
 
 function Register() {
-  const [isRegister , setIsRegister] = useState(false)
-  const [registerModel , setRegisterModel] = useState({})
-  const [isLoading, setIsLoading] = useState(false);
-  
   return (
     <>
-    {
-        !isRegister&&
-        <MainRegisterPage setIsRegister={setIsRegister} setRegisterModel={setRegisterModel} setIsLoading={setIsLoading} isRegister={isRegister}/>
-    }
-    {
-        isRegister&& 
-        <SecoundRegisterPage registerModel={registerModel} setIsRegister={setIsRegister} setIsLoading={setIsLoading} isRegister={isRegister}/>
-    }
-    {
-        isLoading && 
-        <SimpleBackdrop />
-      }
+      <Page title="ثبت نام" sx={{ height: 1 }}>
+        <MainPageRegister />
+      </Page>
     </>
   );
 }
 
 export default Register;
-
-

@@ -15,6 +15,7 @@ import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
 import DashboardFooter from './footer';
 import SimpleBackdrop from '../../components/backdrop';
+import Settings from '../../components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -116,6 +117,7 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
       </MainStyle>
       <DashboardFooter />
       {isLoading && <SimpleBackdrop />}
+      {localStorage.getItem('token') && <Settings />}
     </Box>
   );
 }

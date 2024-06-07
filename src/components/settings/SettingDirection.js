@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Grid, RadioGroup, CardActionArea } from '@mui/material';
@@ -23,9 +24,10 @@ const BoxStyle = styled(CardActionArea)(({ theme }) => ({
 
 export default function SettingDirection() {
   const { themeDirection, onChangeDirection } = useSettings();
-  // console.log(themeDirection);
+ 
   const changeDirection = (e)=>{
     onChangeDirection(e.target.value)
+    console.log(e.target.value);
   }
   return (
     <RadioGroup name="themeDirection" value={themeDirection} onChange={(e)=>changeDirection(e)}>

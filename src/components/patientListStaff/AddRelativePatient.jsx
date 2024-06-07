@@ -78,7 +78,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
           setDescRelative('');
           Toast.fire({
             icon: 'success',
-            text: 'بیمار با موفقیت ثبت شد',
+            text: 'همراه با موفقیت ثبت شد',
           });
         })
         .catch((err) => {

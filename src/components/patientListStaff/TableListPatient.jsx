@@ -4,48 +4,55 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import { Pagination, Stack } from '@mui/material';
+import { Pagination, Skeleton, Stack } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 import OperationMenu from './OperationMenu';
 import SelectStatus from './SelectStatus';
+import SimpleBackdrop from '../backdrop';
 
 export default function TableReqPatient({
   setPageState,
   setAccountUpdate,
   searchValue,
-  setIsLoading,
   valStatusFilter,
-  isLoading,
   patient,
   setPatient,
-  setReceptionSelected
+  setReceptionSelected,
+  statusList,
+  patientList,
+  setPatientList,
 }) {
-  const [patientList, setPatientList] = useState([]);
   const [flag, setFlag] = useState(false);
   const [totalPages, setTotalPages] = useState(3);
   const [numPages, setNumPages] = useState(1);
-  const [statusList, setStatusList] = useState([]);
+  const [PatientRelative, setPatientRelative] = useState([]);
+  const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
+  const [isOpenAddRelative, setIsOpenAddRelative] = useState(false);
+  const [historyReception, setHistoryReception] = useState([]);
 
-  // get status list
+  const [isLoading, setIsLoading] = useState(false);
+
+
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`${mainDomain}/api/Patient/GetStatusList`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        setStatusList(Object.values(res.data));
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, []);
+    if (patient.nationalId) {
+      axios
+        .get(`${mainDomain}/api/PatientRelative/Patient/GetList`, {
+          params: {
+            nationalId: patient.nationalId,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setPatientRelative(res.data);
+        })
+        .catch((err) => {});
+    }
+  }, [patient, isOpenAccompanying, isOpenAddRelative, flag]);
 
   // get list patient
   useEffect(() => {
@@ -66,15 +73,40 @@ export default function TableReqPatient({
       });
   }, [flag]);
 
+  useEffect(() => {
+    axios
+      .get(`${mainDomain}/api/Appointment/GetList`, {
+        params: {
+          typeId: 1,
+          patientNationalId: patient.nationalId,
+          doctorMedicalSystemId: -1,
+
+          statusId: -1,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setHistoryReception(res.data);
+      })
+      .catch((err) => {});
+  }, [patient]);
+
+  
   return (
     <>
-      {patientList.filter(
+      {
+      patientList.filter(
         (ev) =>
-          ((ev.firstName.includes(searchValue) ||
+        (ev.firstName.includes(searchValue) ||
             ev.lastName.includes(searchValue) ||
-            ev.nationalId.includes(searchValue)) &&
-            ev.status === valStatusFilter) ||
-          valStatusFilter === 'همه'
+            ev.nationalId.includes(searchValue))
+            
+            &&
+            
+           ( ev.status === valStatusFilter ||
+          valStatusFilter === 'همه')
       ).length > 0 && (
         <div>
           <TableContainer className="mb-20" component={Paper}>
@@ -93,15 +125,18 @@ export default function TableReqPatient({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {patientList
-                  .filter(
-                    (ev) =>
-                      ((ev.firstName.includes(searchValue) ||
-                        ev.lastName.includes(searchValue) ||
-                        ev.nationalId.includes(searchValue)) &&
-                        ev.status === valStatusFilter) ||
-                      valStatusFilter === 'همه'
-                  )
+                {
+                 patientList.filter(
+                  (ev) =>
+                  (ev.firstName.includes(searchValue) ||
+                      ev.lastName.includes(searchValue) ||
+                      ev.nationalId.includes(searchValue))
+                      
+                      &&
+                      
+                     ( ev.status === valStatusFilter ||
+                    valStatusFilter === 'همه')
+                )
                   .map((pat, index) => (
                     <TableRow key={pat.patientId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell>
@@ -129,6 +164,12 @@ export default function TableReqPatient({
                           patient={patient}
                           setPatient={setPatient}
                           setReceptionSelected={setReceptionSelected}
+                          PatientRelative={PatientRelative}
+                          isOpenAccompanying={isOpenAccompanying}
+                          setIsOpenAccompanying={setIsOpenAccompanying}
+                          isOpenAddRelative={isOpenAddRelative}
+                          setIsOpenAddRelative={setIsOpenAddRelative}
+                          historyReception={historyReception}
                         />
                       </TableCell>
                     </TableRow>
@@ -152,6 +193,22 @@ export default function TableReqPatient({
           valStatusFilter === 'همه'
       ).length === 0 &&
         !isLoading && <p className="border p-3 rounded-lg">بیماری یافت نشد</p>}
+      {patientList.filter(
+        (ev) =>
+          ((ev.firstName.includes(searchValue) ||
+            ev.lastName.includes(searchValue) ||
+            ev.nationalId.includes(searchValue)) &&
+            ev.status === valStatusFilter) ||
+          valStatusFilter === 'همه'
+      ).length === 0 &&
+        isLoading && (
+          <div className="w-full">
+            <Skeleton animation="wave" />
+            <Skeleton animation="wave" />
+            <Skeleton animation="wave" />
+          </div>
+        )}
+      {isLoading && <SimpleBackdrop />}
     </>
   );
 }

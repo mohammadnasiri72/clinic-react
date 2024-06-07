@@ -51,6 +51,7 @@
     "date-fns": "^2.28.0",
     "farvardin": "^1.0.3",
     "framer-motion": "^6.2.8",
+    "git": "^0.1.5",
     "history": "^5.3.0",
     "nprogress": "^0.2.0",
     "prop-types": "^15.8.1",

@@ -8,7 +8,7 @@ export default function ManagInformation({ account }) {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="مدیریت اطلاعات پایه">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageManagInformation />
         </Container>

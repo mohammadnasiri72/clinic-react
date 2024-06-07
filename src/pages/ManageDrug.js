@@ -8,7 +8,7 @@ export default function ManageDrug() {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="مدیریت دارو">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageManageDrug />
         </Container>

@@ -12,7 +12,7 @@ export default function MainPageReserve({account}) {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Reserve">
+    <Page title="نوبت دهی آنلاین">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Typography variant="h3" component="h1" paragraph>
           نوبت دهی آنلاین

@@ -25,7 +25,7 @@ export default function MyVisitedBox({ list, doctor }) {
         <div className="flex items-center mt-2">
           <p className="px-2 whitespace-nowrap">زمان:</p>
           <p className="px-2 whitespace-nowrap">
-            {list.reservationTimeFromTime} الی {list.reservationTimeToTime}
+            {list.reservationTimeFromTime.slice(0,5)} الی {list.reservationTimeToTime.slice(0,5)}
           </p>
         </div>
       </div>

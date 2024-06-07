@@ -8,7 +8,7 @@ export default function ManagStaff({ account }) {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="مدیریت پرسنل">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageManageStaff account={account} />
         </Container>

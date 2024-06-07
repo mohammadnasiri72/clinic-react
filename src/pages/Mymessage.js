@@ -8,7 +8,7 @@ export default function Mymessage({ flagNotification, setFlagNotification, flagN
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="پیغام های من">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageMyMessage
             flagNotification={flagNotification}

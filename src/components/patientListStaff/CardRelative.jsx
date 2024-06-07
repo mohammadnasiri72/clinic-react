@@ -24,7 +24,7 @@ export default function CardRelative({
   setIsLoading,
   setIsOpenAddRelative,
   setEditRelative,
-  setFlag
+  setFlag,
 }) {
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -83,7 +83,7 @@ export default function CardRelative({
           })
           .then((res) => {
             setIsLoading(false);
-            setFlag((e)=>!e)
+            setFlag((e) => !e);
             Toast.fire({
               icon: 'success',
               text: 'همراه مورد نظر با موفقیت حذف شد',
@@ -125,22 +125,21 @@ export default function CardRelative({
               >
                 <div className="px-4">
                   <Tooltip title="ویرایش" placement="right">
-                    <IconButton>
-                      <Iconify
-                        onClick={() => {
-                          handleClose();
-                          setIsOpenAddRelative(true);
-                          setEditRelative(rel);
-                        }}
-                        icon={'eva:edit-fill'}
-                      />
+                    <IconButton
+                      onClick={() => {
+                        handleClose();
+                        setIsOpenAddRelative(true);
+                        setEditRelative(rel);
+                      }}
+                    >
+                      <Iconify icon={'eva:edit-fill'} />
                     </IconButton>
                   </Tooltip>
                 </div>
                 <div className="px-4">
                   <Tooltip title="حذف" placement="right">
-                    <IconButton>
-                      <Iconify onClick={deleteRelativeHandler} className="text-red-500" icon={'eva:trash-2-outline'} />
+                    <IconButton onClick={deleteRelativeHandler}>
+                      <Iconify className="text-red-500" icon={'eva:trash-2-outline'} />
                     </IconButton>
                   </Tooltip>
                 </div>

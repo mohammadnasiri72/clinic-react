@@ -23,12 +23,15 @@ export default function OperationMenu({
   flag,
   patient,
   setPatient,
-  setReceptionSelected
+  setReceptionSelected,
+  PatientRelative,
+  isOpenAccompanying,
+  setIsOpenAccompanying,
+  isOpenAddRelative,
+  setIsOpenAddRelative,
+  historyReception
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
-  const [isOpenAddRelative, setIsOpenAddRelative] = useState(false);
-  const [PatientRelative, setPatientRelative] = useState([]);
 
   const [editRelative, setEditRelative] = useState({});
   const [showDetailsPatient, setShowDetailsPatient] = useState(false);
@@ -109,23 +112,7 @@ export default function OperationMenu({
     setAccountUpdate(e);
     setPageState(3);
   };
-  useEffect(() => {
-    if (patient.nationalId) {
-      axios
-        .get(`${mainDomain}/api/PatientRelative/Patient/GetList`, {
-          params: {
-            nationalId: patient.nationalId,
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((res) => {
-          setPatientRelative(res.data);
-        })
-        .catch((err) => {});
-    }
-  }, [patient, isOpenAccompanying, isOpenAddRelative, flag]);
+
   return (
     <>
       <div>
@@ -212,10 +199,11 @@ export default function OperationMenu({
         patient={patient}
         setPageState={setPageState}
         setReceptionSelected={setReceptionSelected}
+        historyReception={historyReception}
       />
       {(isOpenAccompanying || isOpenAddRelative || showDetailsPatient) && (
         <Paper
-          sx={{ backgroundColor: '#000c' }}
+          sx={{ backgroundColor: '#0003' }}
           style={{ zIndex: 1200 }}
           onClick={() => {
             setIsOpenAccompanying(false);

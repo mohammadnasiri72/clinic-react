@@ -8,7 +8,7 @@ export default function ManagDoctor() {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="مدیریت پزشک">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MainPageManageDoctor/>
         </Container>

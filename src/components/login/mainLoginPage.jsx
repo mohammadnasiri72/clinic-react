@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
+import { Container } from '@mui/material';
 import NationalIdLogin from './nationalIdLogin';
 import MobileLogin from './mobileLogin';
 import SimpleBackdrop from '../backdrop';
 import Page from '../Page';
+import useSettings from '../../hooks/useSettings';
 
 export default function MainLoginPage() {
   const [abroad, setAbroad] = useState(false);
   const [isLoading , setIsLoading] = useState(false)
-
+  const { themeStretch } = useSettings();
   
   
   
   return (
     <>
+    <Page title="ورود">
+        
       <div className="flex justify-center items-center min-h-screen">
         <div className="lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen">
         <div className="flex justify-center">
@@ -27,6 +31,7 @@ export default function MainLoginPage() {
         isLoading &&
         <SimpleBackdrop />
       }
+      </Page>
     </>
   );
 }

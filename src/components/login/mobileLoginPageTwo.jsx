@@ -1,4 +1,4 @@
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton, Paper, Tooltip } from '@mui/material';
 import axios from 'axios';
 import { useRef, useState } from 'react';
 import { IoMdArrowRoundForward } from 'react-icons/io';
@@ -44,7 +44,9 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
             icon: 'success',
             text: 'با موفقیت وارد شدید',
           });
-          navigate('/dashboard');
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 500);
         })
         .catch((err) => {
           setIsLoading(false);
@@ -63,7 +65,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
 
   return (
     <>
-      <Page
+      <Paper
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             btnSubmit.current.click();
@@ -101,7 +103,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
         <div className="lg:w-2/3 w-full mx-auto px-5 mt-4 text-start">
           <InputTimerLogin mobileNumber={mobileNumber} />
         </div>
-      </Page>
+      </Paper>
     </>
   );
 }

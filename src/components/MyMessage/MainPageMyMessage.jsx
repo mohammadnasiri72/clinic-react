@@ -13,6 +13,7 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState('');
   const [listMessageChecked, setListMessageChecked] = useState([]);
+  const [listMessageIdDelete, setListMessageIdDelete] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,6 +35,22 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
         setIsLoading(false);
       });
   }, [flagNotif, numberItems]);
+
+  const deleteMessagesHandler = ()=>{
+    const data = new FormData();
+    data.append('messageId', listMessageIdDelete);
+    axios.post(`${mainDomain}/api/Message/Delete` , data , {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+    .then((res)=>{
+      setFlagNotif((e)=>!e)
+    })
+    .catch((err)=>{
+
+    })
+  }
 
   return (
     <>
@@ -59,7 +76,7 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
           <h3 className="text-xl font-semibold">پیغام‌ های من</h3>
         </div>
         {message.length > 0 && (
-          <IconButton disabled={listMessageChecked.length === 0}>
+          <IconButton disabled={listMessageChecked.length === 0} onClick={deleteMessagesHandler}>
             <FaTrashAlt />
           </IconButton>
         )}
@@ -71,6 +88,7 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
             message={e}
             listMessageChecked={listMessageChecked}
             setListMessageChecked={setListMessageChecked}
+            setListMessageIdDelete={setListMessageIdDelete}
           />
           <div className="w-full">
             <AccordionMessage message={e} setFlag={setFlagNotif} />

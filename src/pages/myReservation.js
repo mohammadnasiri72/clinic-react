@@ -8,7 +8,7 @@ export default function ViewReservation({ account }) {
   const { themeStretch } = useSettings();
   return (
     <>
-      <Page title="view reservation">
+      <Page title="نوبت های من">
         <Container maxWidth={themeStretch ? false : 'xl'}>
           <MyReservation account={account} />
         </Container>

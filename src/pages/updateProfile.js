@@ -13,7 +13,7 @@ export default function UpdateProfile({account , setChang}) {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Update Profile">
+    <Page title="ویرایش پروفایل">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Typography className="text-start" variant="h3" component="h1" paragraph>
           ویرایش پروفایل

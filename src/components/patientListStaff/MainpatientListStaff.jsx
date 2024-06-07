@@ -1,6 +1,7 @@
 import { Button, IconButton, Pagination, Stack, Tooltip, Typography } from '@mui/material';
 import { FaArrowRight, FaChevronRight } from 'react-icons/fa';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import SimpleBackdrop from '../backdrop';
 import MainRegisterPage from '../register/mainRegisterPage';
 import SecoundRegisterPage from '../register/secoundRegisterPage';
@@ -11,6 +12,8 @@ import TableListPatient from './TableListPatient';
 import Reserve from '../reserve/reserve';
 import MyReservation from '../myReservation/myReservation';
 import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
+import { mainDomain } from '../../utils/mainDomain';
+import MainPageRegister from '../register/MainPageRegister';
 
 export default function MainpatientListStaff() {
   const [pageState, setPageState] = useState(0);
@@ -23,6 +26,27 @@ export default function MainpatientListStaff() {
   const [valStatusFilter, setValStatusFilter] = useState('همه');
   const [receptionSelected, setReceptionSelected] = useState({});
   const [patient, setPatient] = useState({});
+  const [statusList, setStatusList] = useState([]);
+  const [patientList, setPatientList] = useState([]);
+  
+
+  // get status list
+  useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get(`${mainDomain}/api/Patient/GetStatusList`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        setStatusList(Object.values(res.data));
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <>
@@ -36,18 +60,20 @@ export default function MainpatientListStaff() {
               setIsLoading={setIsLoading}
               valStatusFilter={valStatusFilter}
               setValStatusFilter={setValStatusFilter}
+              patientList={patientList}
             />
             <div className="mt-5 w-11/12 mx-auto">
               <TableListPatient
-                setIsLoading={setIsLoading}
                 setPageState={setPageState}
                 setAccountUpdate={setAccountUpdate}
                 searchValue={searchValue}
                 valStatusFilter={valStatusFilter}
-                isLoading={isLoading}
                 patient={patient}
                 setPatient={setPatient}
                 setReceptionSelected={setReceptionSelected}
+                statusList={statusList}
+                patientList={patientList}
+                setPatientList={setPatientList}
               />
             </div>
           </div>
@@ -93,23 +119,7 @@ export default function MainpatientListStaff() {
         )}
         {pageState === 2 && (
           <div>
-            {!isRegister && (
-              <MainRegisterPage
-                setPageState={setPageState}
-                setIsRegister={setIsRegister}
-                setRegisterModel={setRegisterModel}
-                setIsLoading={setIsLoading}
-              />
-            )}
-            {isRegister && (
-              <SecoundRegisterPage
-                pageState={pageState}
-                setPageState={setPageState}
-                registerModel={registerModel}
-                setIsRegister={setIsRegister}
-                setIsLoading={setIsLoading}
-              />
-            )}
+            <MainPageRegister setPageState={setPageState} />
           </div>
         )}
         {pageState === 3 && (

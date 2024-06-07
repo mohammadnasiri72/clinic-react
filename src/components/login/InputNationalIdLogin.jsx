@@ -26,6 +26,7 @@ export default function InputNationalIdLogin({ nationalId, setNationalId , setIs
         
             <div className="mt-2" dir={themeDirection}>
               <TextField
+              type='number'
               autoFocus
                 className="w-full"
                 onChange={(e) => setNationalId(e.target.value)}

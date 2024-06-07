@@ -12,10 +12,10 @@ export default function Reception({account}) {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Reserve">
+    <Page title="پذیرش">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Typography variant="h3" component="h1" paragraph>
-          نوبت دهی آنلاین
+            پذیرش
         </Typography>
         <MainPageReception account={account}/>
       </Container>
