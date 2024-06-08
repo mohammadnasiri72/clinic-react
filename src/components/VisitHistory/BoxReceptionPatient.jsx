@@ -2,7 +2,12 @@ import { Card, CardContent, Chip, IconButton, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { BiDetail } from 'react-icons/bi';
 
-export default function BoxReceptionPatient({ reception, setPageStateVisitHistory, setReceptionSelected , setPageState}) {
+export default function BoxReceptionPatient({
+  reception,
+  setPageStateVisitHistory,
+  setReceptionSelected,
+  setPageState,
+}) {
   let color = 'default';
   if (reception.statusId === 5) {
     color = 'error';
@@ -15,16 +20,13 @@ export default function BoxReceptionPatient({ reception, setPageStateVisitHistor
   } else {
     color = 'info';
   }
- 
 
   return (
     <>
       <Card className="relative w-full">
         <CardContent>
           <div className="flex justify-between items-center">
-            <Chip size="small" label={reception.status} 
-            color={color} 
-            variant="filled" />
+            <Chip size="small" label={reception.status} color={color} variant="filled" />
 
             <h3 className="font-semibold -translate-y-6">
               <span className=" md:text-lg text-sm ">مشخصات پذیرش</span>
@@ -33,15 +35,14 @@ export default function BoxReceptionPatient({ reception, setPageStateVisitHistor
               <IconButton
                 onClick={() => {
                   if (setPageState) {
-                    setPageState(5)
-                  }else if (setPageStateVisitHistory) {
-                    
+                    setPageState(5);
+                  } else if (setPageStateVisitHistory) {
                     setPageStateVisitHistory(1);
                   }
                   setReceptionSelected(reception);
                 }}
               >
-                <BiDetail className='text-teal-500'/>
+                <BiDetail className="text-teal-500" />
               </IconButton>
             </Tooltip>
           </div>

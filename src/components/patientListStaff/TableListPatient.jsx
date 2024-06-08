@@ -26,7 +26,7 @@ export default function TableReqPatient({
   setPatientList,
 }) {
   const [flag, setFlag] = useState(false);
-  const [totalPages, setTotalPages] = useState(3);
+  const [totalPages, setTotalPages] = useState(0);
   const [numPages, setNumPages] = useState(1);
   const [PatientRelative, setPatientRelative] = useState([]);
   const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
@@ -58,15 +58,18 @@ export default function TableReqPatient({
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`${mainDomain}/api/Patient/GetList`, {
+      .get(`${mainDomain}/api/Patient/GetListPaged`, {
+        params:{
+          pageIndex: numPages
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       .then((res) => {
         setIsLoading(false);
-        setPatientList(res.data);
-        // setTotalPages(res.data.totalPages)
+        setPatientList(res.data.items);
+        setTotalPages(res.data.totalPages)
       })
       .catch((err) => {
         setIsLoading(false);

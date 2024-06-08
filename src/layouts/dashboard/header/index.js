@@ -19,6 +19,7 @@ import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ContactsPopover from './ContactsPopover';
 import NotificationsPopover from './NotificationsPopover';
+import Settings from '../../../components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,7 @@ export default function DashboardHeader({
   const isDesktop = useResponsive('up', 'lg');
 
   return (
+    <>
     <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
       <Toolbar
         sx={{
@@ -97,8 +99,11 @@ export default function DashboardHeader({
           <ContactsPopover account={account} setIsLoading={setIsLoading} />
           }
           <AccountPopover account={account} />
+         
         </Stack>
       </Toolbar>
     </RootStyle>
+    
+    </>
   );
 }

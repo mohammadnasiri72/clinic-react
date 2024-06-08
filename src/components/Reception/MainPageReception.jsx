@@ -25,7 +25,7 @@ import TableInsuranceSelected from './TableInsuranceSelected';
 export default function MainPageReception({ account }) {
   const [pageStateReception, setPageStateReception] = useState(0);
   const [valReservPatient, setValReservPatient] = useState('');
-  const [userSelected, setUserSelected] = useState([]);
+  const [userSelected, setUserSelected] = useState({});
   const [reservUser, setReservUser] = useState([]);
   const [showAddInsurance, setShowAddInsurance] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
@@ -65,6 +65,17 @@ export default function MainPageReception({ account }) {
   const [hoursEnd, setHoursEnd] = useState('');
   const [minEnd, setMinEnd] = useState('');
   const [timeEditEnd, setTimeEditEnd] = useState('');
+  const [query, setQuery] = useState('');
+
+  // import sweet alert-2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
 
   useEffect(() => {
     if (valTimeStart && !isEditStartTime) {
@@ -81,6 +92,7 @@ export default function MainPageReception({ account }) {
       setTimeEditStart(`${hoursStart}:${minStart}:00`);
     }
   }, [valTimeStart, isEditStartTime, minStart, hoursStart]);
+
   useEffect(() => {
     if (valTimeEnd && !isEditEndTime) {
       if (valTimeEnd.getHours().toString().length === 1) {
@@ -96,7 +108,6 @@ export default function MainPageReception({ account }) {
       setTimeEditEnd(`${hoursEnd}:${minEnd}:00`);
     }
   }, [valTimeEnd, isEditEndTime, minEnd, hoursEnd]);
-  // console.log(editeUser);
 
   useEffect(() => {
     if (editeUser.paid) {
@@ -147,7 +158,9 @@ export default function MainPageReception({ account }) {
         .catch((err) => {});
     }
   }, [editeUser]);
+
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/Appointment/GetList`, {
         params: {
@@ -164,8 +177,11 @@ export default function MainPageReception({ account }) {
       })
       .then((res) => {
         setReceptions(res.data);
+        setIsLoading(false)
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [toPersianDate, fromPersianDate, userSelected, valType, changStatusCondition, pageStateReception]);
 
   useEffect(() => {
@@ -180,14 +196,6 @@ export default function MainPageReception({ account }) {
     setInsuranceList(arr);
   }, [insuranceListSelected]);
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: 'toast-modal',
-  });
   const showAddInsuranceHandler = () => {
     if (userSelected.length === 0) {
       Toast.fire({
@@ -198,6 +206,7 @@ export default function MainPageReception({ account }) {
       setShowAddInsurance(true);
     }
   };
+
   useEffect(() => {
     setNotes(editeUser?.notes ? editeUser.notes : '');
     // setTurn(1);
@@ -293,6 +302,7 @@ export default function MainPageReception({ account }) {
         });
       });
   };
+
   return (
     <>
       {pageStateReception === 0 && (
@@ -307,6 +317,8 @@ export default function MainPageReception({ account }) {
               patientList={patientList}
               setPatientList={setPatientList}
               userSelected={userSelected}
+              query={query}
+              setQuery={setQuery}
             />
             <InputDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
             <Button
@@ -328,10 +340,11 @@ export default function MainPageReception({ account }) {
                 setValTimeEnd('');
                 setIsEditStartTime(false);
                 setIsEditEndTime(false);
+                setQuery('')
+                setUserSelected({})
               }}
               sx={{
                 boxShadow: 'none',
-                // fontSize: 20,
                 color: 'white',
                 backgroundColor: 'rgb(16 185 129)',
                 '&:hover': {
@@ -352,6 +365,7 @@ export default function MainPageReception({ account }) {
             userSelected={userSelected}
             fromPersianDate={fromPersianDate}
             toPersianDate={toPersianDate}
+            setIsLoading={setIsLoading}
           />
           <div className="mt-5">
             <BoxReception
@@ -364,6 +378,7 @@ export default function MainPageReception({ account }) {
               setEditeUser={setEditeUser}
               setIsEditStartTime={setIsEditStartTime}
               setIsEditEndTime={setIsEditEndTime}
+              setIsLoading={setIsLoading}
             />
           </div>
         </div>
@@ -408,6 +423,8 @@ export default function MainPageReception({ account }) {
               setPatientList={setPatientList}
               userSelected={userSelected}
               editeUser={editeUser}
+              query={query}
+              setQuery={setQuery}
             />
             <Button
               onClick={() => setPageStateReception(2)}
@@ -520,14 +537,14 @@ export default function MainPageReception({ account }) {
           <div className="text-start mt-5">
             {editeUser.appointmentId && (
               <Button
-              sx={{
-                py: 2,
-                boxShadow: 'none',
-                backgroundColor: 'rgb(16 185 129)',
-                '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
-                },
-              }}
+                sx={{
+                  py: 2,
+                  boxShadow: 'none',
+                  backgroundColor: 'rgb(16 185 129)',
+                  '&:hover': {
+                    backgroundColor: 'rgb(5 150 105)',
+                  },
+                }}
                 onClick={editeFormHandler}
                 className="px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600"
               >
@@ -536,14 +553,14 @@ export default function MainPageReception({ account }) {
             )}
             {!editeUser.appointmentId && (
               <Button
-              sx={{
-                py: 2,
-                boxShadow: 'none',
-                backgroundColor: 'rgb(16 185 129)',
-                '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
-                },
-              }}
+                sx={{
+                  py: 2,
+                  boxShadow: 'none',
+                  backgroundColor: 'rgb(16 185 129)',
+                  '&:hover': {
+                    backgroundColor: 'rgb(5 150 105)',
+                  },
+                }}
                 onClick={submitFormHandler}
                 className="px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600"
               >

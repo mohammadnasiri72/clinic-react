@@ -27,6 +27,7 @@ import ManagReserve from '../pages/ManagReserve';
 import ManagInformation from '../pages/ManagInformation';
 import ManagInsuranceCompany from '../pages/ManagInsuranceCompany';
 import Mymessage from '../pages/Mymessage';
+import ReservHistory from '../pages/ReservHistory';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +99,6 @@ export default function Router() {
     {
       path: '/dashboard',
       element: <DashboardLayout account={account} flagNotif={flagNotif} setFlagNotif={setFlagNotif} />,
-
       children: [
         { element: <Navigate to="/dashboard/home" replace />, index: true },
         { path: 'home', element: <HomePage account={account} /> },
@@ -114,6 +114,7 @@ export default function Router() {
         { path: 'visit', element: <Visit account={account} /> },
         { path: 'patientListStaff', element: <PatientListStaff account={account} /> },
         { path: 'reception', element: <Reception account={account} /> },
+        { path: 'reservHistory', element: <ReservHistory /> },
         { path: 'manageDrug', element: <ManageDrug /> },
         { path: 'manageServices', element: <ManageServices /> },
         { path: 'managStaff', element: <ManagStaff /> },

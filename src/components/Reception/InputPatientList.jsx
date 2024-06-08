@@ -10,9 +10,9 @@ export default function InputPatientList({
   setPatientList,
   userSelected,
   editeUser,
+  query,
+  setQuery,
 }) {
-  const [query, setQuery] = useState('');
-
   useEffect(() => {
     if (!editeUser) {
       setUserSelected([]);
@@ -26,8 +26,8 @@ export default function InputPatientList({
     if (query.length > 0) {
       axios
         .get(`${mainDomain}/api/Patient/GetList`, {
-          params:{
-            query
+          params: {
+            query,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -37,10 +37,11 @@ export default function InputPatientList({
           setPatientList(res.data);
         })
         .catch((err) => {});
-    }else{
+    } else {
       setPatientList([]);
     }
   }, [query]);
+  
   const changValPatientHandler = (event, newValue) => {
     if (newValue) {
       setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));

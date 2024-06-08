@@ -9,7 +9,8 @@ export default function FilterCondition({
   userSelected,
   fromPersianDate,
   toPersianDate,
-  pageStateReception
+  pageStateReception,
+  setIsLoading
 }) {
   const [conditionList, setConditionList] = useState([]);
   const [focus, setFocus] = useState(true);
@@ -18,6 +19,7 @@ export default function FilterCondition({
     setStatusCondition('')
   }, [userSelected, fromPersianDate, toPersianDate]);
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/Appointment/GetStatusList`, {
         headers: {
@@ -25,10 +27,12 @@ export default function FilterCondition({
         },
       })
       .then((res) => {
-       
+        setIsLoading(false)
         setConditionList(Object.values(res.data));
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [pageStateReception]);
   const filterHandler = (e) => {
     setFocus(false);

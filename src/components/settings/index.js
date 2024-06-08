@@ -95,7 +95,9 @@ export default function Settings() {
         sx={{ background: 'transparent', zIndex: (theme) => theme.zIndex.drawer + 1 }}
       />
 
-      {!open && <ToggleButton open={open} notDefault={notDefault} onToggle={handleToggle} />}
+      {!open && 
+      <ToggleButton open={open} notDefault={notDefault} onToggle={handleToggle} />
+      }
 
       <AnimatePresence>
         {open && (
@@ -104,9 +106,9 @@ export default function Settings() {
               <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: 2.5 }}>
                 <Typography variant="subtitle1">Settings</Typography>
                 <div>
-                  <IconButtonAnimate onClick={onResetSetting}>
+                  {/* <IconButtonAnimate onClick={onResetSetting}>
                     <Iconify icon={'ic:round-refresh'} width={20} height={20} />
-                  </IconButtonAnimate>
+                  </IconButtonAnimate> */}
                   <IconButtonAnimate onClick={handleClose}>
                     <Iconify icon={'eva:close-fill'} width={20} height={20} />
                   </IconButtonAnimate>

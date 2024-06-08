@@ -47,6 +47,7 @@ const sidebarConfig = [
     items: [
       { title: 'لیست بیماران', path: '/dashboard/patientListStaff', icon: <MdSupportAgent /> },
       { title: 'پذیرش', path: '/dashboard/reception', icon: <MdSupportAgent /> },
+      { title: 'لیست نوبت ها', path: '/dashboard/reservHistory', icon: <MdSupportAgent /> },
     ],
   },
 

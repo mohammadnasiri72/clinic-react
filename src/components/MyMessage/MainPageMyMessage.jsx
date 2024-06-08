@@ -9,7 +9,7 @@ import CheckBoxMessage from './CheckBoxMessage';
 
 export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
   const [message, setMessage] = useState([]);
-  const [numberItems, setNumberItems] = useState(20);
+  const [numberItems, setNumberItems] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState('');
   const [listMessageChecked, setListMessageChecked] = useState([]);
@@ -20,7 +20,8 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
     axios
       .get(`${mainDomain}/api/Message/GetListPaged`, {
         params: {
-          pageSize: numberItems,
+          pageIndex: numberItems,
+          userId: localStorage.getItem('userId')
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -28,7 +29,7 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
       })
       .then((res) => {
         setIsLoading(false);
-        setMessage(res.data.items);
+        setMessage([...message , ...res.data.items]);
         setTotalCount(res.data.totalCount);
       })
       .catch((err) => {
@@ -101,7 +102,7 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
           // eslint-disable-next-line no-nested-ternary
           sx={{ display: message.length === totalCount ? 'none' : message.length === 0 ? 'none' : 'inline' }}
           onClick={() => {
-            setNumberItems(numberItems + 20);
+            setNumberItems(numberItems + 1);
           }}
         >
           بیشتر

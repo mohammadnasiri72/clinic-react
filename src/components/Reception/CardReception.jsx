@@ -10,9 +10,9 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { AiOutlineMessage } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaMobile } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { GiCancel } from 'react-icons/gi';
 import { TbDoorEnter } from 'react-icons/tb';
 import { mainDomain } from '../../utils/mainDomain';
@@ -31,30 +31,21 @@ const ExpandMore = styled((props) => {
 
 export default function CardReception({
   reception,
-  patientList,
   setChangStatusCondition,
   setPageStateReception,
-  setUserSelected,
   setEditeUser,
   setIsEditStartTime,
   setIsEditEndTime,
+  setShowDetailsPatient,
+  setPatientId,
+  setOpenBoxMessage,
+  setUserId,
 }) {
-  //  (patientList.filter((e)=>{
-  //      reception.patientNationalId === e.nationalId
-  //     console.log(e.nationalId);
-  //     console.log(reception.patientNationalId);
-  //   }));
-  // console.log(reception.patientNationalId);
+ 
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [user, setUser] = useState({});
-  // console.log(reception);
 
-  const patient = [...patientList];
-  useEffect(() => {
-    setUser(patient.find((e) => e.nationalId === reception.patientNationalId));
-  }, [patient, reception]);
-
+  
 
   
   const handleExpandClick = () => {
@@ -98,7 +89,7 @@ export default function CardReception({
   const editHandler = (e) => {
     setPageStateReception(1);
     setEditeUser(e);
-    setUserSelected(patientList.find((ev) => ev.nationalId === e.patientNationalId));
+    // setUserSelected(patientList.find((ev) => ev.nationalId === e.patientNationalId));
     handleClose();
     setIsEditStartTime(false);
     setIsEditEndTime(false);
@@ -109,11 +100,11 @@ export default function CardReception({
         <Box className={'flex justify-center'}>
           <img
             className="w-14 h-14 rounded-full border"
-            src={
-              patientList.length > 0
-                ? mainDomain + patientList.find((e) => e.nationalId === reception.patientNationalId).avatar
-                : ''
-            }
+            // src={
+            //   patientList.length > 0
+            //     ? mainDomain + patientList.find((e) => e.nationalId === reception.patientNationalId).avatar
+            //     : ''
+            // }
             alt=""
           />
         </Box>
@@ -155,7 +146,8 @@ export default function CardReception({
           >
             <div className="px-4">
               <Tooltip title="مرحله بعد" placement="right">
-                <IconButton
+               <span>
+               <IconButton
                   disabled={reception.statusId > 2}
                   onClick={() => {
                     handleClose();
@@ -164,24 +156,59 @@ export default function CardReception({
                 >
                   <TbDoorEnter style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
                 </IconButton>
+               </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="ویرایش" placement="right">
+                <span>
                 <IconButton
                   onClick={() => {
                     editHandler(reception);
-                    handleClose();
                   }}
                   disabled={reception.statusId > 2}
                 >
                   <Iconify icon={'eva:edit-fill'} />
                 </IconButton>
+                </span>
+              </Tooltip>
+            </div>
+            <div className="px-4">
+              <Tooltip title="مشاهده جزئیات" placement="right">
+               <span>
+               <IconButton
+                  onClick={() => {
+                    handleClose();
+                    setShowDetailsPatient(true)
+                    setPatientId(reception.patientNationalId)
+                    
+                  }}
+                >
+                  <FaEye />
+                </IconButton>
+               </span>
+              </Tooltip>
+            </div>
+            <div className="px-4">
+              <Tooltip title="ارسال پیام" placement="right">
+               <span>
+               <IconButton
+                  onClick={() => {
+                    handleClose();
+                    setOpenBoxMessage(true)
+                    // setShowDetailsPatient(true)
+                    setUserId([reception.patientUserId])
+                  }}
+                >
+                  <AiOutlineMessage />
+                </IconButton>
+               </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="کنسل" placement="right">
-                <IconButton
+               <span>
+               <IconButton
                   onClick={() => {
                     cancelHandler(reception);
                     handleClose();
@@ -190,6 +217,7 @@ export default function CardReception({
                 >
                   <GiCancel style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(239 68 68)' }} />
                 </IconButton>
+               </span>
               </Tooltip>
             </div>
           </Menu>
@@ -212,16 +240,6 @@ export default function CardReception({
           <p className="mt-2">
             نام دکتر : {reception?.doctorFirstName} {reception?.doctorLastName}
           </p>
-          <p className="mt-2 flex items-center justify-center">
-            <Tooltip title="پیامک" placement="right">
-              <IconButton>
-                <FaMobile className="cursor-pointer" />
-              </IconButton>
-            </Tooltip>
-            {user.userPhoneNumber ? user.userPhoneNumber : '____'}
-          </p>
-          <p className="mt-2">نام پدر : {user.fatherName ? user.fatherName : '____'}</p>
-          <p className="mt-2">تلفن ثابت : {user.tel ? user.tel : '____'}</p>
         </CardContent>
       </Collapse>
     </Card>
