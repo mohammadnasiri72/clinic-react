@@ -7,13 +7,12 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 import ProgressBarUpdateProfile from './ProgressBarUpdateProfile';
 
-export default function UploaderImage({ setPageState, account, setChang }) {
+export default function UploaderImage({ account, setChang, patient }) {
   const [avatarTemporary, setAvatarTemporary] = useState('');
   const [fileAtt, setFileAtt] = useState('');
   const [valProgres, setValProgres] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [src, setSrc] = useState('');
-
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -53,12 +52,36 @@ export default function UploaderImage({ setPageState, account, setChang }) {
   const uploadImgHandler = () => {
     if (fileAtt) {
       setIsLoading(true);
-      const data = {
-        fileSrc: fileAtt,
-        userId: account.userId,
-      };
+      let data = {};
+      let role = '';
+      if (patient) {
+        if (localStorage.getItem('roles') === 'Patient') {
+          data = {
+            fileSrc: fileAtt,
+            userId: account.userId,
+          };
+          role = 'Patient';
+        }
+      } else if (!patient) {
+        if (localStorage.getItem('roles') === 'Patient') {
+          data = {
+            fileSrc: fileAtt,
+            userId: account.userId,
+          };
+          role = 'Patient';
+        } else if (localStorage.getItem('roles') === 'Staff') {
+          data = new FormData();
+          data.append('fileSrc', fileAtt);
+          role = 'Staff';
+        } else if (localStorage.getItem('roles').includes('Doctor')) {
+          data = new FormData();
+          data.append('fileSrc', fileAtt);
+          role = 'Doctor';
+        }
+      }
+
       axios
-        .post(`${mainDomain}/api/Patient/Avatar/Update`, data, {
+        .post(`${mainDomain}/api/${role}/Avatar/Update`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -71,9 +94,7 @@ export default function UploaderImage({ setPageState, account, setChang }) {
           setIsLoading(false);
           setValProgres(0);
           setChang((e) => !e);
-          // setPageState(0)
           setFileAtt('');
-          // setPageState(0)
           Toast.fire({
             icon: 'success',
             text: 'تصویر پروفایل با موفقیت بروز رسانی شد',
@@ -107,7 +128,13 @@ export default function UploaderImage({ setPageState, account, setChang }) {
           onClick={selectImgHandler}
           className="border-dashed relative border border-black w-32 h-32 rounded-full flex justify-center items-center cursor-pointer mx-auto box-avatar"
         >
-          {account.avatar && <img className="w-full h-full rounded-full duration-300 object-cover sm:brightness-100 brightness-50" src={src} alt="" />}
+          {account.avatar && (
+            <img
+              className="w-full h-full rounded-full duration-300 object-cover sm:brightness-100 brightness-50"
+              src={src}
+              alt=""
+            />
+          )}
 
           {/* {!account.avatar && (
             <div className="flex justify-center items-center flex-col opacity-50 hover:opacity-100 duration-300 w-full h-full rounded-full absolute">

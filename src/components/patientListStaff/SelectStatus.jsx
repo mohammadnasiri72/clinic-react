@@ -19,13 +19,12 @@ export default function SelectStatus({pat , setIsLoading , statusList}) {
   });
 
   useEffect(()=>{
-    setValStatus(pat.status)
+    setValStatus(pat.statusId)
   },[pat])
 
  
 
   const changeStatusHandler = (e)=>{
-    
     Swal.fire({
         title: 'تغییر وضعیت بیمار',
         text: 'آیا از ثبت درخواست خود مطمئن هستید؟',
@@ -37,30 +36,33 @@ export default function SelectStatus({pat , setIsLoading , statusList}) {
       }).then((result) => {
         
         if (result.isConfirmed) {
-            setValStatus(e.target.value)
-        //   setIsLoading(true);
-        //   const data = new FormData();
-        //   data.append('patientUserId', e.userId);
-        //   axios
-        //     .post(`${mainDomain}/api/Patient/Delete`, data, {
-        //       headers: {
-        //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        //       },
-        //     })
-        //     .then((res) => {
-        //       setIsLoading(false);
-        //       Toast.fire({
-        //         icon: 'success',
-        //         text: 'کاربر مورد نظر با موفقیت حذف شد',
-        //       });
-        //     })
-        //     .catch((err) => {
-        //       setIsLoading(false);
-        //       Toast.fire({
-        //         icon: 'error',
-        //         text: err.response ? err.response.data : 'خطای شبکه',
-        //       });
-        //     });
+          setIsLoading(true)
+            const data = {
+              patientId:pat.patientId,
+              patientStatus: e.target.value,
+            }
+            axios.post(`${mainDomain}/api/Patient/Status/Update` , data ,{
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res)=>{
+              setValStatus(e.target.value)
+              setIsLoading(false)
+              Toast.fire({
+                icon: 'success',
+                text: 'وضعیت بیمار با موفقیت تغییر کرد',
+              });
+            })
+            .catch((err)=>{
+              setIsLoading(false)
+              Toast.fire({
+                icon: 'error',
+                text: err.response ? err.response?.data : 'خطای شبکه',
+              });
+            })
+
+       
         }
       });
   }
@@ -81,9 +83,8 @@ export default function SelectStatus({pat , setIsLoading , statusList}) {
             color="primary"
             onChange={changeStatusHandler}
           >
-           
             {statusList.map((e, i) => (
-              <MenuItem key={i} value={e}>
+              <MenuItem key={i} value={i+100}>
                 {e}
               </MenuItem>
             ))}

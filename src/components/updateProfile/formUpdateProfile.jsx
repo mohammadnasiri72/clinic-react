@@ -16,7 +16,8 @@ import TextareaAddressUpdateProfile from './textareaAddressUpdateProfile';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 
-export default function FormUpdateProfile({ setPageState, setChang, account }) {
+export default function FormUpdateProfile({ setPageState, setChang, account, patient }) {
+  console.log(patient);
   // const account = useContext(Account);
   // const setChange = useContext(Change);
   const [name, setName] = useState('');
@@ -57,73 +58,227 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
 
   // update profile
   const updateProfileHandler = () => {
-    if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
-      setIsLoading(true);
-      const data = {
-        userId: account.userId,
-        firstName: name,
-        lastName,
-        gender,
-        abroad: account.abroad,
-        fatherName,
-        dateOfBirthFa: date,
-        tel,
-        province,
-        city,
-        address,
-      };
-      axios
-        .post(`${mainDomain}/api/Patient/Update`, data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((res) => {
-          setIsLoading(false);
-          Toast.fire({
-            icon: 'success',
-            text: 'اطلاعات با موفقیت ذخیره شد',
-          });
-          setChang((e) => !e);
-          // setPageState(0);
-        })
-        .catch((error) => {
-          setIsLoading(false);
+    if (patient) {
+      if (localStorage.getItem('roles') === 'Patient') {
+        if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
+          setIsLoading(true);
+          const data = {
+            userId: account.userId,
+            firstName: name,
+            lastName,
+            gender,
+            abroad: account.abroad,
+            fatherName,
+            dateOfBirthFa: date,
+            tel,
+            province,
+            city,
+            address,
+          };
+          axios
+            .post(`${mainDomain}/api/Patient/Update`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'success',
+                text: 'اطلاعات با موفقیت ذخیره شد',
+              });
+              setChang((e) => !e);
+              // setPageState(0);
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: error.response ? error.response.data : 'خطای شبکه',
+              });
+            });
+        } else if (name.length <= 2) {
           Toast.fire({
             icon: 'error',
-            text: error.response ? error.response.data : 'خطای شبکه',
+            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
           });
-        });
-    } else if (name.length <= 2) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
-      });
-    } else if (lastName.length <= 2) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
-      });
-    } else if (fatherName.length <= 2) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
-      });
-    } else if (!date) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا تاریخ تولد خود را وارد کنید',
-      });
-    } else if (!province || !city) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
-      });
-    } else if (!address) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا آدرس محل سکونت خود را وارد کنید',
-      });
+        } else if (lastName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (fatherName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (!date) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا تاریخ تولد خود را وارد کنید',
+          });
+        } else if (!province || !city) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
+          });
+        } else if (!address) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا آدرس محل سکونت خود را وارد کنید',
+          });
+        }
+      }
+    } else if (!patient) {
+      if (localStorage.getItem('roles') === 'Patient') {
+        if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
+          setIsLoading(true);
+          const data = {
+            userId: account.userId,
+            firstName: name,
+            lastName,
+            gender,
+            abroad: account.abroad,
+            fatherName,
+            dateOfBirthFa: date,
+            tel,
+            province,
+            city,
+            address,
+          };
+          axios
+            .post(`${mainDomain}/api/Patient/Update`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'success',
+                text: 'اطلاعات با موفقیت ذخیره شد',
+              });
+              setChang((e) => !e);
+              // setPageState(0);
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: error.response ? error.response.data : 'خطای شبکه',
+              });
+            });
+        } else if (name.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (lastName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (fatherName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (!date) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا تاریخ تولد خود را وارد کنید',
+          });
+        } else if (!province || !city) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
+          });
+        } else if (!address) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا آدرس محل سکونت خود را وارد کنید',
+          });
+        }
+      } else if (localStorage.getItem('roles') === 'Staff') {
+        if (name.length > 2 && lastName.length > 2) {
+          setIsLoading(true);
+          const data = {
+            firstName: name,
+            lastName,
+            gender,
+          };
+          axios
+            .post(`${mainDomain}/api/Staff/Profile/Update`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'success',
+                text: 'اطلاعات با موفقیت ذخیره شد',
+              });
+              setChang((e) => !e);
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: error.response ? error.response.data : 'خطای شبکه',
+              });
+            });
+        } else if (name.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (lastName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        }
+      } else if (localStorage.getItem('roles').includes('Doctor') && !patient) {
+        if (name.length > 2 && lastName.length > 2) {
+          setIsLoading(true);
+          const data = {
+            firstName: name,
+            lastName,
+          };
+          axios
+            .post(`${mainDomain}/api/Doctor/Profile/Update`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'success',
+                text: 'اطلاعات با موفقیت ذخیره شد',
+              });
+              setChang((e) => !e);
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: error.response ? error.response.data : 'خطای شبکه',
+              });
+            });
+        } else if (name.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        } else if (lastName.length <= 2) {
+          Toast.fire({
+            icon: 'error',
+            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+          });
+        }
+      }
     }
   };
 
@@ -136,21 +291,29 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
             <InputLastNameProfileUpdate lastName={lastName} setLastName={setLastName} />
           </div>
           <div className="flex flex-wrap">
-            <InputFatherNameUpdateProfile fatherName={fatherName} setFatherName={setFatherName} />
-            <SelectGenderUpdateProfile setGender={setGender} gender={gender} />
+            {(localStorage.getItem('roles') === 'Patient' || patient) && (
+              <InputFatherNameUpdateProfile fatherName={fatherName} setFatherName={setFatherName} />
+            )}
+            {(localStorage.getItem('roles') === 'Patient' || localStorage.getItem('roles') === 'Staff' || patient) && (
+              <SelectGenderUpdateProfile setGender={setGender} gender={gender} />
+            )}
           </div>
-          <div className="flex flex-wrap">
-            <DatePickerUpdateProfile date={date} setDate={setDate} width={width} />
-            <InputTelUpdateProfile setTel={setTel} tel={tel} />
-          </div>
-          <SelectCityUpdateProfile
-            province={province}
-            setProvince={setProvince}
-            setCity={setCity}
-            city={city}
-            setIsLoading={setIsLoading}
-          />
-          <TextareaAddressUpdateProfile setAddress={setAddress} address={address} />
+          {(localStorage.getItem('roles') === 'Patient' || patient) && (
+            <div>
+              <div className="flex flex-wrap">
+                <DatePickerUpdateProfile date={date} setDate={setDate} width={width} />
+                <InputTelUpdateProfile setTel={setTel} tel={tel} />
+              </div>
+              <SelectCityUpdateProfile
+                province={province}
+                setProvince={setProvince}
+                setCity={setCity}
+                city={city}
+                setIsLoading={setIsLoading}
+              />
+              <TextareaAddressUpdateProfile setAddress={setAddress} address={address} />
+            </div>
+          )}
           <div className="flex justify-start mt-4 px-5">
             <Button
               onClick={updateProfileHandler}
@@ -165,21 +328,9 @@ export default function FormUpdateProfile({ setPageState, setChang, account }) {
               }}
               className="rounded-md  text-white mt-5 duration-300"
               variant="contained"
-              // className="px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600 text-white"
             >
               ذخیره تغییرات
             </Button>
-            {/* {accountUpdate && (
-              <div className="px-3">
-                <Button
-                  onClick={() => setPageState(0)}
-                  className="bg-blue-500 px-5 py-2 rounded-md duration-300 text-white hover:bg-blue-600 flex items-center"
-                >
-                  <FaArrowRight />
-                  <span className="px-2">برگشت به صفخه قبل</span>
-                </Button>
-              </div>
-            )} */}
           </div>
         </div>
       </div>

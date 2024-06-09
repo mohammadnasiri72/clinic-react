@@ -3,7 +3,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function TablePatientDoing({ patSelected, valType, setPageStateVisit, setIsLoading }) {
+export default function TablePatientDoing({
+  patSelected,
+  valType,
+  setPageStateVisit,
+  setIsLoading,
+  setPageStateVisitHistory,
+  setAccount,
+  setReceptionSelected,
+}) {
   const [listReception, setListReception] = useState([]);
   useEffect(() => {
     if (patSelected.patientNationalId) {
@@ -31,11 +39,30 @@ export default function TablePatientDoing({ patSelected, valType, setPageStateVi
         });
     }
   }, [patSelected, valType]);
+
+  const showDetailsHandler = (e)=>{
+    setPageStateVisitHistory(1);
+    setReceptionSelected(e);
+    axios.get(`${mainDomain}/api/Patient/GetList` , {
+      params:{
+        query: e.patientNationalId
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+    .then((res)=>[
+      setAccount(res.data[0])
+    ])
+    .catch((err)=>{
+
+    })
+  }
   return (
     <>
       <div>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="sticky table">
+          <Table sx={{ minWidth: 650  , position:'relative'}} aria-label="sticky table">
             <TableHead className="">
               <TableRow>
                 <TableCell align="center">نام بیمار</TableCell>
@@ -44,14 +71,16 @@ export default function TablePatientDoing({ patSelected, valType, setPageStateVi
                 <TableCell align="center">عملیات</TableCell>
               </TableRow>
             </TableHead>
+            {
+              patSelected.patientNationalId &&
             <TableBody>
-              {patSelected.patientFirstName && (
+              {patSelected.patientNationalId && (
                 <TableRow>
                   <TableCell align="center">
                     {patSelected.patientFirstName} {patSelected.patientLastName}
                   </TableCell>
                   <TableCell align="center">{patSelected.patientNationalId}</TableCell>
-                  <TableCell align="center">امروز</TableCell>
+                  <TableCell align="center">{patSelected.appointmentDateFA}</TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={() => setPageStateVisit(1)}
@@ -64,6 +93,11 @@ export default function TablePatientDoing({ patSelected, valType, setPageStateVi
                   </TableCell>
                 </TableRow>
               )}
+              <div className='absolute left-0 right-0'>
+                <hr />
+                <p className='font-semibold text-teal-500'>تاریخچه ویزیت های بیمار</p>
+              </div>
+              <div className='h-5'/>
               {listReception
                 .filter((e) => e.statusId === 4)
                 .sort((a, b) => Number(b.appointmentDateFA.slice(8, 10)) - Number(a.appointmentDateFA.slice(8, 10)))
@@ -75,16 +109,27 @@ export default function TablePatientDoing({ patSelected, valType, setPageStateVi
                     <TableCell align="center">{e.patientNationalId}</TableCell>
                     <TableCell align="center">{e.appointmentDateFA}</TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" color="inherit" className="text-white px-0">
+                      <Button
+                        onClick={()=> showDetailsHandler(e)}
+                        variant="contained"
+                        color="inherit"
+                        className="text-white px-0"
+                      >
                         جزئیات
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
+            }
+            
           </Table>
         </TableContainer>
       </div>
+      {
+        !patSelected.patientNationalId &&
+        <div className='mt-4'>لطفا ابتدا بیمار را انتخاب کنید</div>
+      }
     </>
   );
 }

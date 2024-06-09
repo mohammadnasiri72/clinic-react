@@ -32,6 +32,7 @@ const RootStyle = styled(m.div)(({ theme }) => ({
   bottom: 0,
   display: 'flex',
   position: 'fixed',
+
   overflow: 'hidden',
   width: NAVBAR.BASE_WIDTH,
   flexDirection: 'column',
@@ -47,9 +48,8 @@ const RootStyle = styled(m.div)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Settings() {
+export default function Settings({ open, setOpen }) {
   const { themeMode, themeDirection, themeColorPresets, themeStretch, themeLayout, onResetSetting } = useSettings();
-  const [open, setOpen] = useState(false);
 
   const notDefault =
     themeMode !== defaultSettings.themeMode ||
@@ -95,9 +95,9 @@ export default function Settings() {
         sx={{ background: 'transparent', zIndex: (theme) => theme.zIndex.drawer + 1 }}
       />
 
-      {!open && 
+      {/* {!open && 
       <ToggleButton open={open} notDefault={notDefault} onToggle={handleToggle} />
-      }
+      } */}
 
       <AnimatePresence>
         {open && (

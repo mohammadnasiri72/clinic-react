@@ -38,7 +38,8 @@ export default function TableManageDrug({
   setFlag,
   setIsEdit,
   setEditId,
-  setShowManageCategoryDrug
+  setShowManageCategoryDrug,
+  query
 }) {
   const [drugList, setDrugList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -58,7 +59,8 @@ export default function TableManageDrug({
     axios
       .get(`${mainDomain}/api/Medication/GetListPaged`, {
         params:{
-          pageIndex:numPages
+          pageIndex:numPages,
+          query,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -69,7 +71,7 @@ export default function TableManageDrug({
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => {});
-  }, [flag , numPages]);
+  }, [flag , numPages , query]);
 
   const deleteDrugHandler = (e) => {
     Swal.fire({

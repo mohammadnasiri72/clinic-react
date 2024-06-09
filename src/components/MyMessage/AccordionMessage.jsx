@@ -26,11 +26,10 @@ export default function AccordionMessage({ message , setFlag}) {
     }
   };
 
- 
   return (
     <>
       <Accordion
-        sx={{ backgroundColor: '#edeff2', my: 2 }}
+        sx={{ backgroundColor: '#edeff2', my: 1 }}
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
       >

@@ -20,6 +20,7 @@ import LanguagePopover from './LanguagePopover';
 import ContactsPopover from './ContactsPopover';
 import NotificationsPopover from './NotificationsPopover';
 import Settings from '../../../components/settings';
+import ToggleButton from '../../../components/settings/ToggleButton';
 
 // ----------------------------------------------------------------------
 
@@ -66,44 +67,50 @@ export default function DashboardHeader({
   flagNotif,
   setFlagNotif,
   setIsLoading,
+  open,
+  setOpen,
 }) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
   const isDesktop = useResponsive('up', 'lg');
 
+  const showSettingBox = () => {
+    // alert('sdf')
+    setOpen(true)
+  };
   return (
     <>
-    <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
-      <Toolbar
-        sx={{
-          minHeight: '100% !important',
-          px: { lg: 5 },
-        }}
-      >
-        {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
+      <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
+        <Toolbar
+          sx={{
+            minHeight: '100% !important',
+            px: { lg: 5 },
+          }}
+        >
+          {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
 
-        {!isDesktop && (
-          <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
-            <Iconify icon="eva:menu-2-fill" />
-          </IconButtonAnimate>
-        )}
+          {!isDesktop && (
+            <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+              <Iconify icon="eva:menu-2-fill" />
+            </IconButtonAnimate>
+          )}
 
-        {/* <Searchbar /> */}
-        <Box sx={{ flexGrow: 1 }} />
+          {/* <Searchbar /> */}
+          <Box sx={{ flexGrow: 1 }} />
 
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <LanguagePopover />
-          <NotificationsPopover flagNotif={flagNotif} setFlagNotif={setFlagNotif} />
-          {
-            localStorage.getItem('roles') !== 'Patient' &&
-          <ContactsPopover account={account} setIsLoading={setIsLoading} />
-          }
-          <AccountPopover account={account} />
-         
-        </Stack>
-      </Toolbar>
-    </RootStyle>
-    
+          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+            {/* <Settings /> */}
+            
+            {!open && <ToggleButton open={open} onToggle={showSettingBox} />}
+            <LanguagePopover />
+            <NotificationsPopover flagNotif={flagNotif} setFlagNotif={setFlagNotif} />
+            {localStorage.getItem('roles') !== 'Patient' && (
+              <ContactsPopover account={account} setIsLoading={setIsLoading} />
+            )}
+            <AccountPopover account={account} />
+          </Stack>
+        </Toolbar>
+      </RootStyle>
     </>
   );
 }

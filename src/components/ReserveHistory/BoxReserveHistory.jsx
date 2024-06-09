@@ -1,15 +1,11 @@
-import { Box, Checkbox, Chip, FormControlLabel, IconButton, Menu, Tooltip } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, IconButton, Tooltip } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { AiOutlineMessage } from 'react-icons/ai';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import Swal from 'sweetalert2';
-import { FaEye } from 'react-icons/fa';
-import { GiCancel } from 'react-icons/gi';
 import { mainDomain } from '../../utils/mainDomain';
-import DetailsPatient from '../patientListStaff/DetailsPatient';
 import MessageHandler from '../Reception/MessageHandler';
-import CheckBoxReserve from './CheckBoxReserve';
+import DetailsPatient from '../patientListStaff/DetailsPatient';
+import CardReserveHistory from './CardReserveHistory';
 
 export default function BoxReserveHistory({
   patientUserId,
@@ -18,9 +14,9 @@ export default function BoxReserveHistory({
   toPersianDate,
   statusId,
   setIsLoading,
+  listReserveHistory,
+  setListReserveHistory,
 }) {
-  const [listReserveHistory, setListReserveHistory] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [showDetailsPatient, setShowDetailsPatient] = useState(false);
   const [patient, setPatient] = useState({});
   const [historyReception, setHistoryReception] = useState([]);
@@ -29,25 +25,6 @@ export default function BoxReserveHistory({
   const [userId, setUserId] = useState([]);
   const [listReserveChecked, setListReserveChecked] = useState([]);
   const [flag, setFlag] = useState(false);
-
-  // import sweet alert-2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: 'toast-modal',
-  });
-
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -132,194 +109,84 @@ export default function BoxReserveHistory({
     setUserId(arr);
   };
 
-  const cancelHandler = (e) => {
-    Swal.fire({
-      title: 'کنسل کردن نوبت',
-      text: 'آیا از ثبت درخواست خود مطمئن هستید؟',
-
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: 'green',
-      cancelButtonText: 'انصراف',
-      confirmButtonText: 'کنسل',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const data = {
-          reservationId: e.reservationId,
-          statusId: 0,
-        };
-        axios
-          .post(`${mainDomain}/api/Reservation/Update`, data, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          })
-          .then((res) => {
-            setIsLoading(false);
-            setFlag((e) => !e);
-            Toast.fire({
-              icon: 'success',
-              text: 'نوبت با موفقیت کنسل شد',
-            });
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            Toast.fire({
-              icon: 'error',
-              text: err.response ? err.response.data : 'خطای شبکه',
-            });
-          });
-      }
-    });
-  };
+  useEffect(() => {
+    if (
+      listReserveChecked.length >
+      listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length
+    ) {
+      const arr = [];
+      listReserveHistory
+        .filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev))
+        .map((e) => {
+          arr.push(...listReserveChecked.filter((event) => event === e));
+          return true;
+        });
+      setListReserveChecked(arr);
+    }
+  }, [listReserveChecked, statusId, listReserveHistory]);
   return (
     <>
-      <div className="flex justify-between shadow-sm mt-2 rounded-md px-1">
-        <FormControlLabel
-          control={
-            <Checkbox
-              size="large"
-              indeterminate={
-                listReserveChecked.length > 0 &&
-                listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length !==
-                  listReserveChecked.length
-              }
-              checked={
-                listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length ===
-                  listReserveChecked.length && listReserveHistory.length !== 0
-              }
-              onChange={() => {
-                if (
-                  listReserveChecked.length ===
-                    listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length &&
-                  listReserveChecked.length !== 0
-                ) {
-                  setListReserveChecked([]);
-                } else {
-                  setListReserveChecked(
-                    listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev))
-                  );
+      {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length > 0 && (
+        <div className="flex justify-between shadow-sm mt-2 rounded-md px-1">
+          <FormControlLabel
+            control={
+              <Checkbox
+                size="large"
+                indeterminate={
+                  listReserveChecked.length > 0 &&
+                  listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length !==
+                    listReserveChecked.length
                 }
-              }}
-            />
-          }
-        />
-        <Tooltip title="ارسال پیام" placement="right">
-          <span>
-            <IconButton disabled={listReserveChecked.length === 0} onClick={sendMessageToAll}>
-              <AiOutlineMessage style={{ color: listReserveChecked.length === 0 ? 'inherit' : 'rgb(16 185 129)' }} />
-            </IconButton>
-          </span>
-        </Tooltip>
-      </div>
+                checked={
+                  listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length ===
+                    listReserveChecked.length && listReserveHistory.length !== 0
+                }
+                onChange={() => {
+                  if (
+                    listReserveChecked.length ===
+                      listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length &&
+                    listReserveChecked.length !== 0
+                  ) {
+                    setListReserveChecked([]);
+                  } else {
+                    setListReserveChecked(
+                      listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev))
+                    );
+                  }
+                }}
+              />
+            }
+          />
+          <Tooltip title="ارسال پیام" placement="right">
+            <span>
+              <IconButton disabled={listReserveChecked.length === 0} onClick={sendMessageToAll}>
+                <AiOutlineMessage style={{ color: listReserveChecked.length === 0 ? 'inherit' : 'rgb(16 185 129)' }} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </div>
+      )}
+      {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length === 0 && (
+        <div className="mt-2">موردی موجود نیست</div>
+      )}
       <div className="flex flex-wrap">
         {listReserveHistory
           .filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev))
           .map((e, i) => (
             <div key={i} className="lg:w-1/4 md:w-1/3 sm:w-1/2 w-full p-2 relative">
-              <div className=" border rounded-lg p-2 relative">
-                <CheckBoxReserve
-                  listReserveChecked={listReserveChecked}
-                  setListReserveChecked={setListReserveChecked}
-                  e={e}
-                  listReserveHistory={listReserveHistory}
-                  statusId={statusId}
-                />
-                <div className="text-start pr-5">
-                  <div className="mt-1">
-                    {/* <span>نام و نام خانوادگی: </span> */}
-                    <span className="font-semibold pr-2">
-                      {e.patientFirstName} {e.patientLastName}
-                    </span>
-                  </div>
-                  <div className="mt-1">
-                    <span>تاریخ: </span>
-                    <span>{e.reservationTimeDateFA}</span>
-                  </div>
-                  <div className="mt-1">
-                    <span>زمان: </span>
-                    <span>
-                      {e.reservationTimeToTime.slice(0, 5)} - {e.reservationTimeFromTime.slice(0, 5)}
-                    </span>
-                  </div>
-                  <div className="mt-1">
-                    <Chip
-                      size="small"
-                      label={e.status}
-                      variant="filled"
-                      // eslint-disable-next-line no-nested-ternary
-                      color={e.statusId === 0 ? 'error' : e.statusId === 1 ? 'primary' : 'success'}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="absolute left-4 top-5">
-                <Box
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                >
-                  <BsThreeDotsVertical className="cursor-pointer text-teal-500" />
-                </Box>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <div className="px-4">
-                    <Tooltip title="مشاهده جزئیات" placement="right">
-                      <span>
-                        <IconButton
-                          onClick={() => {
-                            handleClose();
-                            setShowDetailsPatient(true);
-                            setPatientId(e.patientNationalId);
-                          }}
-                        >
-                          <FaEye className="text-teal-500" />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  </div>
-                  <div className="px-4">
-                    <Tooltip title="ارسال پیام" placement="right">
-                      <span>
-                        <IconButton
-                          onClick={() => {
-                            handleClose();
-                            setOpenBoxMessage(true);
-                            setUserId([e.patientUserId]);
-                          }}
-                        >
-                          <AiOutlineMessage className="text-emerald-500" />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  </div>
-                  <div className="px-4">
-                    <Tooltip title="کنسل" placement="right">
-                      <span>
-                        <IconButton
-                          onClick={() => {
-                            cancelHandler(e);
-                            handleClose();
-                            console.log(e.statusId);
-                          }}
-                        >
-                          <GiCancel className="text-red-500" />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  </div>
-                </Menu>
-              </div>
+              <CardReserveHistory
+                listReserveChecked={listReserveChecked}
+                setListReserveChecked={setListReserveChecked}
+                e={e}
+                listReserveHistory={listReserveHistory}
+                statusId={statusId}
+                setShowDetailsPatient={setShowDetailsPatient}
+                setPatientId={setPatientId}
+                setOpenBoxMessage={setOpenBoxMessage}
+                setUserId={setUserId}
+                setIsLoading={setIsLoading}
+                setFlag={setFlag}
+              />
             </div>
           ))}
       </div>

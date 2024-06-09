@@ -64,7 +64,6 @@ export default function NameTemplate({ setIsLoading, listDrugCheched }) {
         description: descTemplate,
         priority: 0,
       };
-      console.log(prescriptionsId);
       axios
         .post(`${mainDomain}/api/PrescriptionTemplate/Add`, data, {
           headers: {

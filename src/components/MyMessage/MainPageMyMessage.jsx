@@ -37,26 +37,26 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
       });
   }, [flagNotif, numberItems]);
 
-  const deleteMessagesHandler = ()=>{
-    const data = new FormData();
-    data.append('messageId', listMessageIdDelete);
-    axios.post(`${mainDomain}/api/Message/Delete` , data , {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-    .then((res)=>{
-      setFlagNotif((e)=>!e)
-    })
-    .catch((err)=>{
+  // const deleteMessagesHandler = ()=>{
+  //   const data = new FormData();
+  //   data.append('messageId', listMessageIdDelete);
+  //   axios.post(`${mainDomain}/api/Message/Delete` , data , {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     },
+  //   })
+  //   .then((res)=>{
+  //     setFlagNotif((e)=>!e)
+  //   })
+  //   .catch((err)=>{
 
-    })
-  }
+  //   })
+  // }
 
   return (
     <>
       <div className="flex justify-between rounded-lg">
-        {message.length > 0 && (
+        {/* {message.length > 0 && (
           <FormControlLabel
             control={
               <Checkbox
@@ -72,29 +72,28 @@ export default function MainPageMyMessage({ flagNotif, setFlagNotif }) {
               />
             }
           />
-        )}
+        )} */}
         <div className="w-full">
           <h3 className="text-xl font-semibold">پیغام‌ های من</h3>
         </div>
-        {message.length > 0 && (
+        {/* {message.length > 0 && (
           <IconButton disabled={listMessageChecked.length === 0} onClick={deleteMessagesHandler}>
             <FaTrashAlt />
           </IconButton>
-        )}
+        )} */}
       </div>
       {message.map((e) => (
         <div className="flex items-center" key={e.messageId}>
-          <CheckBoxMessage
+          {/* <CheckBoxMessage
             listMessage={message}
             message={e}
             listMessageChecked={listMessageChecked}
             setListMessageChecked={setListMessageChecked}
             setListMessageIdDelete={setListMessageIdDelete}
-          />
+          /> */}
           <div className="w-full">
             <AccordionMessage message={e} setFlag={setFlagNotif} />
           </div>
-          <IconButton size="small">{/* <FaTrashAlt /> */}</IconButton>
         </div>
       ))}
       <div className="pb-10 ">

@@ -1,3 +1,4 @@
+import { IoSettings } from 'react-icons/io5';
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
@@ -12,28 +13,15 @@ import { IconButtonAnimate } from '../animate';
 
 const RootStyle = styled('span')(({ theme }) => ({
   ...cssStyles(theme).bgBlur({ opacity: 0.64 }),
-  right: theme.direction==='rtl'? '20%' : '58%',
-  top: '8%',
-  position: 'fixed',
-  marginTop: theme.spacing(-3),
-  padding: theme.spacing(0.5),
+  
+  marginTop: theme.spacing(3),
+  // padding: theme.spacing(0.5),
   zIndex: theme.zIndex.drawer + 2,
   borderRadius: '50%',
-  boxShadow: `-12px 12px 32px -4px ${alpha(
-    theme.palette.mode === 'light' ? theme.palette.grey[600] : theme.palette.common.black,
-    0.36
-  )}`,
+  
 }));
 
-const DotStyle = styled('span')(({ theme }) => ({
-  top: 8,
-  width: 8,
-  height: 8,
-  right: 10,
-  borderRadius: '50%',
-  position: 'absolute',
-  backgroundColor: theme.palette.error.main,
-}));
+
 
 // ----------------------------------------------------------------------
 
@@ -46,22 +34,24 @@ ToggleButton.propTypes = {
 export default function ToggleButton({ notDefault, open, onToggle }) {
   return (
     <RootStyle>
-      {notDefault && !open && <DotStyle />}
+      {/* {notDefault && !open && <DotStyle />} */}
 
-      <Tooltip title="Settings" placement="bottom">
+      <Tooltip title="تنظیمات" placement="bottom">
         <IconButtonAnimate
-          color="inherit"
-          onClick={onToggle}
+        
           sx={{
             p: 1,
             transition: (theme) => theme.transitions.create('all'),
             '&:hover': {
               color: 'primary.main',
               bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+              
             },
           }}
+          onClick={onToggle}
+          
         >
-          <Iconify icon="eva:options-2-fill" width={20} height={20} />
+          <IoSettings className='hover:rotate-180 duration-1000' width={20} height={20} />
         </IconButtonAnimate>
       </Tooltip>
     </RootStyle>

@@ -12,6 +12,7 @@ import SecoundPageVisit from './SecoundPageVisit';
 import SimpleBackdrop from '../backdrop';
 import ShowNotPopUp from './ShowNotPopUp';
 import CheckBoxDoctor from '../Reception/CheckBoxDoctor';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
 export default function MainPageVisit() {
   const [pageStateVisit, setPageStateVisit] = useState(0);
@@ -26,6 +27,9 @@ export default function MainPageVisit() {
   const [showNote, setShowNote] = useState(false);
   const [medicalRecord, setMedicalRecord] = useState([]);
   const [valCondition, setValCondition] = useState([]);
+  const [account, setAccount] = useState([]);
+  const [pageStateVisitHistory, setPageStateVisitHistory] = useState(0);
+  const [receptionSelected, setReceptionSelected] = useState([]);
   const disabledChechBox = true;
 
   // import sweet alert-2
@@ -39,7 +43,6 @@ export default function MainPageVisit() {
   });
 
   const doneHandler = () => {
-    // console.log(patSelected);
     setIsLoading(true);
     const data = new FormData();
     data.append('appointmentId', patSelected.appointmentId);
@@ -63,8 +66,8 @@ export default function MainPageVisit() {
         setIsLoading(false);
       });
   };
+
   const backHandler = () => {
-    // console.log(patSelected);
     setIsLoading(true);
     const data = new FormData();
     data.append('appointmentId', patSelected.appointmentId);
@@ -88,13 +91,13 @@ export default function MainPageVisit() {
         setIsLoading(false);
       });
   };
+
   useEffect(() => {
     setIsLoading(true);
     axios
       .get(`${mainDomain}/api/Appointment/GetList`, {
         params: {
           typeId: valType,
-          // patientNationalId: userSelected.nationalId,
           doctorMedicalSystemId: -1,
           fromPersianDate,
           toPersianDate,
@@ -132,95 +135,118 @@ export default function MainPageVisit() {
         .catch((err) => {});
     }
   }, [patSelected]);
+
+  useEffect(()=>{
+    setPatSelected([])
+  },[patList])
+
   return (
     <>
-      {pageStateVisit === 0 && (
+      {pageStateVisitHistory === 0 && (
         <div>
-          <div className="flex">
-            <InputTypeVisit valType={valType} setValType={setValType} setIsLoading={setIsLoading} />
-            <InputDateVisit setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
-          </div>
-          <div className="flex flex-wrap mt-5">
-            <div className="lg:w-1/4 w-full">
-              <ShowPatient
-                patList={patList}
-                setRefreshPatList={setRefreshPatList}
-                setPatSelected={setPatSelected}
-                patSelected={patSelected}
-                pageStateVisit={pageStateVisit}
-              />
-            </div>
-            <div className="lg:w-3/4 w-full">
-              <div className="">
-                <TablePatientDoing
-                  patSelected={patSelected}
-                  valType={valType}
-                  setPageStateVisit={setPageStateVisit}
-                  setIsLoading={setIsLoading}
-                />
+          {pageStateVisit === 0 && (
+            <div>
+              <div className="flex">
+                <InputTypeVisit valType={valType} setValType={setValType} setIsLoading={setIsLoading} />
+                <InputDateVisit setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
+              </div>
+              <div className="flex flex-wrap mt-5">
+                <div className="lg:w-1/4 w-full">
+                  <ShowPatient
+                    patList={patList}
+                    setRefreshPatList={setRefreshPatList}
+                    setPatSelected={setPatSelected}
+                    patSelected={patSelected}
+                    pageStateVisit={pageStateVisit}
+                  />
+                </div>
+                <div className="lg:w-3/4 w-full">
+                  <div className="">
+                    <TablePatientDoing
+                      patSelected={patSelected}
+                      valType={valType}
+                      setPageStateVisit={setPageStateVisit}
+                      setIsLoading={setIsLoading}
+                      setPageStateVisitHistory={setPageStateVisitHistory}
+                      setAccount={setAccount}
+                      setReceptionSelected={setReceptionSelected}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          {pageStateVisit === 1 && (
+            <div>
+              <div className="text-start mb-5 flex justify-between">
+                <Button
+                  sx={{
+                    py: 1,
+                    boxShadow: 'none',
+                    backgroundColor: 'rgb(20 184 166)',
+                    '&:hover': {
+                      backgroundColor: 'rgb(13 148 136)',
+                    },
+                  }}
+                  className="p-2 rounded-md duration-300 mt-2 bg-teal-600"
+                  onClick={() => setPageStateVisit(0)}
+                  variant="contained"
+                >
+                  برگشت به صفحه قبل
+                </Button>
+                <CheckBoxDoctor
+                  disabledChechBox={disabledChechBox}
+                  valCondition={valCondition}
+                  setValCondition={setValCondition}
+                  medicalRecord={medicalRecord}
+                />
+                <div className="flex">
+                  <Button
+                    sx={{
+                      py: 1,
+                      boxShadow: 'none',
+                      backgroundColor: 'rgb(16 185 129)',
+                      '&:hover': {
+                        backgroundColor: 'rgb(5 150 105)',
+                      },
+                    }}
+                    className="p-2 rounded-md duration-300 mt-2 w-28"
+                    onClick={() => setShowNote(true)}
+                    variant="contained"
+                  >
+                    <HiPencil />
+                    <span className="px-2">note</span>
+                  </Button>
+                  <ToggleButtonGroup
+                    color="primary"
+                    value={alignment}
+                    exclusive
+                    onChange={(event, newEvent) => setAlignment(newEvent)}
+                    aria-label="Platform"
+                  >
+                    <ToggleButton onClick={backHandler} value="back">
+                      <span className="text-red-500">back</span>
+                    </ToggleButton>
+                    <ToggleButton onClick={doneHandler} value="done">
+                      <span className="text-green-500">done</span>
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </div>
+              </div>
+              <SecoundPageVisit patSelected={patSelected} setIsLoading={setIsLoading} isLoading={isLoading} />
+            </div>
+          )}
         </div>
       )}
-      {pageStateVisit === 1 && (
+      {pageStateVisitHistory === 1 && (
         <div>
-          <div className="text-start mb-5 flex justify-between">
-            <Button
-              sx={{
-                py: 1,
-                boxShadow: 'none',
-                backgroundColor: 'rgb(20 184 166)',
-                '&:hover': {
-                  backgroundColor: 'rgb(13 148 136)',
-                },
-              }}
-              className="p-2 rounded-md duration-300 mt-2 bg-teal-600"
-              onClick={() => setPageStateVisit(0)}
-              variant="contained"
-            >
-              برگشت به صفحه قبل
-            </Button>
-            <CheckBoxDoctor
-              disabledChechBox={disabledChechBox}
-              valCondition={valCondition}
-              setValCondition={setValCondition}
-              medicalRecord={medicalRecord}
-            />
-            <div className="flex">
-              <Button
-                sx={{
-                  py: 1,
-                  boxShadow: 'none',
-                  backgroundColor: 'rgb(16 185 129)',
-                  '&:hover': {
-                    backgroundColor: 'rgb(5 150 105)',
-                  },
-                }}
-                className="p-2 rounded-md duration-300 mt-2 w-28"
-                onClick={() => setShowNote(true)}
-                variant="contained"
-              >
-                <HiPencil />
-                <span className="px-2">note</span>
-              </Button>
-              <ToggleButtonGroup
-                color="primary"
-                value={alignment}
-                exclusive
-                onChange={(event, newEvent) => setAlignment(newEvent)}
-                aria-label="Platform"
-              >
-                <ToggleButton onClick={backHandler} value="back">
-                  <span className="text-red-500">back</span>
-                </ToggleButton>
-                <ToggleButton onClick={doneHandler} value="done">
-                  <span className="text-green-500">done</span>
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </div>
-          </div>
-          <SecoundPageVisit patSelected={patSelected} setIsLoading={setIsLoading} isLoading={isLoading} />
+          <FormHistoryVisit
+            setPageStateVisitHistory={setPageStateVisitHistory}
+            receptionSelected={receptionSelected}
+            setIsLoading={setIsLoading}
+            account={account}
+            isLoading={isLoading}
+          />
         </div>
       )}
       {isLoading && <SimpleBackdrop />}

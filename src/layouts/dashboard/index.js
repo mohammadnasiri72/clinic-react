@@ -52,6 +52,7 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
   const isDesktop = useResponsive('up', 'lg');
 
   const [open, setOpen] = useState(false);
+  const [openSetting, setOpenSetting] = useState(false);
 
   const verticalLayout = themeLayout === 'vertical';
 
@@ -65,6 +66,8 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
           flagNotif={flagNotif}
           setFlagNotif={setFlagNotif}
           setIsLoading={setIsLoading}
+          open={openSetting}
+          setOpen={setOpenSetting}
         />
 
         {isDesktop ? (
@@ -108,6 +111,8 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
         setFlagNotif={setFlagNotif}
         account={account}
         setIsLoading={setIsLoading}
+        open={openSetting}
+        setOpen={setOpenSetting}
       />
 
       <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
@@ -117,7 +122,7 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
       </MainStyle>
       <DashboardFooter />
       {isLoading && <SimpleBackdrop />}
-      {localStorage.getItem('token') && <Settings />}
+      {localStorage.getItem('token') && <Settings open={openSetting} setOpen={setOpenSetting} />}
     </Box>
   );
 }

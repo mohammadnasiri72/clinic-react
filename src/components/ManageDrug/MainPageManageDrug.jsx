@@ -55,6 +55,7 @@ export default function MainPageManageDrug() {
 
   // get description drug
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/MedicationCategory/GetList`, {
         headers: {
@@ -62,9 +63,12 @@ export default function MainPageManageDrug() {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setCategoryDrug(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
 
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugForm/GetList`, {
@@ -73,9 +77,12 @@ export default function MainPageManageDrug() {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setDrugForm(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
 
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugDose/GetList`, {
@@ -85,8 +92,11 @@ export default function MainPageManageDrug() {
       })
       .then((res) => {
         setDrugDose(res.data);
+        setIsLoading(false)
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
 
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugUseCycle/GetList`, {
@@ -96,8 +106,11 @@ export default function MainPageManageDrug() {
       })
       .then((res) => {
         setDrugUseCycle(res.data);
+        setIsLoading(false)
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [flag]);
 
   // set new drug
@@ -274,6 +287,7 @@ export default function MainPageManageDrug() {
     }
   }, [flag , query]);
 
+  
   return (
     <>
       <div className="text-start relative">
@@ -304,7 +318,7 @@ export default function MainPageManageDrug() {
                 //     ? `${userSelected.firstName} ${userSelected.lastName} (  ${userSelected.nationalId} )`
                 //     : ''
                 // }
-                // onChange={(event, newValue) => changValPatientHandler(event, newValue)}
+                onChange={(event, newValue) => setQuery(newValue)}
                 freeSolo
                 options={drugList.map((option) => option.name)}
                 renderInput={(params) => (
@@ -609,6 +623,7 @@ export default function MainPageManageDrug() {
             setIsEdit={setIsEdit}
             setEditId={setEditId}
             setShowManageCategoryDrug={setShowManageCategoryDrug}
+            query={query}
           />
         </div>
       </div>

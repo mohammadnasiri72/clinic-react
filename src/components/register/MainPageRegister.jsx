@@ -3,7 +3,7 @@ import MainRegisterPage from './mainRegisterPage';
 import SecoundRegisterPage from './secoundRegisterPage';
 import SimpleBackdrop from '../backdrop';
 
-export default function MainPageRegister({setPageState}) {
+export default function MainPageRegister({setPageState, pageState}) {
   const [isRegister, setIsRegister] = useState(false);
   const [registerModel, setRegisterModel] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +23,8 @@ export default function MainPageRegister({setPageState}) {
           setIsRegister={setIsRegister}
           setIsLoading={setIsLoading}
           isRegister={isRegister}
+          setPageState={setPageState}
+          pageState={pageState}
         />
       )}
       {isLoading && <SimpleBackdrop />}

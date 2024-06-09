@@ -18,9 +18,9 @@ export default function OperationMenu({
   setAccountUpdate,
   setPageState,
   pat,
+  isLoading,
   setIsLoading,
   setFlag,
-  flag,
   patient,
   setPatient,
   setReceptionSelected,
@@ -29,7 +29,8 @@ export default function OperationMenu({
   setIsOpenAccompanying,
   isOpenAddRelative,
   setIsOpenAddRelative,
-  historyReception
+  historyReception,
+  setPatientRelative
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -37,12 +38,14 @@ export default function OperationMenu({
   const [showDetailsPatient, setShowDetailsPatient] = useState(false);
 
   useEffect(() => {
-    if (isOpenAccompanying || isOpenAddRelative) {
+    if (isOpenAccompanying || isOpenAddRelative||showDetailsPatient) {
       document.body.style.overflowY = 'hidden';
     } else {
       document.body.style.overflowY = 'auto';
+      
     }
-  }, [isOpenAccompanying, isOpenAddRelative]);
+  }, [isOpenAccompanying, isOpenAddRelative , showDetailsPatient]);
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -51,6 +54,7 @@ export default function OperationMenu({
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -107,6 +111,7 @@ export default function OperationMenu({
     setIsOpenAccompanying(true);
     handleClose();
     setPatient(e);
+    setPatientRelative([])
   };
   const reserveToPatientHandler = (e) => {
     setAccountUpdate(e);
@@ -186,6 +191,8 @@ export default function OperationMenu({
         setIsOpenAccompanying={setIsOpenAccompanying}
         setEditRelative={setEditRelative}
         setFlag={setFlag}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
       />
       <AddRelativePatient
         isOpenAddRelative={isOpenAddRelative}
@@ -201,13 +208,22 @@ export default function OperationMenu({
         setReceptionSelected={setReceptionSelected}
         historyReception={historyReception}
       />
-      {(isOpenAccompanying || isOpenAddRelative || showDetailsPatient) && (
+      {(isOpenAccompanying || isOpenAddRelative) && (
         <Paper
-          sx={{ backgroundColor: '#0003' }}
+          sx={{ backgroundColor: '#0002' }}
           style={{ zIndex: 1200 }}
           onClick={() => {
             setIsOpenAccompanying(false);
             setIsOpenAddRelative(false);
+          }}
+          className="fixed top-0 left-0 right-0 bottom-0"
+        />
+      )}
+      { showDetailsPatient && (
+        <Paper
+          sx={{ backgroundColor: '#0008' }}
+          style={{ zIndex: 1200 }}
+          onClick={() => {
             setShowDetailsPatient(false);
           }}
           className="fixed top-0 left-0 right-0 bottom-0"

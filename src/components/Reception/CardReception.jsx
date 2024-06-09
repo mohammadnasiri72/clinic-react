@@ -41,13 +41,9 @@ export default function CardReception({
   setOpenBoxMessage,
   setUserId,
 }) {
- 
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  
-
-  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -98,18 +94,10 @@ export default function CardReception({
     <Card className="relative w-full">
       <CardContent>
         <Box className={'flex justify-center'}>
-          <img
-            className="w-14 h-14 rounded-full border"
-            // src={
-            //   patientList.length > 0
-            //     ? mainDomain + patientList.find((e) => e.nationalId === reception.patientNationalId).avatar
-            //     : ''
-            // }
-            alt=""
-          />
+          <img className="w-14 h-14 rounded-full border" src={mainDomain + reception.patientAvatar} alt="" />
         </Box>
         <Chip
-        size='small'
+          size="small"
           className="absolute top-6 right-1"
           label={reception.status}
           color={
@@ -146,78 +134,77 @@ export default function CardReception({
           >
             <div className="px-4">
               <Tooltip title="مرحله بعد" placement="right">
-               <span>
-               <IconButton
-                  disabled={reception.statusId > 2}
-                  onClick={() => {
-                    handleClose();
-                    nextToRoomDoctor(reception);
-                  }}
-                >
-                  <TbDoorEnter style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
-                </IconButton>
-               </span>
+                <span>
+                  <IconButton
+                    disabled={reception.statusId > 2}
+                    onClick={() => {
+                      handleClose();
+                      nextToRoomDoctor(reception);
+                    }}
+                  >
+                    <TbDoorEnter style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
+                  </IconButton>
+                </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="ویرایش" placement="right">
                 <span>
-                <IconButton
-                  onClick={() => {
-                    editHandler(reception);
-                  }}
-                  disabled={reception.statusId > 2}
-                >
-                  <Iconify icon={'eva:edit-fill'} />
-                </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      editHandler(reception);
+                    }}
+                    disabled={reception.statusId > 2}
+                  >
+                    <Iconify icon={'eva:edit-fill'} />
+                  </IconButton>
                 </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="مشاهده جزئیات" placement="right">
-               <span>
-               <IconButton
-                  onClick={() => {
-                    handleClose();
-                    setShowDetailsPatient(true)
-                    setPatientId(reception.patientNationalId)
-                    
-                  }}
-                >
-                  <FaEye />
-                </IconButton>
-               </span>
+                <span>
+                  <IconButton
+                    onClick={() => {
+                      handleClose();
+                      setShowDetailsPatient(true);
+                      setPatientId(reception.patientNationalId);
+                    }}
+                  >
+                    <FaEye />
+                  </IconButton>
+                </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="ارسال پیام" placement="right">
-               <span>
-               <IconButton
-                  onClick={() => {
-                    handleClose();
-                    setOpenBoxMessage(true)
-                    // setShowDetailsPatient(true)
-                    setUserId([reception.patientUserId])
-                  }}
-                >
-                  <AiOutlineMessage />
-                </IconButton>
-               </span>
+                <span>
+                  <IconButton
+                    onClick={() => {
+                      handleClose();
+                      setOpenBoxMessage(true);
+                      // setShowDetailsPatient(true)
+                      setUserId([reception.patientUserId]);
+                    }}
+                  >
+                    <AiOutlineMessage />
+                  </IconButton>
+                </span>
               </Tooltip>
             </div>
             <div className="px-4">
               <Tooltip title="کنسل" placement="right">
-               <span>
-               <IconButton
-                  onClick={() => {
-                    cancelHandler(reception);
-                    handleClose();
-                  }}
-                  disabled={reception.statusId > 2}
-                >
-                  <GiCancel style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(239 68 68)' }} />
-                </IconButton>
-               </span>
+                <span>
+                  <IconButton
+                    onClick={() => {
+                      cancelHandler(reception);
+                      handleClose();
+                    }}
+                    disabled={reception.statusId > 2}
+                  >
+                    <GiCancel style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(239 68 68)' }} />
+                  </IconButton>
+                </span>
               </Tooltip>
             </div>
           </Menu>
@@ -235,7 +222,7 @@ export default function CardReception({
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
-          <p className="mt-2">ساعت ورود : {reception?.startTime.slice(0,5)}</p>
+          <p className="mt-2">ساعت ورود : {reception?.startTime.slice(0, 5)}</p>
           <p className="mt-2">تاریخ ورود : {reception?.appointmentDateFA}</p>
           <p className="mt-2">
             نام دکتر : {reception?.doctorFirstName} {reception?.doctorLastName}
@@ -243,6 +230,5 @@ export default function CardReception({
         </CardContent>
       </Collapse>
     </Card>
-   
   );
 }

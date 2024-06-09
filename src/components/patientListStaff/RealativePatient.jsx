@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Skeleton, Stack } from '@mui/material';
 import { FaPlus } from 'react-icons/fa';
 import { FaChevronRight } from 'react-icons/fa6';
 import SimpleBackdrop from '../backdrop';
@@ -12,9 +12,9 @@ export default function RelativePatient({
   PatientRelative,
   setEditRelative,
   setFlag,
+  isLoading,
+  setIsLoading,
 }) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const addPatientRelativeHandler = () => {
     setIsOpenAddRelative(true);
     setEditRelative({});
@@ -30,7 +30,6 @@ export default function RelativePatient({
             sx={{
               py: 1,
               boxShadow: 'none',
-              // fontSize: 20,
               backgroundColor: 'rgb(100 116 139)',
               '&:hover': {
                 backgroundColor: 'rgb(71 85 105)',
@@ -69,8 +68,7 @@ export default function RelativePatient({
         <div className="mt-3">
           <h3 className="text-xl font-semibold">لیست همراهان</h3>
         </div>
-        {PatientRelative && (
-          
+        {PatientRelative.length > 0 && (
           <BoxRelative
             PatientRelative={PatientRelative}
             setIsLoading={setIsLoading}
@@ -79,7 +77,14 @@ export default function RelativePatient({
             setFlag={setFlag}
           />
         )}
-        {PatientRelative.length === 0 && <p className="mt-5">لیست همراهان خالی است</p>}
+        {PatientRelative.length === 0 && !isLoading && <p className="mt-5">لیست همراهان خالی است</p>}
+        {PatientRelative.length === 0 && isLoading && (
+          <div className="w-full">
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+            <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+          </div>
+        )}
       </div>
       {isLoading && <SimpleBackdrop />}
     </>

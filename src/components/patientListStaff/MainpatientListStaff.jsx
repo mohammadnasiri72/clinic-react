@@ -42,6 +42,7 @@ export default function MainpatientListStaff() {
       .then((res) => {
         setIsLoading(false);
         setStatusList(Object.values(res.data));
+        
       })
       .catch((err) => {
         setIsLoading(false);
@@ -111,15 +112,15 @@ export default function MainpatientListStaff() {
             </div>
             <div className="flex justify-center flex-wrap">
               <div className="lg:w-1/3 w-full p-4">
-                <UploaderImage account={accountUpdate} setPageState={setPageState} setChang={setFlag} />
+                <UploaderImage account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient/>
               </div>
-              <FormUpdateProfile account={accountUpdate} setPageState={setPageState} setChang={setFlag} />
+              <FormUpdateProfile account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient/>
             </div>
           </div>
         )}
         {pageState === 2 && (
           <div>
-            <MainPageRegister setPageState={setPageState} />
+            <MainPageRegister setPageState={setPageState} pageState={pageState}/>
           </div>
         )}
         {pageState === 3 && (

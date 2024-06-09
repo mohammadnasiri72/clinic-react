@@ -13,6 +13,7 @@ export default function MainPageReserveHistory() {
   const [fromPersianDate, setFromPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [toPersianDate, setToPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [statusId, setStatusId] = useState(-1);
+  const [listReserveHistory, setListReserveHistory] = useState([]);
 
   return (
     <>
@@ -22,7 +23,7 @@ export default function MainPageReserveHistory() {
         <SelectDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
       </div>
       <div>
-        <SelectCondition setStatusId={setStatusId}/>
+        <SelectCondition setStatusId={setStatusId} listReserveHistory={listReserveHistory} statusId={statusId} />
       </div>
       <div>
         <BoxReserveHistory
@@ -32,6 +33,8 @@ export default function MainPageReserveHistory() {
           toPersianDate={toPersianDate}
           statusId={statusId}
           setIsLoading={setIsLoading}
+          listReserveHistory={listReserveHistory}
+          setListReserveHistory={setListReserveHistory}
         />
       </div>
       {isLoading && <SimpleBackdrop />}

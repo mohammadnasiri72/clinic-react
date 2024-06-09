@@ -44,6 +44,7 @@ export default function SecoundRegisterPage({
     timerProgressBar: true,
   });
 
+  // register patient
   const submitHandler = (e) => {
     e.preventDefault();
     registerModel.firstName = firstName;
@@ -148,7 +149,7 @@ export default function SecoundRegisterPage({
         }}
         className="flex justify-center items-center min-h-screen"
       >
-        <div className="lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen">
+        <div className={setPageState? "w-full p-3 shadow-lg rounded-lg min-h-screen": "lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen"}>
           <div className="flex justify-center">
             <img src={'/favicon/favicon.ico'} alt="" />
           </div>
@@ -197,7 +198,10 @@ export default function SecoundRegisterPage({
             </div>
           </div>
         </div>
+        {
+          !setPageState &&
         <div className="lg:w-1/2 w-0 h-screen bg-login bg-cover bg-no-repeat bg-[#0008] bg-blend-multiply" />
+        }
       </Page>
     </>
   );

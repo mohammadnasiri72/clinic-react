@@ -38,6 +38,7 @@ export default function TableReqPatient({
 
   useEffect(() => {
     if (patient.nationalId) {
+      setIsLoading(true)
       axios
         .get(`${mainDomain}/api/PatientRelative/Patient/GetList`, {
           params: {
@@ -49,8 +50,11 @@ export default function TableReqPatient({
         })
         .then((res) => {
           setPatientRelative(res.data);
+          setIsLoading(false)
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setIsLoading(false)
+        });
     }
   }, [patient, isOpenAccompanying, isOpenAddRelative, flag]);
 
@@ -161,9 +165,9 @@ export default function TableReqPatient({
                           setPageState={setPageState}
                           setAccountUpdate={setAccountUpdate}
                           pat={pat}
+                          isLoading={isLoading}
                           setIsLoading={setIsLoading}
                           setFlag={setFlag}
-                          flag={flag}
                           patient={patient}
                           setPatient={setPatient}
                           setReceptionSelected={setReceptionSelected}
@@ -173,6 +177,7 @@ export default function TableReqPatient({
                           isOpenAddRelative={isOpenAddRelative}
                           setIsOpenAddRelative={setIsOpenAddRelative}
                           historyReception={historyReception}
+                          setPatientRelative={setPatientRelative}
                         />
                       </TableCell>
                     </TableRow>

@@ -39,13 +39,10 @@ function a11yProps(index) {
   };
 }
 
-
-
 export default function ShowPatient({ patList, setRefreshPatList, setPatSelected, patSelected, pageStateVisit }) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [valDoing, setValDoing] = React.useState('');
-  console.log(patList);
   React.useEffect(() => {
     setValDoing(patSelected.appointmentId);
   }, [pageStateVisit, patSelected]);
@@ -62,7 +59,7 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
       className="h-full"
       sx={{
         bgcolor: 'background.paper',
-        // width: 500,
+        width: '100%',
         position: 'relative',
         minHeight: 200,
       }}
@@ -86,14 +83,18 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
         index={value}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel className="max-h-[70vh] overflow-auto" value={value} index={0} dir={theme.direction}>
+        <TabPanel className="max-h-[70vh] overflow-auto " value={value} index={0} dir={theme.direction}>
           <ToggleButtonGroup
+          className='w-full'
             orientation="vertical"
             value={valDoing}
             exclusive
             onChange={(event, newEvent) => setValDoing(newEvent)}
           >
-            {patList
+            {
+            patList
+            .filter((e) => e.statusId === 3).length >0 &&
+            patList
               .filter((e) => e.statusId === 3)
               .map((e) => (
                 <ToggleButton
@@ -105,16 +106,29 @@ export default function ShowPatient({ patList, setRefreshPatList, setPatSelected
                   <span>{`${e.patientFirstName} ${e.patientLastName} ${e.patientNationalId}`}</span>
                 </ToggleButton>
               ))}
+              {
+                patList
+                .filter((e) => e.statusId === 3).length ===0 &&
+                <div>در این تاریخ نوبتی ثبت نشده است</div>
+              }
           </ToggleButtonGroup>
         </TabPanel>
         <TabPanel className="max-h-[70vh] overflow-auto" value={value} index={1} dir={theme.direction}>
-          {patList
+          {
+          patList
+          .filter((e) => e.statusId === 2).length>0 &&
+          patList
             .filter((e) => e.statusId === 2)
             .map((e) => (
               <div key={e.appointmentId}>
                 <Button>{`${e.patientFirstName} ${e.patientLastName} ${e.patientNationalId}`}</Button>
               </div>
             ))}
+            {
+              patList
+              .filter((e) => e.statusId === 2).length===0 &&
+              <div>لیست انتظار خالی است</div>
+            }
         </TabPanel>
       </SwipeableViews>
     </Box>
