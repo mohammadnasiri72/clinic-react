@@ -54,6 +54,8 @@ export default function Router() {
     let role = localStorage.getItem('roles') ? localStorage.getItem('roles') : 'patient';
     if (role.includes('Doctor')) {
       role = 'Doctor';
+    }else if (role.includes('Staff')) {
+      role = 'Staff';
     }
 
     const token = localStorage.getItem('token');

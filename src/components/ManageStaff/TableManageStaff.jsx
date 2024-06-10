@@ -43,6 +43,7 @@ export default function TableManageStaff({
 
   // get list staff
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/Staff/GetList`, {
         headers: {
@@ -50,9 +51,12 @@ export default function TableManageStaff({
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setListStaff(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [flag]);
 
   //   delete staff

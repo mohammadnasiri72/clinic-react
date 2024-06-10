@@ -42,6 +42,7 @@ export default function TableManageDoctor({
 
   // get list doctor
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${mainDomain}/api/Doctor/GetList`, {
         params: {
@@ -52,9 +53,12 @@ export default function TableManageDoctor({
         },
       })
       .then((res) => {
+        setIsLoading(false);
         setListDoctor(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false);
+      });
   }, [flag]);
 
   //   delete doctor

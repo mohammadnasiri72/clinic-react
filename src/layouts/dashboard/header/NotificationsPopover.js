@@ -7,10 +7,12 @@ import {
   Box,
   Button,
   Divider,
+  IconButton,
   List,
   ListItemButton,
   ListItemText,
   ListSubheader,
+  Tooltip,
   Typography,
 } from '@mui/material';
 // utils
@@ -73,15 +75,15 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
     setFlagNotif((e) => !e);
 
     axios
-    .get(`${mainDomain}/api/Message/UnRead/Count`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-    .then((res) => {
-      setTotalUnRead(res.data);
-    })
-    .catch((err) => {});
+      .get(`${mainDomain}/api/Message/UnRead/Count`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setTotalUnRead(res.data);
+      })
+      .catch((err) => {});
 
     axios
       .get(`${mainDomain}/api/Message/UnRead/GetList`, {
@@ -112,11 +114,13 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
 
   return (
     <>
-      <IconButtonAnimate color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
-        <Badge badgeContent={totalUnRead} color="error">
-          <Iconify icon="eva:bell-fill" width={20} height={20} />
-        </Badge>
-      </IconButtonAnimate>
+      <Tooltip title="پیامها">
+        <IconButtonAnimate color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
+          <Badge badgeContent={totalUnRead} color="error">
+            <Iconify icon="eva:bell-fill" width={20} height={20} />
+          </Badge>
+        </IconButtonAnimate>
+      </Tooltip>
 
       <MenuPopover
         open={Boolean(open)}
@@ -124,7 +128,7 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
         onClose={handleClose}
         sx={{ width: 360, p: 0, mt: 1.5, ml: 0.75 }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5, overflowY: 'auto' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', pb: 2, px: 2.5, overflowY: 'auto' }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">پیغام ها</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -141,7 +145,7 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Scrollbar sx={{ height: 340 }}>
+        <Scrollbar sx={{ height: 250 }}>
           <List
             disablePadding
             subheader={
@@ -150,15 +154,11 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
               </ListSubheader>
             }
           >
-            {
-              messageUnread.length===0 &&
-              <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>
-            }
-            {
-            messageUnread.length>0 &&
-            messageUnread.map((message) => (
-              <NotificationItem key={message.messageId} message={message} setFlagNotif={setFlagNotif} />
-            ))}
+            {messageUnread.length === 0 && <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>}
+            {messageUnread.length > 0 &&
+              messageUnread.map((message) => (
+                <NotificationItem key={message.messageId} message={message} setFlagNotif={setFlagNotif} />
+              ))}
           </List>
         </Scrollbar>
 
@@ -226,20 +226,20 @@ function NotificationItem({ message, setFlagNotif }) {
       </ListItemAvatar> */}
       <ListItemText
         primary={subject}
-        secondary={
-          <Typography
-            variant="caption"
-            sx={{
-              mt: 0.5,
-              display: 'flex',
-              alignItems: 'center',
-              color: 'text.disabled',
-            }}
-          >
-            <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {/* {fToNow(message.createdAt)} */}
-          </Typography>
-        }
+        // secondary={
+        //   <Typography
+        //     variant="caption"
+        //     sx={{
+        //       mt: 0.5,
+        //       display: 'flex',
+        //       alignItems: 'center',
+        //       color: 'text.disabled',
+        //     }}
+        //   >
+        //     <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
+        //     {fToNow(message.createdAt)}
+        //   </Typography>
+        // }
       />
     </ListItemButton>
   );

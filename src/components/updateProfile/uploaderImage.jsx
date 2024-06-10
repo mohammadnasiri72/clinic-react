@@ -69,7 +69,7 @@ export default function UploaderImage({ account, setChang, patient }) {
             userId: account.userId,
           };
           role = 'Patient';
-        } else if (localStorage.getItem('roles') === 'Staff') {
+        } else if (localStorage.getItem('roles').includes('Staff')) {
           data = new FormData();
           data.append('fileSrc', fileAtt);
           role = 'Staff';
@@ -118,10 +118,8 @@ export default function UploaderImage({ account, setChang, patient }) {
   }, [account, avatarTemporary]);
   return (
     <>
-      <div className="border rounded-lg h-full pt-5 relative">
-        <div className="flex justify-start">
-          <h3 className="px-5">تصویر پروفایل</h3>
-        </div>
+      <div className="border rounded-lg h-full relative">
+       
         <input className="opacity-0 invisible" ref={inpImg} onChange={viewImgHandler} type="file" />
         <Paper
           sx={{ borderRadius: '100%' }}
@@ -150,7 +148,7 @@ export default function UploaderImage({ account, setChang, patient }) {
           }
         </Paper>
 
-        <div className="p-5 mx-auto">
+        <div className="absolute bottom-5 left-5">
           <div>
             <ProgressBarUpdateProfile valProgres={valProgres} />
           </div>

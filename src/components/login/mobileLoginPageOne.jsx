@@ -78,6 +78,7 @@ export default function MobileLoginPageOne({
   return (
     <>
       <Paper
+      sx={{backgroundColor:'rgb(241 245 249)'}}
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             btnNextRef.current.click();

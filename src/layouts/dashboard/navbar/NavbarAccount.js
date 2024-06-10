@@ -24,8 +24,7 @@ NavbarAccount.propTypes = {
   isCollapse: PropTypes.bool,
 };
 
-export default function NavbarAccount({ isCollapse , account}) {
-  
+export default function NavbarAccount({ isCollapse, account }) {
   return (
     <Link underline="none" color="inherit">
       <RootStyle
@@ -35,7 +34,7 @@ export default function NavbarAccount({ isCollapse , account}) {
           }),
         }}
       >
-        <Avatar src={mainDomain+account.avatar} alt="Rayan Moran" />
+        <Avatar src={mainDomain + account.avatar} alt="Rayan Moran" />
 
         <Box
           sx={{
@@ -54,7 +53,13 @@ export default function NavbarAccount({ isCollapse , account}) {
             {account.firstName} {account.lastName}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {localStorage.getItem("roles")==='Patient'? 'بیمار' :localStorage.getItem("roles")==='Staff'? 'منشی': localStorage.getItem("roles").includes('Doctor')? 'دکتر' : localStorage.getItem("roles")==='Admin'? 'ادمین':''}
+            {localStorage.getItem('roles') === 'Patient'
+              ? 'بیمار'
+              : localStorage.getItem('roles') === 'Staff'
+              ? 'منشی'
+              : localStorage.getItem('roles').includes('Doctor')
+              ? 'دکتر'
+              : ''}
           </Typography>
         </Box>
       </RootStyle>

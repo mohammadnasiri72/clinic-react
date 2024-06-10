@@ -54,6 +54,7 @@ export default function MainPageManageDoctor() {
 
   // get list expertises
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/BasicInfo/Specialization/GetList`, {
         headers: {
@@ -61,9 +62,12 @@ export default function MainPageManageDoctor() {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setExpertise(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [flag]);
 
   // set new doctor

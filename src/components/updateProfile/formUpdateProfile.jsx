@@ -17,7 +17,7 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 
 export default function FormUpdateProfile({ setPageState, setChang, account, patient }) {
-  console.log(patient);
+  
   // const account = useContext(Account);
   // const setChange = useContext(Change);
   const [name, setName] = useState('');
@@ -32,14 +32,15 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
   const [isLoading, setIsLoading] = useState(false);
   const [width, setWidth] = useState('');
 
+
   useEffect(() => {
     if (account.firstName) {
       setName(account.firstName);
       setLastName(account.lastName);
-      setFatherName(account.fatherName);
+      setFatherName(account.fatherName? account.fatherName : '');
       setGender(account.gender);
       setDate(account.dateOfBirthFa);
-      setTel(account.tel);
+      setTel(account.tel?account.tel:'');
       setProvince(account.province);
       setCity(account.city);
       setAddress(account.address);
@@ -199,7 +200,7 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
             text: 'لطفا آدرس محل سکونت خود را وارد کنید',
           });
         }
-      } else if (localStorage.getItem('roles') === 'Staff') {
+      } else if (localStorage.getItem('roles').includes('Staff')) {
         if (name.length > 2 && lastName.length > 2) {
           setIsLoading(true);
           const data = {
@@ -294,7 +295,7 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
             {(localStorage.getItem('roles') === 'Patient' || patient) && (
               <InputFatherNameUpdateProfile fatherName={fatherName} setFatherName={setFatherName} />
             )}
-            {(localStorage.getItem('roles') === 'Patient' || localStorage.getItem('roles') === 'Staff' || patient) && (
+            {(localStorage.getItem('roles') === 'Patient' || localStorage.getItem('roles').includes('Staff') || patient) && (
               <SelectGenderUpdateProfile setGender={setGender} gender={gender} />
             )}
           </div>

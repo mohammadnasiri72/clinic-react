@@ -10,8 +10,10 @@ import axios from 'axios';
 import { useState } from 'react';
 import { BsCloudUploadFill } from 'react-icons/bs';
 import { FaEye, FaTrashAlt } from 'react-icons/fa';
+import { PiUserList } from 'react-icons/pi';
 import { FaRegTrashCan } from 'react-icons/fa6';
-import { MdDoneOutline } from 'react-icons/md';
+import { GiNotebook } from 'react-icons/gi';
+import { MdDoneOutline, MdOutlineSupportAgent } from 'react-icons/md';
 import { TbBrandCashapp } from 'react-icons/tb';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
@@ -27,9 +29,9 @@ export default function TableReqPatient({
   setIsLoading,
   setIsShowDetails,
   setAppointmentId,
-  setReceptionSelected
+  setReceptionSelected,
 }) {
-
+  console.log(reqPatient);
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -82,6 +84,7 @@ export default function TableReqPatient({
       }
     });
   };
+
   return (
     <>
       <div>
@@ -165,8 +168,72 @@ export default function TableReqPatient({
         <div className="md:hidden block">
           <div className="flex flex-wrap justify-around pb-2">
             {reqPatient.map((req) => (
-              <div key={req.appointmentId} className="border rounded-2xl bg-slate-50 p-3 sm:w-5/12 w-full mt-2">
-                <div className="mt-3 w-52 mx-auto">
+              <div key={req.appointmentId} className="border rounded-2xl bg-slate-50 p-3 w-full mt-2">
+                <div className="flex justify-between">
+                  <div className="flex w-2/3 items-center">
+                    <div className='rounded-full border w-14 h-14 flex justify-center items-center'>
+                    <MdOutlineSupportAgent className='text-5xl text-slate-700'/>
+                      {/* <img className="w-14 h-14 border rounded-full p-1" src="/images/nobat.png" alt="" /> */}
+                    </div>
+                    <div className="flex flex-col px-1">
+                      <span className="font-semibold whitespace-nowrap">{`${req.doctorFirstName} ${req.doctorLastName}`}</span>
+                      <span className="text-[#42181899] flex items-center">
+                        <GiNotebook className='text-3xl px-1'/>
+                        <span className='px-1'>{req.status}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className='w-1/3'>
+                  <div>
+                    <Button
+                    variant="contained"
+                    sx={{
+                      py: 1,
+                      boxShadow: 'none',
+                      backgroundColor: 'rgb(16 185 129)',
+                      '&:hover': {
+                        backgroundColor: 'rgb(5 150 105)',
+                      },
+                    }}
+                      
+                      // onClick={() => editPatientHandler(pat)}
+                      className="flex items-center border"
+                    >
+                      <TbBrandCashapp className="text-white text-xl" />
+                      <span className="text-white">پرداخت</span>
+                    </Button>
+                  </div>
+                  </div>
+                </div>
+                <div className='sm:w-1/2 w-full flex justify-around flex-wrap mt-3'>
+                
+                  <div className="w-1/3">
+                    <Button size="small" onClick={() => goToUploadPage(req)} className="flex items-center">
+                      <BsCloudUploadFill className="text-teal-500 text-xl sm:translate-x-2" />
+                      <span className="text-teal-500 whitespace-nowrap sm:translate-x-2 px-1">آپلود فایل </span>
+                    </Button>
+                  </div>
+                  <div className="w-1/3">
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setIsShowDetails(true);
+                        setAppointmentId(req.appointmentId);
+                      }}
+                      className="flex items-center"
+                    >
+                      <FaEye className="text-slate-700 text-xl" />
+                      <span className="text-slate-700 whitespace-nowrap px-1"> جزئیات</span>
+                    </Button>
+                  </div>
+                  <div className="w-1/3">
+                    <Button size="small" onClick={() => deleteUploadHandler(req)} className="flex items-center">
+                      <FaRegTrashCan className="text-red-500 text-lg" />
+                      <span className="text-red-500 px-1">حذف</span>
+                    </Button>
+                  </div>
+                </div>
+                {/* <div className="mt-3 w-52 mx-auto">
                   <TextField
                     aria-readonly
                     className=" text-end"
@@ -175,8 +242,8 @@ export default function TableReqPatient({
                     dir="rtl"
                     value={`${req.doctorFirstName} ${req.doctorLastName}`}
                   />
-                </div>
-                <div className="mt-3 w-52 mx-auto">
+                </div> */}
+                {/* <div className="mt-3 w-52 mx-auto">
                   <TextField
                     aria-readonly
                     className="text-end"
@@ -185,7 +252,7 @@ export default function TableReqPatient({
                     dir="rtl"
                     value={req.status}
                   />
-                </div>
+                </div> */}
                 {/* <div className="mt-3 w-52 mx-auto">
                 <TextField
                   aria-readonly
@@ -197,7 +264,7 @@ export default function TableReqPatient({
                 />
               </div> */}
 
-                <div className="flex flex-wrap justify-center mt-5">
+                {/* <div className="flex flex-wrap justify-center mt-5">
                   <div className="w-1/2">
                     <Button size="small" onClick={() => deleteUploadHandler(req)} className="flex items-center">
                       <FaRegTrashCan className="text-red-500 text-lg" />
@@ -233,7 +300,7 @@ export default function TableReqPatient({
                       <span className="text-slate-700">مشاهده جزئیات </span>
                     </Button>
                   </div>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

@@ -46,7 +46,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
           });
           setTimeout(() => {
             navigate('/dashboard');
-          }, 500);
+          }, 1000);
         })
         .catch((err) => {
           setIsLoading(false);
@@ -66,13 +66,15 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
   return (
     <>
       <Paper
+      sx={{backgroundColor:'rgb(241 245 249)'}}
+      className='bg-slate-100'
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             btnSubmit.current.click();
           }
         }}
       >
-        <h2 className="text-3xl font-semibold text-white">تایید کد ارسالی</h2>
+        <h2 className="text-3xl font-semibold">تایید کد ارسالی</h2>
         <div className="text-start">
           <Tooltip title="مرحله قبل">
             <IconButton onClick={() => setIsValiedMobile(false)}>

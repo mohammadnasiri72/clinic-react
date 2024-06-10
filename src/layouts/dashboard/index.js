@@ -91,6 +91,8 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif }) {
           }}
         >
           <Outlet />
+          <DashboardFooter />
+          {localStorage.getItem('token') && <Settings open={openSetting} setOpen={setOpenSetting} />}
         </Box>
         {isLoading && <SimpleBackdrop />}
       </>

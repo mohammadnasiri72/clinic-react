@@ -18,6 +18,7 @@ export default function ModalSelectTime({
   setValDoctor,
   valMoon,
   valYearSelect,
+  mountt
 }) {
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState('');
@@ -30,6 +31,9 @@ export default function ModalSelectTime({
   const [interval, setInterval] = useState('');
   const [capacity, setCapacity] = useState(1);
 
+  useEffect(()=>{
+    setMoon(mountt)
+  },[mountt])
    // import sweet alert-2
    const Toast = Swal.mixin({
     toast: true,
@@ -55,6 +59,7 @@ export default function ModalSelectTime({
 
   // set mounth & years
   useEffect(() => {
+    // setMoon(Number(converter(valMoon.format('MM'))))
     setMount(valMoon);
     setValYear(valYearSelect);
   }, [valMoon, valYearSelect]);
@@ -89,16 +94,7 @@ export default function ModalSelectTime({
 
   // select times
   const saveTimeHandler = () => {
-    Swal.fire({
-      title: 'ثبت زمان پذیرش',
-      text: 'آیا از ثبت زمان پذیرش مطمئن هستید؟',
-      showCancelButton: true,
-      confirmButtonColor: 'green',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'انصراف',
-      confirmButtonText: 'تایید ',
-    }).then((result) => {
-      if (result.isConfirmed) {
+    
         setIsLoading(true);
         const data = {
           doctorId: valDoctor,
@@ -133,8 +129,6 @@ export default function ModalSelectTime({
               text: err.response ? err.response.data : 'خطای شبکه',
             });
           });
-      }
-    });
   };
 
 
@@ -156,7 +150,7 @@ export default function ModalSelectTime({
         افزودن ماهانه
       </Button>
       <Dialog
-        sx={{ '& .MuiDialog-paper': { minHeight: 455 } }}
+        sx={{ '& .MuiDialog-paper': { minHeight: 455 }}}
         fullWidth
         maxWidth="md"
         open={open}

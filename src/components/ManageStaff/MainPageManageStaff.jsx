@@ -55,6 +55,7 @@ export default function MainPageManageStaff() {
 
   // get list job
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${mainDomain}/api/BasicInfo/JobTitle/GetList`, {
         headers: {
@@ -63,8 +64,11 @@ export default function MainPageManageStaff() {
       })
       .then((res) => {
         setJobList(res.data);
+        setIsLoading(false)
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [flag]);
 
   // set new staff

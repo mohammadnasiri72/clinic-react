@@ -18,9 +18,9 @@ export default function PatientList() {
   return (
     <>
       <div>
-        <div className="w-11/12 border rounded-md">
-          <h3 className="bg-[#f4f6f8] rounded-t-md font-semibold text-xl text-gray-600 p-2">لیست بیماریهای من</h3>
-          <div className="text-start p-3">
+        <div className="w-full border rounded-md">
+          <h3 className="bg-[#f4f6f8] rounded-t-md font-semibold text-xl text-gray-600 p-2">لیست بیماری های من</h3>
+          <div className="p-3">
             <Button
               sx={{
                 py: 1,

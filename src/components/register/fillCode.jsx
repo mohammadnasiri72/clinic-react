@@ -45,7 +45,7 @@ export default function InputFillCode({ setCode , login}) {
                   value={valueInputCode[i]}
                   onChange={(e) => fillCodeHandler(e, i)}
                   className="border-2 focus:border-green-500 border-gray-500  h-full w-full sm:w-14 sm:h-14 bg-slate-100 text-slate-600 text-3xl text-center outline-none p-2 rounded-lg"
-                  type="text"
+                  type="number"
                 />
               </div>
             ))}

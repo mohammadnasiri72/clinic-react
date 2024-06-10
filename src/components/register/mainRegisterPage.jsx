@@ -48,7 +48,7 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
           setIsRegister(true);
           Toast.fire({
             icon: 'success',
-            text: 'با موفقیت وارد شدید لطفا اطلاعات خود را وارد کنید',
+            text: 'کد ارسال شد لطفا اطلاعات خود را تکمیل کنید',
           });
         })
         .catch((err) => {
@@ -78,6 +78,8 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
       });
     }
   };
+
+
   return (
     <>
       <Paper
@@ -88,9 +90,9 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
         }}
         className="flex justify-center items-center min-h-screen"
       >
-        <div className={setPageState? 'w-full p-3 shadow-lg rounded-lg min-h-screen' : "lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen"}>
+        <div className={setPageState? 'bg-slate-100 w-full p-3 shadow-lg rounded-lg min-h-screen' : "lg:w-1/2 w-full bg-slate-100 p-3 shadow-lg rounded-lg min-h-screen"}>
           <div className="flex justify-center">
-            <img src={'/favicon/favicon.ico'} alt="" />
+            <img src={'/favicon/lgo.png'} alt="logo" />
           </div>
           <h1 className="text-3xl mt-4">ثبت نام بیمار</h1>
           <SelectAbroad abroad={abroad} setAbroad={setAbroad} setMobile={setMobile} setEmail={setEmail} />

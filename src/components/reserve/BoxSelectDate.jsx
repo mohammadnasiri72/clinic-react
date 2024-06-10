@@ -24,7 +24,7 @@ export default function BoxSelectDate({ dates, dateReserved, setIsLoading, docto
   const setTimeHandler = (e) => {
     Swal.fire({
       title: 'ثبت نوبت',
-      text: `شما تاریخ ${dateReserved} و زمان ${e.fromTime.slice(0,5)} تا ${e.toTime.slice(0,5)} را برای دکتر ${doctor.firstName} ${doctor.lastName} انتخاب کردین`,
+      text: `شما تاریخ ${dateReserved} و زمان ${e.fromTime.slice(0,5)} تا ${e.toTime.slice(0,5)} را برای ${doctor.firstName} ${doctor.lastName} انتخاب کردید`,
 
       showCancelButton: true,
       confirmButtonColor: 'green',

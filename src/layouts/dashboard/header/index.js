@@ -102,7 +102,7 @@ export default function DashboardHeader({
             {/* <Settings /> */}
             
             {!open && <ToggleButton open={open} onToggle={showSettingBox} />}
-            <LanguagePopover />
+            {/* <LanguagePopover /> */}
             <NotificationsPopover flagNotif={flagNotif} setFlagNotif={setFlagNotif} />
             {localStorage.getItem('roles') !== 'Patient' && (
               <ContactsPopover account={account} setIsLoading={setIsLoading} />

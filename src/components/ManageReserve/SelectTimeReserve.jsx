@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persianFa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
@@ -15,11 +15,13 @@ export default function SelectTimeReserve({
   setNumberMoon,
   setFlag,
   doctors,
+  mount
 }) {
   const [valMoon, setValMoon] = useState(new Date());
   const [valYear, setValYear] = useState(new Date());
 
-  const [day, setDay] = useState('همه');
+ 
+
   // const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
   function converter(strNum, name) {
     const pn = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -33,6 +35,8 @@ export default function SelectTimeReserve({
     return cache;
   }
 
+
+  
   return (
     <>
       <div className="flex flex-wrap justify-between">
@@ -109,6 +113,7 @@ export default function SelectTimeReserve({
               setValDoctor={setValDoctor}
               valMoon={valMoon}
               valYearSelect={valYear}
+              mountt={mount}
             />
           </div>
           <div className="px-2">

@@ -13,7 +13,6 @@ export default function MainPageManageReserve() {
   const [numberMoon, setNumberMoon] = useState(0);
   const [flag, setFlag] = useState(false);
   const [doctors, setDoctors] = useState([]);
-
   // const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
   function converter(strNum, name) {
     const pn = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -81,6 +80,7 @@ export default function MainPageManageReserve() {
         setMount={setMount}
         setFlag={setFlag}
         doctors={doctors}
+        mount={mount}
       />
       <hr className="mt-3" />
       <BoxTimeReserve
