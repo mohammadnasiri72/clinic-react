@@ -46,6 +46,7 @@ export default function Router() {
   const [account, setAccount] = useState('');
   const [change, setChang] = useState(false);
   const [flagNotif, setFlagNotif] = useState(false);
+  const [changeStatePages , setChangeStatePages] = useState(false)
 
   const url = useLocation();
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ export default function Router() {
     },
     {
       path: '/dashboard',
-      element: <DashboardLayout account={account} flagNotif={flagNotif} setFlagNotif={setFlagNotif} />,
+      element: <DashboardLayout setChangeStatePages={setChangeStatePages} account={account} flagNotif={flagNotif} setFlagNotif={setFlagNotif} />,
       children: [
         { element: <Navigate to="/dashboard/home" replace />, index: true },
         { path: 'home', element: <HomePage account={account} /> },
@@ -111,8 +112,8 @@ export default function Router() {
         { path: 'reserve', element: <MainPageReserve account={account} /> },
         { path: 'viewReservation', element: <ViewReservation account={account} /> },
         { path: 'sicknessList', element: <SicknessList /> },
-        { path: 'counseling', element: <Counseling account={account} /> },
-        { path: 'historyVisit', element: <HistoryVisit account={account} /> },
+        { path: 'counseling', element: <Counseling account={account} changeStatePages={changeStatePages}/> },
+        { path: 'historyVisit', element: <HistoryVisit account={account} changeStatePages={changeStatePages}/> },
         { path: 'visit', element: <Visit account={account} /> },
         { path: 'patientListStaff', element: <PatientListStaff account={account} /> },
         { path: 'reception', element: <Reception account={account} /> },

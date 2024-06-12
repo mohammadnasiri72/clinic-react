@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 // @mui
 import { Container } from '@mui/material';
 // hooks
@@ -8,13 +9,14 @@ import Page from '../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function Counseling({account}) {
+export default function Counseling({account , changeStatePages}) {
   const { themeStretch } = useSettings();
+ 
 
   return (
     <Page title="مشاوره آنلاین">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <MainCounselingPage account={account}/>
+        <MainCounselingPage account={account} changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

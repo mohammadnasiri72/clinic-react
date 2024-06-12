@@ -1,7 +1,8 @@
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button } from '@mui/material';
 import axios from 'axios';
+import { IoCalendarOutline } from 'react-icons/io5';
+import { MdOutlineAccessTime } from 'react-icons/md';
 import Swal from 'sweetalert2';
-import { FaTrashAlt } from "react-icons/fa";
 import { mainDomain } from '../../utils/mainDomain';
 
 export default function MyReserveBox({ list, doctor, setFlag, setIsLoading, setPageState }) {
@@ -13,6 +14,7 @@ export default function MyReserveBox({ list, doctor, setFlag, setIsLoading, setP
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
+  console.log(list);
 
   const deleteReservationHandler = () => {
     const reservationIdData = new FormData();
@@ -55,19 +57,34 @@ export default function MyReserveBox({ list, doctor, setFlag, setIsLoading, setP
   return (
     <>
       <div className="flex flex-wrap items-center">
-        <div className="w-1/6 flex justify-center">
+        <div className="w-1/4 flex justify-center p-2">
           <div className="w-full lg:w-1/2 sm:w-3/4 border rounded-full cursor-pointer ">
             <img className="w-full h-full rounded-full" src={mainDomain + doctor?.avatar} alt="" />
           </div>
         </div>
-        <div className="w-1/2 text-start pr-2">
-          <p className="font-nastaligh lg:text-5xl sm:text-4xl text-3xl">
+        <div className="w-3/4 text-start pr-2">
+          <p className="lg:text-2xl text-xl font-semibold whitespace-nowrap">
             {doctor?.firstName} {doctor?.lastName}
           </p>
-          <p className="mt-5 font-semibold text-xs sm:text-lg">{doctor?.specialization}</p>
+          <p className="mt-5 font-semibold text-sm text-[#0007] sm:text-lg">{doctor?.specialization}</p>
         </div>
-        <div className="w-1/3 text-end pl-3 overflow-hidden">
+        
+      </div>
+      <div className="px-5 mt-2">
+        <div className="flex items-center">
+          <IoCalendarOutline className='text-[#777] text-2xl'/>
+          <p className="px-2 text-lg font-semibold">{list.reservationTimeDateFA}</p>
+        </div>
+        <div className="flex items-center text-xl mt-2">
+        <MdOutlineAccessTime className='text-[#777] text-2xl'/>
+          <p className="px-2 whitespace-nowrap text-lg font-semibold">
+            {list.reservationTimeFromTime.slice(0,5)} الی {list.reservationTimeToTime.slice(0,5)}
+          </p>
+        </div>
+      </div>
+      <div className="text-start overflow-hidden mt-2 px-5">
           <Button
+          size='small'
             sx={{
               py: 1,
               boxShadow: 'none',
@@ -85,19 +102,6 @@ export default function MyReserveBox({ list, doctor, setFlag, setIsLoading, setP
             حذف نوبت
           </Button>
         </div>
-      </div>
-      <div className="px-10 mt-6">
-        <div className="flex items-center text-xl mt-2">
-          <p className="px-2">تاریخ:</p>
-          <p className="px-2">{list.reservationTimeDateFA}</p>
-        </div>
-        <div className="flex items-center mt-5 text-xl">
-          <p className="px-2">زمان:</p>
-          <p className="px-2 whitespace-nowrap">
-            {list.reservationTimeFromTime.slice(0,5)} الی {list.reservationTimeToTime.slice(0,5)}
-          </p>
-        </div>
-      </div>
     </>
   );
 }

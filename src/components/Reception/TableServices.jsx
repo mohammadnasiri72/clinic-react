@@ -12,7 +12,7 @@ export default function TableServices({ listServices , setListServices}) {
     //   },
     // })
     // .then((res)=>{
-    //   // console.log(res);
+    //   
     // })
     // .catch((err)=>{
 

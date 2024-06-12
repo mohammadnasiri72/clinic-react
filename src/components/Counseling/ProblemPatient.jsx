@@ -5,13 +5,24 @@ import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 
-export default function ProblemPatient({ setPageNumber, valDoctor , service , setApointmentId , flagUpload , setFlagUpload , account}) {
+export default function ProblemPatient({
+  setPageNumber,
+  valDoctor,
+  service,
+  setApointmentId,
+  flagUpload,
+  setFlagUpload,
+  account,
+  titleServices,
+  priceServices,
+  nameDoctor
+}) {
   const [problemList, setProblemList] = useState([]);
   const [desc, setDesc] = useState('');
   const [valProblem, setValProblem] = useState([]);
-  const [complaints , setComplaints] = useState([]);
-  const [isLoading , setIsLoading] = useState(false);
-  
+  const [complaints, setComplaints] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -39,15 +50,30 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
         text: 'لطفا مشخصات خواسته شده را وارد کنید',
       });
     } else {
-      setIsLoading(true)
+      Swal.fire({
+        title: 'حذف نوبت',
+        text: `آیا درخواست شما برای ${titleServices} با هزینه ${priceServices} تومان برای ${nameDoctor} ثبت شود؟`,
+        showCancelButton: true,
+        showDenyButton: true,
+        denyButtonText: `بعدا پرداخت می‌کنم`,
+        confirmButtonColor: 'green',
+        cancelButtonColor: '#d33',
+        denyButtonColor: '#333',
+        cancelButtonText: 'انصراف',
+        confirmButtonText: 'تایید و پرداخت',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //  //////////
+        }else if (result.isDenied) {
+          setIsLoading(true)
       const data = {
         patientUserId: account.userId,
-        doctorId: valDoctor,
+        doctorId: valDoctor.doctorId,
         notes: desc,
         serviceList:[
             {
                 appointmentId:0,
-                medicalServiceId:service,
+                medicalServiceId:service.medicalServiceId,
                 number:1
             }
         ],
@@ -76,24 +102,25 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
           text: err.response.data,
         });
       });
+        }
+      });
       
     }
   };
   const changProblem = (event, newValue) => {
     setValProblem(newValue);
-    if (newValue.length>0) {
-      const arr = []
-      newValue.map((e)=>{
-        const complaintsChild =
-        {
+    if (newValue.length > 0) {
+      const arr = [];
+      newValue.map((e) => {
+        const complaintsChild = {
           appointmentId: 0,
           typeId: 2,
           medicalItemId: e.itemId,
-        }
-        arr.push(complaintsChild)
-        return true
-      })
-      setComplaints(arr)
+        };
+        arr.push(complaintsChild);
+        return true;
+      });
+      setComplaints(arr);
     }
   };
   return (
@@ -136,21 +163,21 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
             برگشت به صفحه قبل
           </button> */}
           <Button
-              sx={{
-                py: 1,
-                boxShadow: 'none',
-                // fontSize: 20,
-                backgroundColor: 'rgb(6 182 212)',
-                '&:hover': {
-                  backgroundColor: 'rgb(8 145 178)',
-                },
-              }}
-              className="p-2 rounded-md duration-300 whitespace-nowrap text-white"
-              onClick={() => setPageNumber(2)}
-              variant="contained"
-            >
-              برگشت به صفحه قبل
-            </Button>
+            sx={{
+              py: 1,
+              boxShadow: 'none',
+              // fontSize: 20,
+              backgroundColor: 'rgb(6 182 212)',
+              '&:hover': {
+                backgroundColor: 'rgb(8 145 178)',
+              },
+            }}
+            className="p-2 rounded-md duration-300 whitespace-nowrap text-white"
+            onClick={() => setPageNumber(2)}
+            variant="contained"
+          >
+            برگشت به صفحه قبل
+          </Button>
           {/* <button
             onClick={goToNext}
             className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
@@ -158,27 +185,24 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
              ثبت درخواست
           </button> */}
           <Button
-              sx={{
-                py: 1,
-                boxShadow: 'none',
-                // fontSize: 20,
-                backgroundColor: 'rgb(16 185 129)',
-                '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
-                },
-              }}
-              className="p-2 rounded-md duration-300 whitespace-nowrap text-white"
-              onClick={goToNext}
-              variant="contained"
-            >
-              ثبت درخواست
-            </Button>
+            sx={{
+              py: 1,
+              boxShadow: 'none',
+              // fontSize: 20,
+              backgroundColor: 'rgb(16 185 129)',
+              '&:hover': {
+                backgroundColor: 'rgb(5 150 105)',
+              },
+            }}
+            className="p-2 rounded-md duration-300 whitespace-nowrap text-white"
+            onClick={goToNext}
+            variant="contained"
+          >
+            ثبت درخواست
+          </Button>
         </div>
       </div>
-      {
-        isLoading &&
-        <SimpleBackdrop />
-      }
+      {isLoading && <SimpleBackdrop />}
     </>
   );
 }

@@ -14,7 +14,7 @@ NavListRoot.propTypes = {
   list: PropTypes.object,
 };
 
-export function NavListRoot({ list, isCollapse }) {
+export function NavListRoot({ list, isCollapse , setChangeStatePages}) {
   
   const { pathname } = useLocation();
 
@@ -27,7 +27,7 @@ export function NavListRoot({ list, isCollapse }) {
   if (hasChildren) {
     return (
       <>
-        <NavItemRoot item={list} isCollapse={isCollapse} active={active} open={open} onOpen={() => setOpen(!open)} />
+        <NavItemRoot item={list} isCollapse={isCollapse} active={active} open={open} onOpen={() => setOpen(!open)} setChangeStatePages={setChangeStatePages}/>
 
         {!isCollapse && (
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -44,7 +44,7 @@ export function NavListRoot({ list, isCollapse }) {
 
   return (
     <>
-    <NavItemRoot item={list} active={active} isCollapse={isCollapse} />
+    <NavItemRoot item={list} active={active} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
     </>
   );
 }

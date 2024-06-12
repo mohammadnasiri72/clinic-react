@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -17,7 +17,6 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 
 export default function FormUpdateProfile({ setPageState, setChang, account, patient }) {
-  
   // const account = useContext(Account);
   // const setChange = useContext(Change);
   const [name, setName] = useState('');
@@ -31,16 +30,25 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
   const [address, setAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [width, setWidth] = useState('');
+  const [focusInputName, setFocusInputName] = useState(false);
+  const [scrollTopInpName, setScrollTopInpName] = useState('');
+  const [focusInputLName, setFocusInputLName] = useState(false);
+  const [scrollTopInpLName, setScrollTopInpLName] = useState('');
+  const [focusInputFatherName, setFocusInputFatherName] = useState(false);
+  const [scrollTopInpFatherName, setScrollTopInpFatherName] = useState('');
+  const [scrollTopInpBirth, setScrollTopInpBirth] = useState('');
+  const [focusInputAddress, setFocusInputAddress] = useState(false);
+  const [scrollTopInpAddress, setScrollTopInpAddress] = useState('');
 
 
   useEffect(() => {
     if (account.firstName) {
       setName(account.firstName);
       setLastName(account.lastName);
-      setFatherName(account.fatherName? account.fatherName : '');
+      setFatherName(account.fatherName ? account.fatherName : '');
       setGender(account.gender);
       setDate(account.dateOfBirthFa);
-      setTel(account.tel?account.tel:'');
+      setTel(account.tel ? account.tel : '');
       setProvince(account.province);
       setCity(account.city);
       setAddress(account.address);
@@ -57,149 +65,106 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
     customClass: 'toast-modal',
   });
 
+  const updateProfile = () => {
+    if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
+      setIsLoading(true);
+      const data = {
+        userId: account.userId,
+        firstName: name,
+        lastName,
+        gender,
+        abroad: account.abroad,
+        fatherName,
+        dateOfBirthFa: date,
+        tel,
+        province,
+        city,
+        address,
+      };
+      axios
+        .post(`${mainDomain}/api/Patient/Update`, data, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setIsLoading(false);
+          Toast.fire({
+            icon: 'success',
+            text: 'اطلاعات با موفقیت ذخیره شد',
+          });
+          setChang((e) => !e);
+          // setPageState(0);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          Toast.fire({
+            icon: 'error',
+            text: error.response ? error.response.data : 'خطای شبکه',
+          });
+        });
+    } else if (name.length <= 2) {
+      setFocusInputName(true);
+      setFocusInputLName(false);
+      setFocusInputFatherName(false);
+      setFocusInputAddress(false);
+      window.scrollTo(0, scrollTopInpName - 150);
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
+      });
+    } else if (lastName.length <= 2) {
+      setFocusInputName(false);
+      setFocusInputLName(true);
+      setFocusInputFatherName(false);
+      setFocusInputAddress(false);
+      window.scrollTo(0, scrollTopInpLName - 150);
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+      });
+    } else if (fatherName.length <= 2) {
+      setFocusInputName(false);
+      setFocusInputLName(false);
+      setFocusInputFatherName(true);
+      setFocusInputAddress(false);
+      window.scrollTo(0, scrollTopInpFatherName - 150);
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
+      });
+    } else if (!date) {
+      window.scrollTo(0, scrollTopInpBirth - 150);
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا تاریخ تولد خود را وارد کنید',
+      });
+    } else if (!province || !city) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
+      });
+    } else if (!address) {
+      setFocusInputName(false);
+      setFocusInputLName(false);
+      setFocusInputFatherName(false);
+      setFocusInputAddress(true);
+      window.scrollTo(0, scrollTopInpAddress - 150);
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا آدرس محل سکونت خود را وارد کنید',
+      });
+    }
+  };
+
   // update profile
   const updateProfileHandler = () => {
     if (patient) {
-      if (localStorage.getItem('roles') === 'Patient') {
-        if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
-          setIsLoading(true);
-          const data = {
-            userId: account.userId,
-            firstName: name,
-            lastName,
-            gender,
-            abroad: account.abroad,
-            fatherName,
-            dateOfBirthFa: date,
-            tel,
-            province,
-            city,
-            address,
-          };
-          axios
-            .post(`${mainDomain}/api/Patient/Update`, data, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            })
-            .then((res) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'success',
-                text: 'اطلاعات با موفقیت ذخیره شد',
-              });
-              setChang((e) => !e);
-              // setPageState(0);
-            })
-            .catch((error) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'error',
-                text: error.response ? error.response.data : 'خطای شبکه',
-              });
-            });
-        } else if (name.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (lastName.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (fatherName.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (!date) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا تاریخ تولد خود را وارد کنید',
-          });
-        } else if (!province || !city) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
-          });
-        } else if (!address) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا آدرس محل سکونت خود را وارد کنید',
-          });
-        }
-      }
+      updateProfile();
+      
     } else if (!patient) {
       if (localStorage.getItem('roles') === 'Patient') {
-        if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
-          setIsLoading(true);
-          const data = {
-            userId: account.userId,
-            firstName: name,
-            lastName,
-            gender,
-            abroad: account.abroad,
-            fatherName,
-            dateOfBirthFa: date,
-            tel,
-            province,
-            city,
-            address,
-          };
-          axios
-            .post(`${mainDomain}/api/Patient/Update`, data, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            })
-            .then((res) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'success',
-                text: 'اطلاعات با موفقیت ذخیره شد',
-              });
-              setChang((e) => !e);
-              // setPageState(0);
-            })
-            .catch((error) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'error',
-                text: error.response ? error.response.data : 'خطای شبکه',
-              });
-            });
-        } else if (name.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (lastName.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (fatherName.length <= 2) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
-          });
-        } else if (!date) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا تاریخ تولد خود را وارد کنید',
-          });
-        } else if (!province || !city) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
-          });
-        } else if (!address) {
-          Toast.fire({
-            icon: 'error',
-            text: 'لطفا آدرس محل سکونت خود را وارد کنید',
-          });
-        }
+        updateProfile();
       } else if (localStorage.getItem('roles').includes('Staff')) {
         if (name.length > 2 && lastName.length > 2) {
           setIsLoading(true);
@@ -288,21 +253,42 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
       <div className="lg:w-1/2 w-full p-4">
         <div className="border rounded-lg pb-5">
           <div className="flex flex-wrap">
-            <InputNameUpdateProfile name={name} setName={setName} setWidth={setWidth} />
-            <InputLastNameProfileUpdate lastName={lastName} setLastName={setLastName} />
+            <InputNameUpdateProfile
+              name={name}
+              setName={setName}
+              setWidth={setWidth}
+              focusInputName={focusInputName}
+              setScrollTopInpName={setScrollTopInpName}
+            />
+            <InputLastNameProfileUpdate
+              lastName={lastName}
+              setLastName={setLastName}
+              focusInputLName={focusInputLName}
+              setScrollTopInpLName={setScrollTopInpLName}
+            />
           </div>
           <div className="flex flex-wrap">
             {(localStorage.getItem('roles') === 'Patient' || patient) && (
-              <InputFatherNameUpdateProfile fatherName={fatherName} setFatherName={setFatherName} />
+              <InputFatherNameUpdateProfile
+                fatherName={fatherName}
+                setFatherName={setFatherName}
+                focusInputFatherName={focusInputFatherName}
+                setScrollTopInpFatherName={setScrollTopInpFatherName}
+              />
             )}
-            {(localStorage.getItem('roles') === 'Patient' || localStorage.getItem('roles').includes('Staff') || patient) && (
-              <SelectGenderUpdateProfile setGender={setGender} gender={gender} />
-            )}
+            {(localStorage.getItem('roles') === 'Patient' ||
+              localStorage.getItem('roles').includes('Staff') ||
+              patient) && <SelectGenderUpdateProfile setGender={setGender} gender={gender} />}
           </div>
           {(localStorage.getItem('roles') === 'Patient' || patient) && (
             <div>
               <div className="flex flex-wrap">
-                <DatePickerUpdateProfile date={date} setDate={setDate} width={width} />
+                <DatePickerUpdateProfile
+                  date={date}
+                  setDate={setDate}
+                  width={width}
+                  setScrollTopInpBirth={setScrollTopInpBirth}
+                />
                 <InputTelUpdateProfile setTel={setTel} tel={tel} />
               </div>
               <SelectCityUpdateProfile
@@ -312,7 +298,12 @@ export default function FormUpdateProfile({ setPageState, setChang, account, pat
                 city={city}
                 setIsLoading={setIsLoading}
               />
-              <TextareaAddressUpdateProfile setAddress={setAddress} address={address} />
+              <TextareaAddressUpdateProfile
+                setAddress={setAddress}
+                address={address}
+                focusInputAddress={focusInputAddress}
+                setScrollTopInpAddress={setScrollTopInpAddress}
+              />
             </div>
           )}
           <div className="flex justify-start mt-4 px-5">

@@ -39,7 +39,7 @@ NavbarVertical.propTypes = {
   onCloseSidebar: PropTypes.func,
 };
 
-export default function NavbarVertical({ isOpenSidebar, onCloseSidebar , account}) {
+export default function NavbarVertical({ isOpenSidebar, onCloseSidebar , account , setChangeStatePages}) {
   const theme = useTheme();
 
   const { pathname } = useLocation();
@@ -84,7 +84,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar , account
         <NavbarAccount isCollapse={isCollapse} account={account}/>
       </Stack>
 
-      <NavSectionVertical navConfig={navConfig} isCollapse={isCollapse} account={account}/>
+      <NavSectionVertical navConfig={navConfig} isCollapse={isCollapse} account={account} setChangeStatePages={setChangeStatePages}/>
 
       {/* <Box sx={{ flexGrow: 1 }} /> */}
 

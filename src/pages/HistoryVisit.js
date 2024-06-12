@@ -8,13 +8,13 @@ import MainPageVisitHistory from '../components/VisitHistory/mainPageHistoryVisi
 
 // ----------------------------------------------------------------------
 
-export default function HistoryVisit({account}) {
+export default function HistoryVisit({account , changeStatePages}) {
   const { themeStretch } = useSettings();
 
   return (
     <Page title="سابقه پذیرش">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-      <MainPageVisitHistory account={account}/>
+      <MainPageVisitHistory account={account} changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

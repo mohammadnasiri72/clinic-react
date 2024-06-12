@@ -138,7 +138,8 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
           maxRows={4}
         />
       </div>
-      <div className="mt-4 w-full">
+     <div className='flex'>
+     <div className="mt-4 w-1/2 px-1">
         <DatePicker
           ref={datePicStart}
           inputClass="outline-none border rounded-lg w-full h-14 px-3"
@@ -151,7 +152,7 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
           placeholder="تاریخ شروع بیمه"
         />
       </div>
-      <div className="mt-4">
+      <div className="mt-4 w-1/2 px-1">
         <DatePicker
           ref={datePicEnd}
           inputClass="outline-none border rounded-lg w-full h-14 px-3"
@@ -164,8 +165,18 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
           placeholder="تاریخ اتمام بیمه"
         />
       </div>
+     </div>
       <div className="mt-4">
         <Button
+        sx={{
+          py:1,
+          boxShadow: 'none',
+          color: 'white',
+          backgroundColor: 'rgb(16 185 129)',
+          '&:hover': {
+            backgroundColor: 'rgb(5 150 105)',
+          },
+        }}
           onClick={setInsuranceHandler}
           className="bg-green-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-green-600"
         >

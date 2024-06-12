@@ -104,17 +104,19 @@ export default function TableReqPatient({
   return (
     <>
       {
-      patientList.filter(
-        (ev) =>
-        (ev.firstName.includes(searchValue) ||
-            ev.lastName.includes(searchValue) ||
-            ev.nationalId.includes(searchValue))
+      // patientList
+      // .filter(
+      //   (ev) =>
+      //   (ev.firstName.includes(searchValue) ||
+      //       ev.lastName.includes(searchValue) ||
+      //       ev.nationalId.includes(searchValue))
             
-            &&
+      //       &&
             
-           ( ev.status === valStatusFilter ||
-          valStatusFilter === 'همه')
-      ).length > 0 && (
+      //      ( ev.status === valStatusFilter ||
+      //     valStatusFilter === 'همه')
+      // ).length > 0 && 
+      (
         <div>
           <TableContainer className="mb-20" component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -132,18 +134,19 @@ export default function TableReqPatient({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {
-                 patientList.filter(
-                  (ev) =>
-                  (ev.firstName.includes(searchValue) ||
-                      ev.lastName.includes(searchValue) ||
-                      ev.nationalId.includes(searchValue))
+                {patientList.length>0 &&
+                 patientList
+                //  .filter(
+                //   (ev) =>
+                //   (ev.firstName.includes(searchValue) ||
+                //       ev.lastName.includes(searchValue) ||
+                //       ev.nationalId.includes(searchValue))
                       
-                      &&
+                //       &&
                       
-                     ( ev.status === valStatusFilter ||
-                    valStatusFilter === 'همه')
-                )
+                //      ( ev.status === valStatusFilter ||
+                //     valStatusFilter === 'همه')
+                // )
                   .map((pat, index) => (
                     <TableRow key={pat.patientId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
+export default function SelecDoctor({ expertise , valDoctor , setValDoctor ,setNameDoctor}) {
   const [doctors, setDoctors] = useState([]);
   
   useEffect(() => {
@@ -15,7 +15,9 @@ export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
       })
       .then((res) => {
         setDoctors(res.data);
-        setValDoctor(res.data[0].doctorId)
+        setValDoctor(res.data[0])
+        setNameDoctor(`${res.data[0].firstName} ${res.data[0].lastName}`)
+        
       })
       .catch((err) => {});
   }, []);
@@ -28,7 +30,10 @@ export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
               لیست پزشکان
             </InputLabel>
             <Select
-              onChange={(e) => setValDoctor(e.target.value)}
+              onChange={(e) => {
+                setValDoctor(e.target.value)
+                setNameDoctor(`${e.target.value.firstName} ${e.target.value.lastName}`)
+              }}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="لیست پزشکان"
@@ -37,7 +42,7 @@ export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
             >
               {expertise === 'همه' &&
                 doctors.map((d) => (
-                  <MenuItem key={d.doctorId} value={d.doctorId}>
+                  <MenuItem key={d.doctorId} value={d}>
                     {d.firstName} {d.lastName}
                   </MenuItem>
                 ))}
@@ -45,7 +50,7 @@ export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
                 doctors
                   .filter((e) => e.specialization === expertise)
                   .map((d) => (
-                    <MenuItem key={d.doctorId} value={d.doctorId}>
+                    <MenuItem key={d.doctorId} value={d}>
                       {d.firstName} {d.lastName}
                     </MenuItem>
                   ))}

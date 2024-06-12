@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -13,12 +14,25 @@ export default function InputPatientList({
   query,
   setQuery,
 }) {
+
   useEffect(() => {
     if (!editeUser) {
       setUserSelected([]);
     }
-    if (editeUser?.length > 0) {
-      setUserSelected(editeUser);
+    if (editeUser?.patientNationalId) {
+      axios
+        .get(`${mainDomain}/api/Patient/GetList`, {
+          params: {
+            query: editeUser.patientNationalId,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setUserSelected(res.data[0]);
+        })
+        .catch((err) => {});
     }
   }, [pageStateReception]);
 
@@ -41,7 +55,7 @@ export default function InputPatientList({
       setPatientList([]);
     }
   }, [query]);
-  
+
   const changValPatientHandler = (event, newValue) => {
     if (newValue) {
       setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
@@ -64,7 +78,9 @@ export default function InputPatientList({
           options={patientList.map((option) => `${option.firstName} ${option.lastName} ( ${option.nationalId} ) `)}
           renderInput={(params) => (
             <TextField
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
               {...params}
               label={pageStateReception === 0 ? 'لیست بیماران' : 'انتخاب بیمار'}
             />

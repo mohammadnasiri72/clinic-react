@@ -84,7 +84,6 @@ export default function TableReqPatient({
       }
     });
   };
-
   return (
     <>
       <div>
@@ -113,7 +112,9 @@ export default function TableReqPatient({
                     <TableCell align="center">{req.status}</TableCell>
                     <TableCell align="center">
                       {req.paid ? (
-                        <MdDoneOutline className="text-green-500" />
+                        <div className="flex justify-center">
+                          <MdDoneOutline className="text-green-500 text-2xl" />
+                        </div>
                       ) : (
                         <div className="flex items-center justify-center">
                           {' '}
@@ -134,7 +135,7 @@ export default function TableReqPatient({
                     </TableCell>
                     <TableCell align="center">
                       <div className="flex items-center justify-around">
-                        <Tooltip title="آپلود فایل جدید">
+                        <Tooltip title="ارسال فایل جدید">
                           <IconButton onClick={() => goToUploadPage(req)}>
                             <BsCloudUploadFill className="text-xl cursor-pointer" />
                           </IconButton>
@@ -170,47 +171,49 @@ export default function TableReqPatient({
             {reqPatient.map((req) => (
               <div key={req.appointmentId} className="border rounded-2xl bg-slate-50 p-3 w-full mt-2">
                 <div className="flex justify-between">
-                  <div className="flex w-2/3 items-center">
-                    <div className='rounded-full border w-14 h-14 flex justify-center items-center'>
-                    <MdOutlineSupportAgent className='text-5xl text-slate-700'/>
+                  <div className="flex w-4/5 items-center">
+                    <div className="flex justify-center items-center">
+                      <MdOutlineSupportAgent className="text-4xl text-slate-700 w-12 h-12 border rounded-full" />
                       {/* <img className="w-14 h-14 border rounded-full p-1" src="/images/nobat.png" alt="" /> */}
                     </div>
                     <div className="flex flex-col px-1">
-                      <span className="font-semibold whitespace-nowrap">{`${req.doctorFirstName} ${req.doctorLastName}`}</span>
+                      <span className="font-semibold whitespace-nowrap text-sm">{`${req.doctorFirstName} ${req.doctorLastName}`}</span>
                       <span className="text-[#42181899] flex items-center">
-                        <GiNotebook className='text-3xl px-1'/>
-                        <span className='px-1'>{req.status}</span>
+                        <GiNotebook className="text-3xl px-1" />
+                        <span className="px-1 text-xs">{req.status}</span>
+                        <span className="text-xs whitespace-nowrap">{req.paid ? '' : '(در انتظار پرداخت)'}</span>
                       </span>
                     </div>
                   </div>
-                  <div className='w-1/3'>
-                  <div>
-                    <Button
-                    variant="contained"
-                    sx={{
-                      py: 1,
-                      boxShadow: 'none',
-                      backgroundColor: 'rgb(16 185 129)',
-                      '&:hover': {
-                        backgroundColor: 'rgb(5 150 105)',
-                      },
-                    }}
-                      
-                      // onClick={() => editPatientHandler(pat)}
-                      className="flex items-center border"
-                    >
-                      <TbBrandCashapp className="text-white text-xl" />
-                      <span className="text-white">پرداخت</span>
-                    </Button>
-                  </div>
+                  <div className="w-1/5">
+                    {!req.paid && (
+                      <div>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{
+                            py: 1,
+                            boxShadow: 'none',
+                            backgroundColor: 'rgb(16 185 129)',
+                            '&:hover': {
+                              backgroundColor: 'rgb(5 150 105)',
+                            },
+                          }}
+                          // onClick={() => editPatientHandler(pat)}
+                          className="flex items-center border"
+                        >
+                          <span className="text-white">پرداخت</span>
+                        </Button>
+                      </div>
+                    )}
+                    {req.paid && <p className='whitespace-nowrap text-xs text-green-500 font-semibold'>پرداخت شده</p>}
                   </div>
                 </div>
-                <div className='sm:w-1/2 w-full flex justify-around flex-wrap mt-3'>
-                
+                <div className="sm:w-1/2 w-full flex justify-around flex-wrap mt-3">
                   <div className="w-1/3">
                     <Button size="small" onClick={() => goToUploadPage(req)} className="flex items-center">
                       <BsCloudUploadFill className="text-teal-500 text-xl sm:translate-x-2" />
-                      <span className="text-teal-500 whitespace-nowrap sm:translate-x-2 px-1">آپلود فایل </span>
+                      <span className="text-teal-500 whitespace-nowrap sm:translate-x-2 px-1">ارسال فایل </span>
                     </Button>
                   </div>
                   <div className="w-1/3">
@@ -226,81 +229,15 @@ export default function TableReqPatient({
                       <span className="text-slate-700 whitespace-nowrap px-1"> جزئیات</span>
                     </Button>
                   </div>
-                  <div className="w-1/3">
-                    <Button size="small" onClick={() => deleteUploadHandler(req)} className="flex items-center">
-                      <FaRegTrashCan className="text-red-500 text-lg" />
-                      <span className="text-red-500 px-1">حذف</span>
-                    </Button>
-                  </div>
+                  {!req.paid && (
+                    <div className="w-1/3">
+                      <Button size="small" onClick={() => deleteUploadHandler(req)} className="flex items-center">
+                        <FaRegTrashCan className="text-red-500 text-lg" />
+                        <span className="text-red-500 px-1">حذف</span>
+                      </Button>
+                    </div>
+                  )}
                 </div>
-                {/* <div className="mt-3 w-52 mx-auto">
-                  <TextField
-                    aria-readonly
-                    className=" text-end"
-                    id="outlined-multiline-flexible"
-                    label="نام دکتر"
-                    dir="rtl"
-                    value={`${req.doctorFirstName} ${req.doctorLastName}`}
-                  />
-                </div> */}
-                {/* <div className="mt-3 w-52 mx-auto">
-                  <TextField
-                    aria-readonly
-                    className="text-end"
-                    id="outlined-multiline-flexible"
-                    label="وضعیت"
-                    dir="rtl"
-                    value={req.status}
-                  />
-                </div> */}
-                {/* <div className="mt-3 w-52 mx-auto">
-                <TextField
-                  aria-readonly
-                  className="text-end"
-                  id="outlined-multiline-flexible"
-                  label="پرداخت"
-                  dir="rtl"
-                  value={req.paid? <MdDoneOutline className='text-green-500'/> : <div className='flex items-center justify-center'> <button className='bg-green-500 px-4 py-2 rounded-md duration-300 hover:bg-green-600 text-white'>پرداخت</button></div>}
-                />
-              </div> */}
-
-                {/* <div className="flex flex-wrap justify-center mt-5">
-                  <div className="w-1/2">
-                    <Button size="small" onClick={() => deleteUploadHandler(req)} className="flex items-center">
-                      <FaRegTrashCan className="text-red-500 text-lg" />
-                      <span className="text-red-500">حذف</span>
-                    </Button>
-                  </div>
-                  <div className="w-1/2">
-                    <Button size="small" onClick={() => goToUploadPage(req)} className="flex items-center">
-                      <BsCloudUploadFill className="text-teal-500 text-xl sm:translate-x-2" />
-                      <span className="text-teal-500 whitespace-nowrap sm:translate-x-2">آپلود فایل </span>
-                    </Button>
-                  </div>
-                  <div className="w-1/2">
-                    <Button
-                      size="small"
-                      // onClick={() => editPatientHandler(pat)}
-                      className="flex items-center"
-                    >
-                      <TbBrandCashapp className="text-green-500 text-xl" />
-                      <span className="text-green-500">پرداخت</span>
-                    </Button>
-                  </div>
-                  <div className="w-1/2">
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        setIsShowDetails(true);
-                        setAppointmentId(req.appointmentId);
-                      }}
-                      className="flex items-center"
-                    >
-                      <FaEye className="text-slate-700 text-xl" />
-                      <span className="text-slate-700">مشاهده جزئیات </span>
-                    </Button>
-                  </div>
-                </div> */}
               </div>
             ))}
           </div>

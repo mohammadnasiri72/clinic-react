@@ -16,9 +16,10 @@ export default function PatientListVisit({setPageNumber}) {
                 py: 1,
                 boxShadow: 'none',
                 // fontSize: 20,
-                backgroundColor: 'rgb(16 185 129)',
+                backgroundColor: 'rgb(6 182 212)',
                 '&:hover': {
-                  backgroundColor: 'rgb(5 150 105)',
+                  backgroundColor: 'rgb(8 145 178)',
+               
                 },
               }}
               className="p-2 rounded-md duration-300 whitespace-nowrap text-white"
@@ -35,9 +36,9 @@ export default function PatientListVisit({setPageNumber}) {
                 py: 1,
                 boxShadow: 'none',
                 // fontSize: 20,
-                backgroundColor: 'rgb(6 182 212)',
+                backgroundColor: 'rgb(16 185 129)',
                 '&:hover': {
-                  backgroundColor: 'rgb(8 145 178)',
+                  backgroundColor: 'rgb(5 150 105)',
                 },
               }}
               className="p-2 rounded-md duration-300 whitespace-nowrap text-white"

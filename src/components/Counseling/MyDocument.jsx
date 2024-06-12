@@ -7,9 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaEye, FaTrashAlt } from 'react-icons/fa';
 import { RiFileVideoLine } from 'react-icons/ri';
 import { IoIosDocument } from 'react-icons/io';
 import Swal from 'sweetalert2';
@@ -41,6 +41,8 @@ export default function MyDocumentSend({
   setSrcAudio,
 }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const btnDoc = useRef(null);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -202,10 +204,10 @@ export default function MyDocumentSend({
               </TableContainer>
             </div>
             <div className="md:hidden block">
-             <div className='flex flex-wrap'>
-             {filesUpload.map((file, index) => (
-                <div key={file.id} className='sm:w-1/2 w-full p-2'>
-                  <Card >
+              <div className="flex flex-wrap">
+                {filesUpload.map((file, index) => (
+                  <div key={file.id} className="sm:w-1/2 w-full p-2">
+                    {/* <Card >
                   <CardContent>
                     <Typography variant="h5" component="div">
                       {file.medicalItemName}
@@ -260,15 +262,75 @@ export default function MyDocumentSend({
                         </Button>
                       )}
                     </div>
-                    <Button sx={{color:'red'}} >
+                    <Button onClick={() => deleteFileHandler(file)} sx={{color:'red'}} >
                       <FaTrashAlt  />
                       <span>حذف</span>
                     </Button>
                   </CardActions>
-                </Card>
-                </div>
-              ))}
-             </div>
+                </Card> */}
+                    <div className="border rounded-lg bg-slate-50 flex ">
+                      <div className="w-1/4">
+                        {file.medicalItemName === 'تصویر' && (
+                          <div className="flex justify-center items-center pt-2">
+                            <FaImage className="  text-3xl text-slate-700" />
+                          </div>
+                        )}
+                        {file.medicalItemName === 'ویدئو' && (
+                          <div className="flex justify-center items-center pt-2">
+                            <RiFileVideoLine className=" text-3xl text-slate-700" />
+                          </div>
+                        )}
+                        {file.medicalItemName === 'سند' && (
+                          <div>
+                            <a ref={btnDoc} target="_blank" rel="noreferrer" href={mainDomain + file.attachmentSrc}>
+                              {/*  */}
+                            </a>
+
+                            <div className="flex justify-center items-center pt-2">
+                              <IoIosDocument className=" text-3xl text-slate-700" />
+                            </div>
+                          </div>
+                        )}
+                        {file.medicalItemName === 'صوت' && (
+                          <div className="flex justify-center items-center pt-2">
+                            <MdAudioFile className=" text-3xl text-slate-700" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="w-1/2 flex flex-col">
+                        <Typography variant="h5" component="div">
+                          {file.medicalItemName}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                          {file.description}
+                        </Typography>
+                      </div>
+                      <div className="w-1/4 flex justify-center items-center">
+                        <FaEye
+                          onClick={() => {
+                            if (file.medicalItemId === 4) {
+                              setIsShowImg(true);
+                              setSrc(file.attachmentSrc);
+                            } else if (file.medicalItemId === 5) {
+                              setIsShowVideo(true);
+                              setSrcVideo(file.attachmentSrc);
+                            } else if (file.medicalItemId === 6) {
+                              setIsShowAudio(true);
+                              setSrcAudio(file.attachmentSrc);
+                            } else {
+                              btnDoc.current.click();
+                            }
+                          }}
+                          className="text-3xl cursor-pointer text-teal-500"
+                        />
+                        <Button size="small" onClick={() => deleteFileHandler(file)} sx={{ color: 'red' }}>
+                          <FaTrashAlt className="text-xl" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

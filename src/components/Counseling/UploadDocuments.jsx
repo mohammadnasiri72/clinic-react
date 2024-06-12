@@ -156,7 +156,7 @@ export default function UploadDocuments({
       <div className="relative">
         {!patSelected && (
           <div>
-            <h2 className="text-2xl font-semibold pb-4">در صورت داشتن مدارک پزشکی آن را برای دکتر ارسال کنید</h2>
+            <h2 className="text-xl font-semibold pb-4">در صورت داشتن مدارک پزشکی آن را برای دکتر ارسال کنید</h2>
           </div>
         )}
         <div className="px-4 w-full flex flex-wrap justify-start items-center" dir="rtl">
@@ -195,7 +195,8 @@ export default function UploadDocuments({
           </div>
           <input className="opacity-0 invisible absolute" ref={inpRef} type="file" onChange={uploadDocumentHandler} />
 
-          <div className="lg:px-3 lg:mt-0 mt-3 lg:w-auto w-full text-start">
+         <div className='flex items-center'>
+         <div className="lg:px-3 lg:mt-0 mt-3 lg:w-auto w-full text-start">
             {/* <button
               onClick={selectFileHandler}
               className="p-3 flex justify-center items-center bg-slate-100 hover:bg-slate-300 duration-300 rounded-full"
@@ -221,11 +222,13 @@ export default function UploadDocuments({
               <MdDriveFolderUpload className="text-3xl" />
             </Button>
           </div>
-          {/* <div>{<span dir="ltr">{savedfile.name}</span>}</div> */}
-          {/* <CircularProgress variant="determinate" value={valProgres} /> */}
           <div className="px-5">
             <ProgressBarUpload valProgres={valProgres} />
           </div>
+         </div>
+          {/* <div>{<span dir="ltr">{savedfile.name}</span>}</div> */}
+          {/* <CircularProgress variant="determinate" value={valProgres} /> */}
+          
         </div>
 
         <div className="p-5">

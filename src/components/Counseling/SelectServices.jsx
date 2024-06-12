@@ -4,16 +4,30 @@ import SelecDoctor from './SelecDoctor';
 import SelectExpertises from './SelectExpertises';
 import SelectServicesNotPersonal from './SelectServicesNotPersonal';
 
-export default function SelectServices({ setPageNumber, valDoctor, setValDoctor, service, setService }) {
+export default function SelectServices({
+  setPageNumber,
+  valDoctor,
+  setValDoctor,
+  service,
+  setService,
+  setTitleServices,
+  setPriceServices,
+  setNameDoctor
+}) {
   const [expertise, setExpertise] = useState('همه');
 
   return (
     <>
       <div className="md:w-1/2 sm:w-2/3 w-full mx-auto pb-10">
-        <h2 className="text-2xl font-semibold">لطفا خدمات مد نظر خود را وارد کنید</h2>
+        <h2 className="text-xl font-semibold">لطفا خدمات مد نظر خود را وارد کنید</h2>
         <SelectExpertises expertise={expertise} setExpertise={setExpertise} />
-        <SelecDoctor expertise={expertise} valDoctor={valDoctor} setValDoctor={setValDoctor} />
-        <SelectServicesNotPersonal service={service} setService={setService} />
+        <SelecDoctor expertise={expertise} valDoctor={valDoctor} setValDoctor={setValDoctor} setNameDoctor={setNameDoctor}/>
+        <SelectServicesNotPersonal
+          service={service}
+          setService={setService}
+          setTitleServices={setTitleServices}
+          setPriceServices={setPriceServices}
+        />
 
         <div className="flex justify-between mt-5 px-4">
           <Button

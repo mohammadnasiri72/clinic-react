@@ -1,6 +1,8 @@
 import { Card, CardContent, Chip, IconButton, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { BiDetail } from 'react-icons/bi';
+import { FaEye } from 'react-icons/fa';
+import { IoCalendarOutline } from 'react-icons/io5';
 
 export default function BoxReceptionPatient({
   reception,
@@ -42,13 +44,13 @@ export default function BoxReceptionPatient({
                   setReceptionSelected(reception);
                 }}
               >
-                <BiDetail className="text-teal-500" />
+                <FaEye className="text-teal-500" />
               </IconButton>
             </Tooltip>
           </div>
-          <p className="mt-2">
-            <span>تاریخ پذیرش :</span>
-            {reception.appointmentDateFA}
+          <p className="mt-2 flex items-center">
+            <IoCalendarOutline className='text-2xl'/>
+            <span className='px-2'>{reception.appointmentDateFA}</span>
           </p>
         </CardContent>
       </Card>

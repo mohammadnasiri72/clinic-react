@@ -77,6 +77,7 @@ export default function MainPageReception({ account }) {
     customClass: 'toast-modal',
   });
 
+  // time start
   useEffect(() => {
     if (valTimeStart && !isEditStartTime) {
       if (valTimeStart.getHours().toString().length === 1) {
@@ -93,6 +94,7 @@ export default function MainPageReception({ account }) {
     }
   }, [valTimeStart, isEditStartTime, minStart, hoursStart]);
 
+// time end
   useEffect(() => {
     if (valTimeEnd && !isEditEndTime) {
       if (valTimeEnd.getHours().toString().length === 1) {
@@ -223,14 +225,15 @@ export default function MainPageReception({ account }) {
       paid,
       doctorId,
       dateFa: date,
-      startTime: `${valTimeStart.format()}:00`,
-      endTime: `${valTimeEnd.format()}:00`,
+      startTime: isEditStartTime ? `${valTimeStart.format()}:00` : timeEditStart,
+      endTime: isEditEndTime ? `${valTimeEnd.format()}:00` : timeEditEnd,
       insuranceList,
       serviceList,
       statusAdmissionIdList: [...new Set(valCondition)],
       turn,
       notes,
       statusId,
+      // reservationId: valReservPatient,
     };
     axios
       .post(`${mainDomain}/api/Appointment/Add`, dataForm, {
@@ -238,7 +241,7 @@ export default function MainPageReception({ account }) {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
-      .then((res) => {
+      .then(() => {
         setIsLoading(false);
         // setIsEditStartTime(false);
         // setIsEditEndTime(false);
@@ -258,6 +261,8 @@ export default function MainPageReception({ account }) {
         });
       });
   };
+
+  
 
   const editeFormHandler = () => {
     setIsLoading(true);
@@ -324,7 +329,7 @@ export default function MainPageReception({ account }) {
             <Button
               onClick={() => {
                 setPageStateReception(1);
-                setEditeUser([]);
+                setEditeUser({});
                 setValInsurance([]);
                 setInsuranceListSelected([]);
                 setInsuranceUser([]);
@@ -390,7 +395,7 @@ export default function MainPageReception({ account }) {
               onClick={() => {
                 setPageStateReception(0);
                 setValType(1);
-                setEditeUser([]);
+                setEditeUser({});
                 setMedicalRecord([]);
                 setListServices([]);
                 setServiceList([]);
@@ -426,7 +431,7 @@ export default function MainPageReception({ account }) {
               query={query}
               setQuery={setQuery}
             />
-            <Button
+            {/* <Button
               onClick={() => setPageStateReception(2)}
               sx={{
                 py: 2,
@@ -440,7 +445,7 @@ export default function MainPageReception({ account }) {
               className="px-5 py-2 rounded-md text-white duration-300"
             >
               <FaPlus />
-            </Button>
+            </Button> */}
           </div>
           <div className="flex justify-start mt-5">
             <ReserveListPatient

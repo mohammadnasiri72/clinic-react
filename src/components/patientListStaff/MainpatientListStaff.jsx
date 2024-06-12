@@ -62,6 +62,7 @@ export default function MainpatientListStaff() {
               valStatusFilter={valStatusFilter}
               setValStatusFilter={setValStatusFilter}
               patientList={patientList}
+              setPatientList={setPatientList}
             />
             <div className="mt-5 w-11/12 mx-auto">
               <TableListPatient

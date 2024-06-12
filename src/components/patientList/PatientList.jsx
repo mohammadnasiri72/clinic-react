@@ -20,7 +20,7 @@ export default function PatientList() {
       <div>
         <div className="w-full border rounded-md">
           <h3 className="bg-[#f4f6f8] rounded-t-md font-semibold text-xl text-gray-600 p-2">لیست بیماری های من</h3>
-          <div className="p-3">
+          <div className="p-3 ">
             <Button
               sx={{
                 py: 1,
@@ -30,17 +30,26 @@ export default function PatientList() {
                   backgroundColor: 'rgb(5 150 105)',
                 },
               }}
-              className="p-2 rounded-md duration-300 mt-2"
-              onClick={() => setIsOpenAddPatient(!isOpenAddPatient)}
+              className="p-2 rounded-md duration-300 mt-2 text-white"
+              onClick={() => {
+                setIsOpenAddPatient(!isOpenAddPatient)
+                setMedicationIdList([])
+              }}
               variant="contained"
             >
-              <span className="px-2">ثبت بیماری جدید</span>
+              <span className="px-2 ">ثبت بیماری جدید</span>
               <FaPlus />
             </Button>
           </div>
 
           <div>
-            <TablePatient isOpenAddPatient={isOpenAddPatient} isLoading={isLoading} setIsLoading={setIsLoading} />
+            <TablePatient
+              isOpenAddPatient={isOpenAddPatient}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              medicationIdList={medicationIdList}
+              setMedicationIdList={setMedicationIdList}
+            />
           </div>
         </div>
         <AddPatientPopUp

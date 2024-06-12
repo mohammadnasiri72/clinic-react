@@ -11,7 +11,7 @@ export default function MyVisitedBox({ list, doctor }) {
           </div>
         </div>
         <div className="w-2/3">
-          <p className="font-nastaligh text-4xl">
+          <p className="lg:text-2xl sm:text-xl text-sm font-semibold whitespace-nowrap">
             {doctor?.firstName} {doctor?.lastName}
           </p>
           <p className="mt-5 font-semibold">{doctor?.specialization}</p>

@@ -19,6 +19,8 @@ export default function FormHistoryVisit({
   setIsShowDetails,
   isLoading
 }) {
+
+  
   const [medicalRecord, setMedicalRecord] = useState([]);
 
   // get medicalrecoard
@@ -76,6 +78,10 @@ export default function FormHistoryVisit({
             </p>
             <p className="text-sm">{account.nationalId}</p>
           </div>
+        </div>
+        <div className='text-start font-semibold px-4'>
+          <span>توضیحات : </span>
+          <span>{receptionSelected.notes}</span>
         </div>
         <hr className="my-2 border-dotted border-2" />
         <div className="flex flex-wrap">

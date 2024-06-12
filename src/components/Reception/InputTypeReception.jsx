@@ -6,7 +6,7 @@ import { mainDomain } from '../../utils/mainDomain';
 export default function InputTypeReception({valType , setValType , editeUser}) {
   useEffect(()=>{
     if (editeUser?.type) {
-      setValType(editeUser.type==='InPerson' ? 1:2)
+      setValType(editeUser.typeId)
     }
   },[editeUser])
   const [typeReception, setTypeReception] = useState([]);
@@ -19,6 +19,7 @@ export default function InputTypeReception({valType , setValType , editeUser}) {
       })
       .then((res) => {
         setTypeReception(res.data);
+        console.log(res.data);
         
       })
       .catch((err) => {});
@@ -40,7 +41,7 @@ export default function InputTypeReception({valType , setValType , editeUser}) {
           >
             {[typeReception[1], typeReception[2]].map((e, i) => (
               <MenuItem value={i+1} key={i+1}>
-                {e === 'Counseling' ? 'غیر حضوری' : 'حضوری'}
+                {e}
               </MenuItem>
             ))}
           </Select>

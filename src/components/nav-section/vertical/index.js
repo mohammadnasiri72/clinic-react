@@ -27,7 +27,7 @@ NavSectionVertical.propTypes = {
   navConfig: PropTypes.array,
 };
 
-export default function NavSectionVertical({account , navConfig, isCollapse = false, ...other}) {
+export default function NavSectionVertical({setChangeStatePages , account , navConfig, isCollapse = false, ...other}) {
   return (
     <Box {...other}>
       {navConfig.map((group) => (
@@ -46,14 +46,14 @@ export default function NavSectionVertical({account , navConfig, isCollapse = fa
           localStorage.getItem('roles').includes(group.subheader) &&
          
           group.items.map((list) => (
-            <NavListRoot key={list.title} list={list} isCollapse={isCollapse} />
+            <NavListRoot  key={list.title} list={list} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
             
           ))
           }
           {
             group.subheader==='General' &&
             group.items.map((list) => (
-              <NavListRoot key={list.title} list={list} isCollapse={isCollapse} />
+              <NavListRoot key={list.title} list={list} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
               
             ))
           }

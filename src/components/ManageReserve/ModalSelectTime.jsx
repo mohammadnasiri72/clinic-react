@@ -114,7 +114,7 @@ export default function ModalSelectTime({
             },
           })
           .then((res) => {
-            handleClose();
+            // handleClose();
             setFlag((e) => !e);
             Toast.fire({
               icon: 'success',

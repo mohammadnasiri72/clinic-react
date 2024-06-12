@@ -12,11 +12,30 @@ export default function NavBarListPatient({
   valStatusFilter,
   setValStatusFilter,
   patientList,
+  setPatientList
 }) {
   const [statusList, setStatusList] = useState([]);
+  console.log(patientList);
 
   const filterPatientHandler = (e) => {
     setSearchValue(e.target.value);
+if (e.target.value.length > 0) {
+  axios
+  .get(`${mainDomain}/api/Patient/GetList`, {
+    params: {
+      query: e.target.value,
+    },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  .then((res) => {
+    setPatientList(res.data);
+  })
+  .catch((err) => {});
+  
+}
+
     // setPatientListFilter(
     //   patientList.filter(
     //     (ev) =>

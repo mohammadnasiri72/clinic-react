@@ -20,7 +20,14 @@ import { mainDomain } from '../../utils/mainDomain';
 import Iconify from '../Iconify';
 import AddPatientPopUp from './AddPatientPopUp';
 
-export default function TablePatient({ isOpenAddPatient, infoPat, isLoading, setIsLoading }) {
+export default function TablePatient({
+  isOpenAddPatient,
+  infoPat,
+  isLoading,
+  setIsLoading,
+  medicationIdList,
+  setMedicationIdList,
+}) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -35,7 +42,6 @@ export default function TablePatient({ isOpenAddPatient, infoPat, isLoading, set
   const [patientName, setPatientName] = useState('');
   const [age, setAge] = useState('');
   const [isPatientActive, setIsPatientActive] = useState('true');
-  const [medicationIdList, setMedicationIdList] = useState([]);
   const [desc, setDesc] = useState('');
   const [valueMedicine, setValueMedicine] = useState([]);
   const [patId, setPatId] = useState('');
@@ -133,6 +139,7 @@ export default function TablePatient({ isOpenAddPatient, infoPat, isLoading, set
       arr.push(medicines.find((med) => med.medicationId === ev));
       return true;
     });
+    setMedicationIdList(e.medicationIdList)
     setValueMedicine(arr);
     setPatId(e.patientHistoryId);
   };
@@ -222,9 +229,7 @@ export default function TablePatient({ isOpenAddPatient, infoPat, isLoading, set
                         {!infoPat && (
                           <div className="flex justify-around">
                             <Tooltip title="ویرایش">
-                              <IconButton
-                              //  onClick={() => editPatientHandler(pat)}
-                              >
+                              <IconButton onClick={() => editPatientHandler(pat)}>
                                 <Iconify icon={'eva:edit-fill'} />
                               </IconButton>
                             </Tooltip>

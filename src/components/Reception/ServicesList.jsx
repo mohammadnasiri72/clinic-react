@@ -101,6 +101,15 @@ export default function ServicesList({ userSelected , setServiceList , servicesU
           />
         </div>
         <Button
+         sx={{
+          py:1,
+          boxShadow: 'none',
+          color: 'white',
+          backgroundColor: 'rgb(16 185 129)',
+          '&:hover': {
+            backgroundColor: 'rgb(5 150 105)',
+          },
+        }}
           onClick={setServiceHandler}
           className="text-white rounded-md px-5 py-2 bg-green-500 duration-300 hover:bg-green-600"
         >

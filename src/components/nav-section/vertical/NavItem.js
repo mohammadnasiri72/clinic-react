@@ -20,10 +20,11 @@ NavItemRoot.propTypes = {
     info: PropTypes.any,
     path: PropTypes.string,
     title: PropTypes.string,
+   
   }),
 };
 
-export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }) {
+export function NavItemRoot({ item, isCollapse, open = false, active, onOpen ,setChangeStatePages}) {
   const { title, path, icon, info, children } = item;
   const renderContent = (
     <>
@@ -40,7 +41,7 @@ export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }) 
 
   if (children) {
     return (
-      <ListItemStyle onClick={onOpen} activeRoot={active}>
+      <ListItemStyle  onClick={onOpen} activeRoot={active}>
         {renderContent}
       </ListItemStyle>
     );
@@ -51,7 +52,7 @@ export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }) 
       {renderContent}
     </ListItemStyle>
   ) : (
-    <ListItemStyle component={RouterLink} to={path} activeRoot={active}>
+    <ListItemStyle onClick={()=>setChangeStatePages((e)=>!e)} component={RouterLink} to={path} activeRoot={active}>
       {renderContent}
     </ListItemStyle>
   );

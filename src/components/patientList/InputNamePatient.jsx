@@ -1,7 +1,9 @@
 import { TextField } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function InputNamePatient({patientName , setPatientName}) {
+
+  
   return (
     <>
       <div className=" text-start" dir="rtl">

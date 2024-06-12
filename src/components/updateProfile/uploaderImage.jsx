@@ -1,7 +1,7 @@
-import { Button, Paper } from '@mui/material';
+import { Button, Paper, Stack } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { MdAddAPhoto } from 'react-icons/md';
+import { MdOutlineAddAPhoto } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
@@ -55,13 +55,11 @@ export default function UploaderImage({ account, setChang, patient }) {
       let data = {};
       let role = '';
       if (patient) {
-        if (localStorage.getItem('roles') === 'Patient') {
-          data = {
-            fileSrc: fileAtt,
-            userId: account.userId,
-          };
-          role = 'Patient';
-        }
+        data = {
+          fileSrc: fileAtt,
+          userId: account.userId,
+        };
+        role = 'Patient';
       } else if (!patient) {
         if (localStorage.getItem('roles') === 'Patient') {
           data = {
@@ -119,32 +117,21 @@ export default function UploaderImage({ account, setChang, patient }) {
   return (
     <>
       <div className="border rounded-lg h-full relative">
-       
         <input className="opacity-0 invisible" ref={inpImg} onChange={viewImgHandler} type="file" />
         <Paper
           sx={{ borderRadius: '100%' }}
-          onClick={selectImgHandler}
-          className="border-dashed relative border border-black w-32 h-32 rounded-full flex justify-center items-center cursor-pointer mx-auto box-avatar"
+          className="border-dashed relative border border-black w-32 h-32 rounded-full flex justify-center items-center mx-auto"
         >
           {account.avatar && (
-            <img
-              className="w-full h-full rounded-full duration-300 object-cover sm:brightness-100 brightness-50"
-              src={src}
-              alt=""
-            />
+            <img className="w-full h-full rounded-full duration-300 object-cover brightness-100" src={src} alt="" />
           )}
-
-          {/* {!account.avatar && (
-            <div className="flex justify-center items-center flex-col opacity-50 hover:opacity-100 duration-300 w-full h-full rounded-full absolute">
-              <MdAddAPhoto className="text-2xl" />
-              <span className="text-xl">آپلود تصویر</span>
-            </div>
-          )} */}
           {
-            <div className="flex justify-center items-center flex-col sm:opacity-0 opacity-50 hover:opacity-50 duration-300 w-full h-full rounded-full absolute text-white">
-              <MdAddAPhoto className="text-2xl" />
-              <span className="text-xl">تغییر تصویر</span>
-            </div>
+            <Stack
+              onClick={selectImgHandler}
+              className="flex justify-center items-center flex-col duration-300  rounded-full absolute text-[#eee] -right-1 -bottom-1 bg-teal-500 hover:bg-teal-600 hover:text-[#fff] p-2 cursor-pointer"
+            >
+              <MdOutlineAddAPhoto className="text-3xl" />
+            </Stack>
           }
         </Paper>
 

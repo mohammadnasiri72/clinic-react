@@ -6,7 +6,10 @@ export default function InputAge({setAge , age}) {
     <>
     <div className=" text-start" dir="rtl">
         <TextField
-          onChange={(e) => setAge(e.target.value)}
+          onChange={(e) => {
+            setAge(e.target.value)
+            console.log(e.target.value);
+          }}
           className="w-full text-end"
           id="outlined-multiline-flexible"
           label="سن ابتلا"

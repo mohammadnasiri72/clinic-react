@@ -4,6 +4,8 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaEye } from 'react-icons/fa';
 import { AiOutlineMessage } from 'react-icons/ai';
 import Swal from 'sweetalert2';
+import { IoCalendarOutline } from 'react-icons/io5';
+import { IoMdTime } from 'react-icons/io';
 import { GiCancel } from 'react-icons/gi';
 import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
@@ -22,6 +24,7 @@ export default function CardReserveHistory({
   setIsLoading,
   setFlag,
 }) {
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   // import sweet alert-2
@@ -85,7 +88,7 @@ export default function CardReserveHistory({
   };
   return (
     <>
-      <div className=" border rounded-lg p-2 relative">
+      <div className=" border rounded-lg p-2 relative bg-slate-50">
         <CheckBoxReserve
           listReserveChecked={listReserveChecked}
           setListReserveChecked={setListReserveChecked}
@@ -99,12 +102,12 @@ export default function CardReserveHistory({
               {e.patientFirstName} {e.patientLastName}
             </span>
           </div>
-          <div className="mt-1">
-            <span>تاریخ: </span>
-            <span>{e.reservationTimeDateFA}</span>
+          <div className="mt-1 flex items-center">
+          <IoCalendarOutline className='text-2xl'/>
+            <span className='px-1'>{e.reservationTimeDateFA}</span>
           </div>
-          <div className="mt-1">
-            <span>زمان: </span>
+          <div className="mt-1 flex items-center">
+          <IoMdTime className='text-2xl'/>
             <span>
               {e.reservationTimeToTime.slice(0, 5)} - {e.reservationTimeFromTime.slice(0, 5)}
             </span>

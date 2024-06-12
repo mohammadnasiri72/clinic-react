@@ -15,7 +15,7 @@ NavListRoot.propTypes = {
   }),
 };
 
-export function NavListRoot({ list }) {
+export function NavListRoot({ list , setChangeStatePages }) {
   const menuRef = useRef(null);
 
   const { pathname } = useLocation();
@@ -71,7 +71,7 @@ export function NavListRoot({ list }) {
     );
   }
 
-  return <NavItemRoot item={list} active={active} />;
+  return <NavItemRoot item={list} active={active} setChangeStatePages={setChangeStatePages}/>;
 }
 
 // ----------------------------------------------------------------------
@@ -106,6 +106,7 @@ function NavListSub({ list }) {
     return (
       <>
         <NavItemSub
+        
           ref={menuRef}
           open={open}
           item={list}

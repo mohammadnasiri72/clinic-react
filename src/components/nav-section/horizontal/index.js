@@ -20,7 +20,7 @@ NavSectionHorizontal.propTypes = {
   navConfig: PropTypes.array,
 };
 
-function NavSectionHorizontal({ navConfig }) {
+function NavSectionHorizontal({ navConfig , setChangeStatePages}) {
   return (
     <Stack direction="row" justifyContent="center" sx={{ bgcolor: 'background.neutral', borderRadius: 1, px: 0.5 }}>
       <Stack direction="row" sx={{ ...hideScrollbar, py: 1 }}>
@@ -29,12 +29,12 @@ function NavSectionHorizontal({ navConfig }) {
             {
             localStorage.getItem('roles').includes(group.subheader) &&
             group.items.map((list) => (
-              <NavListRoot key={list.title} list={list} />
+              <NavListRoot key={list.title} list={list} setChangeStatePages={setChangeStatePages}/>
             ))}
             {
             group.subheader==='General' &&
             group.items.map((list) => (
-              <NavListRoot key={list.title} list={list} />
+              <NavListRoot key={list.title} list={list} setChangeStatePages={setChangeStatePages}/>
               
             ))
           }

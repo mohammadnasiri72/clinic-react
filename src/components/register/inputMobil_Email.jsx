@@ -8,7 +8,7 @@ export default function InputMobilEmail({
   mobile,
   setMobile,
 }) {
-  const paternMobile = /09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/;
+  const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
   const inputRef = useRef(null);
  

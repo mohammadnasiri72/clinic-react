@@ -12,7 +12,7 @@ import { FaPlus } from 'react-icons/fa6';
 import { LiaUserEditSolid } from 'react-icons/lia';
 import { useNavigate } from 'react-router';
 
-export default function MainPageDashboardFooter() {
+export default function MainPageDashboardFooter({setChangeStatePages}) {
   const [valueButton, setValueButton] = useState('home');
 
     const navigate = useNavigate()
@@ -118,6 +118,7 @@ export default function MainPageDashboardFooter() {
         <Button
           onClick={() => {
             setValueButton('counseling')
+            setChangeStatePages((e)=>!e)
             navigate('/dashboard/counseling')
           }}
           value={valueButton}

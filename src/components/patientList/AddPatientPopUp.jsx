@@ -28,6 +28,9 @@ export default function AddPatientPopUp({
   setValueMedicine,
   patId,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  // import sweet alert
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -37,42 +40,59 @@ export default function AddPatientPopUp({
     customClass: 'toast-modal',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const setPatientHandler = () => {
-    setIsLoading(true);
-    const dataPatient = {
-      title: patientName,
-      age,
-      statusId: isPatientActive === 'true' ? 1 : 0,
-      description: desc,
-      medicationIdList,
-    };
-    axios
-      .post(`${mainDomain}/api/PatientHistory/Add`, dataPatient, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        setIsOpenAddPatient(!isOpenAddPatient);
-        setPatientName('');
-        setAge('');
-        setIsPatientActive('true');
-        setDesc('');
-        setValueMedicine([]);
-        Toast.fire({
-          icon: 'success',
-          text: 'بیماری با موفقیت ثبت شد',
+    if (patientName && age && desc) {
+      setIsLoading(true);
+      const dataPatient = {
+        title: patientName,
+        age,
+        statusId: isPatientActive === 'true' ? 1 : 0,
+        description: desc,
+        medicationIdList,
+      };
+      axios
+        .post(`${mainDomain}/api/PatientHistory/Add`, dataPatient, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setIsLoading(false);
+          setIsOpenAddPatient(!isOpenAddPatient);
+          setPatientName('');
+          setAge('');
+          setIsPatientActive('true');
+          setDesc('');
+          setValueMedicine([]);
+          Toast.fire({
+            icon: 'success',
+            text: 'بیماری با موفقیت ثبت شد',
+          });
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          Toast.fire({
+            icon: 'error',
+            text: err.response.data,
+          });
         });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        Toast.fire({
-          icon: 'error',
-          text: err.response.data,
-        });
+      
+    }else if (!patientName) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا عنوان بیماری راوارد کنید',
       });
+    }else if (!age) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا سن ابتلا راوارد کنید',
+      });
+    }else if (!desc) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا توضیحات بیماری راوارد کنید',
+      });
+    }
   };
   const editPatientHandler = () => {
     setIsLoading(true);
@@ -94,7 +114,7 @@ export default function AddPatientPopUp({
         setIsLoading(false);
         Toast.fire({
           icon: 'success',
-          text: 'بیماری با موفقیت ثبت شد',
+          text: 'بیماری با موفقیت ویرایش شد',
         });
         setIsOpenAddPatient(!isOpenAddPatient);
       })
@@ -102,11 +122,12 @@ export default function AddPatientPopUp({
         setIsLoading(false);
       });
   };
+
   return (
     <>
       <div
         style={{ zIndex: '1300', transform: isOpenAddPatient ? 'translateX(0)' : 'translateX(-100%)' }}
-        className="fixed top-0 bottom-0 lg:right-2/3 sm:right-1/2 right-0 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
+        className="fixed top-0 bottom-0 lg:right-2/3 sm:right-1/2 right-0 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto pb-20"
       >
         <h3 className="text-2xl font-semibold ">افزودن بیماری</h3>
         <IoClose
@@ -116,12 +137,15 @@ export default function AddPatientPopUp({
         <div className=" mt-6">
           <InputNamePatient patientName={patientName} setPatientName={setPatientName} />
         </div>
-        <div className=" mt-6">
+        <div className="flex mt-6">
+          <div className='w-1/2 px-1'>
           <InputAge setAge={setAge} age={age} />
-        </div>
-        <div className="mt-6">
+          </div>
+          <div className='w-1/2 px-1'>
           <SwitchPatientActive setIsPatientActive={setIsPatientActive} isPatientActive={isPatientActive} />
+          </div>
         </div>
+       
         <div className="mt-6">
           <MedicineList
             isPatientActive={isPatientActive}

@@ -24,6 +24,7 @@ export default function BoxChangDate({
   setIsEditStartTime,
   setIsEditEndTime,
 }) {
+
   useEffect(() => {
     if (editeUser.appointmentId) {
       const startTime = new Date();
@@ -36,14 +37,25 @@ export default function BoxChangDate({
       setValTimeEnd(endTime);
     }
   }, [editeUser]);
+
+
   useEffect(() => {
     if (reservUser.length !== 0) {
       reservUser
         .filter((ev) => ev.reservationTimeId === valReservPatient)
         .map((e) => {
           setDate(e.reservationTimeDateFA);
+          
           // setValTimeStart(e.reservationTimeFromTime);
+          const startTime = new Date();
+      startTime.setHours(Number(e.reservationTimeFromTime.slice(0, 2)));
+      startTime.setMinutes(Number(e.reservationTimeFromTime.slice(3, 5)));
+      setValTimeStart(startTime);
           // setValTimeEnd(e.reservationTimeToTime);
+          const endTime = new Date();
+      endTime.setHours(Number(e.reservationTimeToTime.slice(0, 2)));
+      endTime.setMinutes(Number(e.reservationTimeToTime.slice(3, 5)));
+      setValTimeEnd(endTime);
           return true;
         });
     } else if (reservUser.length === 0 && !editeUser.appointmentDateFA) {

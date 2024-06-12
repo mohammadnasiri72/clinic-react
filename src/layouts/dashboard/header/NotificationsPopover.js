@@ -32,6 +32,8 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
   const [totalUnRead, setTotalUnRead] = useState(0);
   const [messageUnread, setMessageUnread] = useState([]);
   const [open, setOpen] = useState(null);
+  const [isBgColor, setIsBgColor] = useState(false);
+
   // const [flag, setFlag] = useState(false);
 
   useEffect(() => {
@@ -102,12 +104,18 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
+    
+    axios
+      .post(`${mainDomain}/api/Message/SeenAll`, null , {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setFlagNotif((e) => !e);
+        setIsBgColor(true);
+      })
+      .catch((err) => {});
   };
 
   const navigate = useNavigate();
@@ -157,7 +165,12 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
             {messageUnread.length === 0 && <h4 className="mt-3 text-xs font-light">مورد جدیدی موجود نیست</h4>}
             {messageUnread.length > 0 &&
               messageUnread.map((message) => (
-                <NotificationItem key={message.messageId} message={message} setFlagNotif={setFlagNotif} />
+                <NotificationItem
+                  key={message.messageId}
+                  message={message}
+                  setFlagNotif={setFlagNotif}
+                  isBgColor={isBgColor}
+                />
               ))}
           </List>
         </Scrollbar>
@@ -195,7 +208,7 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
 //   }),
 // };
 
-function NotificationItem({ message, setFlagNotif }) {
+function NotificationItem({ message, setFlagNotif, isBgColor }) {
   const { avatar, subject } = renderContent(message);
   const [bgColor, setbgColor] = useState('#edeff2');
 
@@ -218,7 +231,7 @@ function NotificationItem({ message, setFlagNotif }) {
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        bgcolor: bgColor,
+        bgcolor: isBgColor? '' : bgColor,
       }}
     >
       {/* <ListItemAvatar>

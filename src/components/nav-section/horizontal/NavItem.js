@@ -12,7 +12,7 @@ import { isExternalLink } from '..';
 
 // ----------------------------------------------------------------------
 
-export const NavItemRoot = forwardRef(({ item, active, open, onMouseEnter, onMouseLeave }, ref) => {
+export const NavItemRoot = forwardRef(({ item,setChangeStatePages, active, open, onMouseEnter, onMouseLeave }, ref) => {
   const { title, path, icon, children } = item;
 
   if (children) {
@@ -25,11 +25,11 @@ export const NavItemRoot = forwardRef(({ item, active, open, onMouseEnter, onMou
 
   return isExternalLink(path) ? (
     <ListItemStyle component={Link} href={path} target="_blank" rel="noopener">
-      <NavItemContent icon={icon} title={title} children={children} />
+      <NavItemContent  icon={icon} title={title} children={children} />
     </ListItemStyle>
   ) : (
-    <ListItemStyle component={RouterLink} to={path} activeRoot={active}>
-      <NavItemContent icon={icon} title={title} children={children} />
+    <ListItemStyle onClick={()=>setChangeStatePages((e)=>!e)} component={RouterLink} to={path} activeRoot={active}>
+      <NavItemContent  icon={icon} title={title} children={children} />
     </ListItemStyle>
   );
 });

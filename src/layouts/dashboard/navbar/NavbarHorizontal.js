@@ -27,11 +27,11 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function NavbarHorizontal() {
+function NavbarHorizontal({setChangeStatePages}) {
   return (
     <RootStyle>
       <Container maxWidth={false}>
-        <NavSectionHorizontal navConfig={navConfig} />
+        <NavSectionHorizontal navConfig={navConfig} setChangeStatePages={setChangeStatePages}/>
       </Container>
     </RootStyle>
   );

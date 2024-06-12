@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SelectServicesNotPersonal({service , setService}) {
+export default function SelectServicesNotPersonal({service , setService , setTitleServices , setPriceServices}) {
   const [services, setServices] = useState([]);
   
   useEffect(() => {
@@ -15,7 +15,9 @@ export default function SelectServicesNotPersonal({service , setService}) {
       })
       .then((res) => {
         setServices(res.data);
-        setService(res.data[0].medicalServiceId)
+        setService(res.data[0])
+        setTitleServices(res.data[0].title)
+        setPriceServices(res.data[0].rate)
       })
       .catch((err) => {});
   }, []);
@@ -28,16 +30,25 @@ export default function SelectServicesNotPersonal({service , setService}) {
               لیست خدمات غیر حضوری
             </InputLabel>
             <Select
-              onChange={(e) => setService(e.target.value)}
+              onChange={(e) => {
+                setService(e.target.value)
+                setTitleServices(e.target.value.title);
+                setPriceServices(e.target.value.rate);
+              }}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="لیست خدمات غیر حضوری"
               color="primary"
               value={service}
             >
-              {services.map((e) => (
-                <MenuItem key={e.medicalServiceId} value={e.medicalServiceId}>
-                  {e.title}
+              {services
+              .filter((ev)=>ev.medicalCategoryId === 12)
+              .map((e) => (
+                <MenuItem key={e.medicalServiceId} value={e}>
+                  <div className='flex justify-between px-10'>
+                  <span> {e.title} </span>
+                  <span> {e.rate} تومان</span>
+                  </div>
                 </MenuItem>
               ))}
             </Select>

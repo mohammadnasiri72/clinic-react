@@ -11,6 +11,7 @@ export default function ReserveListPatient({
   reservUser,
   pageStateReception
 }) {
+  
   useEffect(() => {
     if (userSelected.userId) {
       axios
