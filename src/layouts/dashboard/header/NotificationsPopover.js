@@ -27,9 +27,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 
-export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
-  const [notifications, setNotifications] = useState(_notifications);
-  const [totalUnRead, setTotalUnRead] = useState(0);
+export default function NotificationsPopover({ flagNotif, setFlagNotif, totalUnRead, setTotalUnRead }) {
   const [messageUnread, setMessageUnread] = useState([]);
   const [open, setOpen] = useState(null);
   const [isBgColor, setIsBgColor] = useState(false);
@@ -104,9 +102,8 @@ export default function NotificationsPopover({ flagNotif, setFlagNotif }) {
   };
 
   const handleMarkAllAsRead = () => {
-    
     axios
-      .post(`${mainDomain}/api/Message/SeenAll`, null , {
+      .post(`${mainDomain}/api/Message/SeenAll`, null, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -231,7 +228,7 @@ function NotificationItem({ message, setFlagNotif, isBgColor }) {
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        bgcolor: isBgColor? '' : bgColor,
+        bgcolor: isBgColor ? '' : bgColor,
       }}
     >
       {/* <ListItemAvatar>

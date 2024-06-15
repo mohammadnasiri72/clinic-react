@@ -5,27 +5,25 @@ import { useState } from 'react';
 import { MdDoneAll, MdOutlineDone } from 'react-icons/md';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function AccordionMessage({ message}) {
+export default function AccordionMessage({ message, totalUnRead, setTotalUnRead }) {
   const [expanded, setExpanded] = useState(false);
-  const[chang , setChang] = useState(false)
+  const [change , setChange] = useState(false)
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
     if (!message.seenDateTime) {
-        axios
-      .get(`${mainDomain}/api/Message/Get/${message.messageId}` , {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res)=>{
-        // setFlag((e)=>!e)
-        message.seenDateTime= new Date().toLocaleDateString('fa-IR')
-        setChang((e)=>!e)
-      })
-      .catch((err)=>{
-        
-      })
+      axios
+        .get(`${mainDomain}/api/Message/Get/${message.messageId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setTotalUnRead(totalUnRead-1)
+          message.seenDateTime = new Date().toLocaleDateString('fa-IR');
+          setChange((e)=>!e)
+        })
+        .catch((err) => {});
     }
   };
 
@@ -37,7 +35,6 @@ export default function AccordionMessage({ message}) {
         onChange={handleChange('panel1')}
       >
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
-         
           <Typography>
             {message.seenDateTime ? (
               <MdDoneAll className="text-green-500 text-xl " />
@@ -45,9 +42,16 @@ export default function AccordionMessage({ message}) {
               <MdOutlineDone className="text-xl" />
             )}
           </Typography>
-          <div className='flex flex-col'>
-          <Typography sx={{ flexShrink: 0, fontWeight: '700' , px:1}}>{message.subject}</Typography>
-          <Typography sx={{ color: 'text.secondary',fontSize:12 , mt:1 }}>{message.createdDateTimeFa.slice(0, 10)}</Typography>
+          <div className="flex flex-col items-start">
+            <Typography sx={{ flexShrink: 0, fontWeight: '700', px: 1 }}>{message.subject}</Typography>
+            <div className="flex">
+              <Typography sx={{ color: 'text.secondary', fontSize: 12, mt: 1, px: 1 }}>
+                {message.createdDateTimeFa.slice(11, 16)}
+              </Typography>
+              <Typography sx={{ color: 'text.secondary', fontSize: 12, mt: 1, px: 1 }}>
+                {message.createdDateTimeFa.slice(0, 10)}
+              </Typography>
+            </div>
           </div>
 
           <Typography className="absolute left-10 top-1/2 -translate-y-1/2">

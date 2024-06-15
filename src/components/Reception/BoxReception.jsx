@@ -15,7 +15,8 @@ export default function BoxReception({
   setEditeUser,
   setIsEditStartTime,
   setIsEditEndTime,
-  setIsLoading
+  setIsLoading,
+  setReceptionSelected,
 }) {
   const [patient, setPatient] = useState({});
   const [patientId, setPatientId] = useState('');
@@ -24,6 +25,9 @@ export default function BoxReception({
   const [showDetailsPatient, setShowDetailsPatient] = useState(false);
   const [openBoxMessage, setOpenBoxMessage] = useState(false);
   const [userId , setUserId] = useState([])
+  
+
+  
 
   useEffect(() => {
     if (patientId.length > 0) {
@@ -96,6 +100,7 @@ export default function BoxReception({
                   setPatientId={setPatientId}
                   setOpenBoxMessage={setOpenBoxMessage}
                   setUserId={setUserId}
+                  setUserSelected={setUserSelected}
                 />
               </div>
             ))}
@@ -129,6 +134,8 @@ export default function BoxReception({
         setShowDetailsPatient={setShowDetailsPatient}
         patient={patient}
         historyReception={historyReception}
+        setReceptionSelected={setReceptionSelected}
+        setPageStateReception={setPageStateReception}
       />
       <Box sx={{zIndex:'1300'}} onClick={()=> setShowDetailsPatient(false)} style={{display: showDetailsPatient?'block':'none'}} className='fixed top-0 bottom-0 left-0 right-0 bg-[#000c]'/>
     </>

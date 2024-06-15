@@ -24,7 +24,6 @@ export default function CardReserveHistory({
   setIsLoading,
   setFlag,
 }) {
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   // import sweet alert-2
@@ -103,11 +102,11 @@ export default function CardReserveHistory({
             </span>
           </div>
           <div className="mt-1 flex items-center">
-          <IoCalendarOutline className='text-2xl'/>
-            <span className='px-1'>{e.reservationTimeDateFA}</span>
+            <IoCalendarOutline className="text-2xl" />
+            <span className="px-1">{e.reservationTimeDateFA}</span>
           </div>
           <div className="mt-1 flex items-center">
-          <IoMdTime className='text-2xl'/>
+            <IoMdTime className="text-2xl" />
             <span>
               {e.reservationTimeToTime.slice(0, 5)} - {e.reservationTimeFromTime.slice(0, 5)}
             </span>
@@ -176,12 +175,13 @@ export default function CardReserveHistory({
             <Tooltip title="کنسل" placement="right">
               <span>
                 <IconButton
+                  disabled={e.statusId !== 1}
                   onClick={() => {
                     cancelHandler(e);
                     handleClose();
                   }}
                 >
-                  <GiCancel className="text-red-500" />
+                  <GiCancel style={{ color: e.statusId === 1 ? 'rgb(239 68 68)' : '#ddd' }} className="text-red-500" />
                 </IconButton>
               </span>
             </Tooltip>

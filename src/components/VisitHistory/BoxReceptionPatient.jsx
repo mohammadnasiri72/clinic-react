@@ -9,6 +9,8 @@ export default function BoxReceptionPatient({
   setPageStateVisitHistory,
   setReceptionSelected,
   setPageState,
+  setPageStateReception,
+  setPageStateReserveHistory
 }) {
   let color = 'default';
   if (reception.statusId === 5) {
@@ -40,6 +42,10 @@ export default function BoxReceptionPatient({
                     setPageState(5);
                   } else if (setPageStateVisitHistory) {
                     setPageStateVisitHistory(1);
+                  }else if (setPageStateReception) {
+                    setPageStateReception(3)
+                  }else if (setPageStateReserveHistory) {
+                    setPageStateReserveHistory(1)
                   }
                   setReceptionSelected(reception);
                 }}

@@ -1,49 +1,54 @@
 import axios from 'axios';
 import { Autocomplete, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SelectPatient({setPatientUserId}) {
-    const [patientList , setPatientList] = useState([])
-    const [query , setQuery] = useState('')
-    const [userSelected , setUserSelected] = useState({})
+export default function SelectPatient({ setPatientUserId }) {
+  const [patientList, setPatientList] = useState([]);
+  const [query, setQuery] = useState('');
+  const [userSelected, setUserSelected] = useState({});
 
-    useEffect(() => {
-        if (query.length > 2) {
-          axios
-            .get(`${mainDomain}/api/Patient/GetList`, {
-              params: {
-                query,
-              },
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            })
-            .then((res) => {
-              setPatientList(res.data);
-            })
-            .catch(() => {});
-        } else {
-          setPatientList([]);
-        }
-      }, [query]);
+  useEffect(() => {
+    if (query.length > 2) {
+      axios
+        .get(`${mainDomain}/api/Patient/GetList`, {
+          params: {
+            query,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setPatientList(res.data);
+        })
+        .catch(() => {});
+    } else {
+      setPatientList([]);
+    }
+  }, [query]);
 
-      const changValPatientHandler = (event, newValue) => {
-        if (newValue) {
-          setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
-        }
-        if (!newValue) {
-          setUserSelected({});
-        }
-      };
+  const changValPatientHandler = (event, newValue) => {
+    if (newValue) {
+      if (patientList.find((ev) => newValue.includes(ev.nationalId))) {
+        setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
+      } else {
+        setUserSelected({});
+      }
+    } else {
+      setUserSelected({});
+    }
+  };
 
-      useEffect(()=>{
-        setPatientUserId(userSelected.userId)
-      },[userSelected])
+  useEffect(() => {
+    if (userSelected.userId) {
+      setPatientUserId(userSelected.userId);
+    }
+  }, [userSelected]);
 
   return (
     <>
-    <div className="min-w-80">
+      <div className="min-w-80">
         <Autocomplete
           value={
             userSelected.nationalId
@@ -54,14 +59,10 @@ export default function SelectPatient({setPatientUserId}) {
           freeSolo
           options={patientList.map((option) => `${option.firstName} ${option.lastName} ( ${option.nationalId} ) `)}
           renderInput={(params) => (
-            <TextField
-              onChange={(e) => setQuery(e.target.value)}
-              {...params}
-              label={'لیست بیماران'}
-            />
+            <TextField onChange={(e) => setQuery(e.target.value)} {...params} label={'لیست بیماران'} />
           )}
         />
       </div>
     </>
-  )
+  );
 }

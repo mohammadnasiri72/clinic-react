@@ -21,8 +21,9 @@ import InsuranceList from './InsuranceList';
 import ReserveListPatient from './ReserveListPatient';
 import ServicesList from './ServicesList';
 import TableInsuranceSelected from './TableInsuranceSelected';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function MainPageReception({ account }) {
+export default function MainPageReception({ account , changeStatePages}) {
   const [pageStateReception, setPageStateReception] = useState(0);
   const [valReservPatient, setValReservPatient] = useState('');
   const [userSelected, setUserSelected] = useState({});
@@ -33,7 +34,7 @@ export default function MainPageReception({ account }) {
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
   const [paid, setPaid] = useState(false);
-  const [doctorId, setDoctorId] = useState('');
+  const [doctorId, setDoctorId] = useState(-1);
   const [date, setDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [valTimeStart, setValTimeStart] = useState('');
   const [valTimeEnd, setValTimeEnd] = useState('');
@@ -66,6 +67,13 @@ export default function MainPageReception({ account }) {
   const [minEnd, setMinEnd] = useState('');
   const [timeEditEnd, setTimeEditEnd] = useState('');
   const [query, setQuery] = useState('');
+  const [doctorMedicalSystemId, setDoctorMedicalSystemId] = useState(-1);
+  const [receptionSelected, setReceptionSelected] = useState({});
+  const [flagCondition , setFlagCondition] = useState(false)
+
+  useEffect(()=>{
+    setPageStateReception(0)
+  },[changeStatePages])
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -94,7 +102,7 @@ export default function MainPageReception({ account }) {
     }
   }, [valTimeStart, isEditStartTime, minStart, hoursStart]);
 
-// time end
+  // time end
   useEffect(() => {
     if (valTimeEnd && !isEditEndTime) {
       if (valTimeEnd.getHours().toString().length === 1) {
@@ -162,13 +170,21 @@ export default function MainPageReception({ account }) {
   }, [editeUser]);
 
   useEffect(() => {
-    setIsLoading(true)
+    if (pageStateReception === 0 && userSelected.nationalId) {
+      setUserSelected({});
+      setFromPersianDate(new Date().toLocaleDateString('fa-IR'));
+      setToPersianDate(new Date().toLocaleDateString('fa-IR'));
+    }
+  }, [pageStateReception]);
+
+  useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${mainDomain}/api/Appointment/GetList`, {
         params: {
           typeId: valType,
           patientNationalId: userSelected.nationalId,
-          doctorMedicalSystemId: -1,
+          doctorMedicalSystemId,
           fromPersianDate,
           toPersianDate,
           statusId: -1,
@@ -179,12 +195,21 @@ export default function MainPageReception({ account }) {
       })
       .then((res) => {
         setReceptions(res.data);
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-  }, [toPersianDate, fromPersianDate, userSelected, valType, changStatusCondition, pageStateReception]);
+  }, [
+    toPersianDate,
+    fromPersianDate,
+    userSelected,
+    valType,
+    changStatusCondition,
+    pageStateReception,
+    doctorMedicalSystemId,
+    flagCondition
+  ]);
 
   useEffect(() => {
     const arr = [];
@@ -199,7 +224,7 @@ export default function MainPageReception({ account }) {
   }, [insuranceListSelected]);
 
   const showAddInsuranceHandler = () => {
-    if (userSelected.length === 0) {
+    if (!userSelected.nationalId) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا ابتدا بیمار را ثبت کنید',
@@ -233,7 +258,7 @@ export default function MainPageReception({ account }) {
       turn,
       notes,
       statusId,
-      // reservationId: valReservPatient,
+      reservationId: valReservPatient,
     };
     axios
       .post(`${mainDomain}/api/Appointment/Add`, dataForm, {
@@ -261,8 +286,6 @@ export default function MainPageReception({ account }) {
         });
       });
   };
-
-  
 
   const editeFormHandler = () => {
     setIsLoading(true);
@@ -315,7 +338,12 @@ export default function MainPageReception({ account }) {
           <div className="flex justify-start">
             <InputTypeReception valType={valType} setValType={setValType} editeUser={editeUser} />
             {/* <InputCondition conditionVal={conditionVal} setConditionVal={setConditionVal} /> */}
-            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
+            <InputDoctorSelect
+              pageStateReception={pageStateReception}
+              setDoctorId={setDoctorId}
+              doctorId={doctorId}
+              setDoctorMedicalSystemId={setDoctorMedicalSystemId}
+            />
             <InputPatientList
               pageStateReception={pageStateReception}
               setUserSelected={setUserSelected}
@@ -345,8 +373,8 @@ export default function MainPageReception({ account }) {
                 setValTimeEnd('');
                 setIsEditStartTime(false);
                 setIsEditEndTime(false);
-                setQuery('')
-                setUserSelected({})
+                setQuery('');
+                setUserSelected({});
               }}
               sx={{
                 boxShadow: 'none',
@@ -371,6 +399,7 @@ export default function MainPageReception({ account }) {
             fromPersianDate={fromPersianDate}
             toPersianDate={toPersianDate}
             setIsLoading={setIsLoading}
+            setFlagCondition={setFlagCondition}
           />
           <div className="mt-5">
             <BoxReception
@@ -384,6 +413,7 @@ export default function MainPageReception({ account }) {
               setIsEditStartTime={setIsEditStartTime}
               setIsEditEndTime={setIsEditEndTime}
               setIsLoading={setIsLoading}
+              setReceptionSelected={setReceptionSelected}
             />
           </div>
         </div>
@@ -420,7 +450,12 @@ export default function MainPageReception({ account }) {
           </div>
           <div className="flex justify-start">
             <InputTypeReception valType={valType} setValType={setValType} editeUser={editeUser} />
-            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
+            <InputDoctorSelect
+              pageStateReception={pageStateReception}
+              setDoctorId={setDoctorId}
+              doctorId={doctorId}
+              setDoctorMedicalSystemId={setDoctorMedicalSystemId}
+            />
             <InputPatientList
               pageStateReception={pageStateReception}
               setUserSelected={setUserSelected}
@@ -618,6 +653,14 @@ export default function MainPageReception({ account }) {
           )}
           {isLoading && <SimpleBackdrop />}
         </div>
+      )}
+      {pageStateReception === 3 && (
+        <FormHistoryVisit
+          setPageStateReception={setPageStateReception}
+          receptionSelected={receptionSelected}
+          setIsLoading={setIsLoading}
+          account={userSelected}
+        />
       )}
       {isLoading && <SimpleBackdrop />}
     </>

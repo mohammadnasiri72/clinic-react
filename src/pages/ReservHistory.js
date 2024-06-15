@@ -8,13 +8,13 @@ import MainPageReserveHistory from '../components/ReserveHistory/MainPageReserve
 
 // ----------------------------------------------------------------------
 
-export default function ReservHistory() {
+export default function ReservHistory({changeStatePages}) {
   const { themeStretch } = useSettings();
 
   return (
     <Page title="لیست نوبت ها">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <MainPageReserveHistory />
+        <MainPageReserveHistory changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

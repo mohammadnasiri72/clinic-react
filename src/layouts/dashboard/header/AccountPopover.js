@@ -6,6 +6,7 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar } from '@mui/material
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { mainDomain } from '../../../utils/mainDomain';
+import SimpleBackdrop from '../../../components/backdrop';
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
 
@@ -28,22 +29,29 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover({ account }) {
+export default function AccountPopover({ account  , setIsLoading}) {
+ 
+
   const navigate = useNavigate();
 
   const logoutHandler = () => {
     // const userIdData = new FormData();
     // userIdData.append('userId', localStorage.getItem('userId'));
+    setIsLoading(true)
     axios
       .post(`${mainDomain}/api/Authenticate/Logout`, null, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
-      .then((res) => {})
-      .catch((err) => {});
-    localStorage.removeItem('token');
-    navigate('/login');
+      .then((res) => {
+        setIsLoading(false)
+        localStorage.removeItem('token');
+        navigate('/login');
+      })
+      .catch((err) => {
+        setIsLoading(false)
+      });
   };
   const [open, setOpen] = useState(null);
 
@@ -97,7 +105,7 @@ export default function AccountPopover({ account }) {
             {account.firstName} {account.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-           {account.status}
+            {account.status}
           </Typography>
         </Box>
 
@@ -105,10 +113,13 @@ export default function AccountPopover({ account }) {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={()=>{
-              handleClose()
-              navigate(option.linkTo);
-            }}>
+            <MenuItem
+              key={option.label}
+              onClick={() => {
+                handleClose();
+                navigate(option.linkTo);
+              }}
+            >
               {option.label}
             </MenuItem>
           ))}
@@ -120,6 +131,10 @@ export default function AccountPopover({ account }) {
           خروج از حساب کاربری
         </MenuItem>
       </MenuPopover>
+      {/* {
+        isLoading &&
+        <SimpleBackdrop />
+      } */}
     </>
   );
 }

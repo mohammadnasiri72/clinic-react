@@ -8,13 +8,13 @@ import MainpatientListStaff from '../components/patientListStaff/MainpatientList
 
 // ----------------------------------------------------------------------
 
-export default function PatientListStaff({account}) {
+export default function PatientListStaff({changeStatePages}) {
   const { themeStretch } = useSettings();
 
   return (
     <Page title="لیست بیماران">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-      <MainpatientListStaff account={account}/>
+      <MainpatientListStaff changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

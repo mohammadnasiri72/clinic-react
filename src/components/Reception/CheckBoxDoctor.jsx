@@ -37,13 +37,15 @@ export default function CheckBoxDoctor({ valCondition, setValCondition, medicalR
   };
   return (
     <>
-      <div className="mt-4 flex justify-start items-center">
-        <h3 className="px-4 whitespace-nowrap">وضعیت هنگام پذیرش:</h3>
+      <div className="flex justify-center items-center flex-wrap">
+        <h3 className="px-1 whitespace-nowrap sm:w-auto w-full text-start">وضعیت هنگام پذیرش:</h3>
+        <div className='sm:w-auto w-full flex'>
         {conditionPatient
           .filter((e)=> e.isActive)
           .map((e, i) => (
             <CheckBoxHandler key={e.itemId} e={e} changConditionHandler={changConditionHandler} medicalRecord={medicalRecord} disabledChechBox={disabledChechBox}/>
           ))}
+        </div>
       </div>
     </>
   );

@@ -34,8 +34,7 @@ export default function TableManageService({
   setShowManagecategoryServices
 }) {
   const [serviceList, setServiceList] = useState([]);
-// console.log(serviceList);
-//   console.log(categoryServices);
+
   // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
@@ -48,6 +47,7 @@ export default function TableManageService({
 
   // get list services
   useEffect(() => {
+    setIsLoading(true)
       axios
         .get(`${mainDomain}/api/MedicalService/GetList`, {
           params: {
@@ -58,9 +58,12 @@ export default function TableManageService({
           },
         })
         .then((res) => {
+          setIsLoading(false)
           setServiceList(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setIsLoading(false)
+        });
     
   }, [flag]);
 

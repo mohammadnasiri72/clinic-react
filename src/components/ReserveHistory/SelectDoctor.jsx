@@ -1,29 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { mainDomain } from '../../utils/mainDomain';
 
-export default function SelectDoctor({ setIsLoading, doctorId, setDoctorId }) {
-  const [doctors, setDoctors] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`${mainDomain}/api/Doctor/GetList`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setDoctors(res.data);
-        setDoctorId(res.data[0].doctorId);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
+export default function SelectDoctor({ doctorId, setDoctorId, doctors }) {
   return (
     <>
       <div className="px-4 w-56" dir="rtl">
@@ -39,6 +16,9 @@ export default function SelectDoctor({ setIsLoading, doctorId, setDoctorId }) {
             color="primary"
             value={doctorId}
           >
+            <MenuItem value={-1}>
+                همه
+              </MenuItem>
             {doctors.map((e, i) => (
               <MenuItem value={e.doctorId} key={i}>
                 {e.firstName} {e.lastName}

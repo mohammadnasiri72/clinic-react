@@ -14,7 +14,7 @@ import ShowNotPopUp from './ShowNotPopUp';
 import CheckBoxDoctor from '../Reception/CheckBoxDoctor';
 import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function MainPageVisit() {
+export default function MainPageVisit({changeStatePages}) {
   const [pageStateVisit, setPageStateVisit] = useState(0);
   const [valType, setValType] = useState(1);
   const [fromPersianDate, setFromPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
@@ -31,6 +31,11 @@ export default function MainPageVisit() {
   const [pageStateVisitHistory, setPageStateVisitHistory] = useState(0);
   const [receptionSelected, setReceptionSelected] = useState([]);
   const disabledChechBox = true;
+
+  useEffect(()=>{
+    setPageStateVisit(0)
+    setPageStateVisitHistory(0)
+  },[changeStatePages])
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -178,7 +183,8 @@ export default function MainPageVisit() {
           )}
           {pageStateVisit === 1 && (
             <div>
-              <div className="text-start mb-5 flex justify-between">
+              <div className="mb-5 flex items-center flex-wrap">
+                <div className='lg:w-1/6 w-full text-start'>
                 <Button
                   sx={{
                     py: 1,
@@ -188,19 +194,22 @@ export default function MainPageVisit() {
                       backgroundColor: 'rgb(13 148 136)',
                     },
                   }}
-                  className="p-2 rounded-md duration-300 mt-2 bg-teal-600"
+                  className="p-2 rounded-md duration-300 mt-2 text-white"
                   onClick={() => setPageStateVisit(0)}
                   variant="contained"
                 >
                   برگشت به صفحه قبل
                 </Button>
+                </div>
+                <div className='lg:w-2/3 w-full'>
                 <CheckBoxDoctor
                   disabledChechBox={disabledChechBox}
                   valCondition={valCondition}
                   setValCondition={setValCondition}
                   medicalRecord={medicalRecord}
                 />
-                <div className="flex">
+                </div>
+                <div className="flex lg:w-1/6 w-full">
                   <Button
                     sx={{
                       py: 1,
@@ -215,7 +224,7 @@ export default function MainPageVisit() {
                     variant="contained"
                   >
                     <HiPencil />
-                    <span className="px-2">note</span>
+                    <span className="px-2 text-white">note</span>
                   </Button>
                   <ToggleButtonGroup
                     color="primary"

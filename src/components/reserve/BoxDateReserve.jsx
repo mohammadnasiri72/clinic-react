@@ -112,15 +112,16 @@ export default function BoxDateReserve({ doctorId, setDates, setIsLoading, setDa
               </div>
             ))}
              
-          {dateFa.length === 0 && (
+         
+        </div>
+        </ToggleButtonGroup>
+        {dateFa.length === 0 && (
             <div className="w-full">
               <Skeleton animation="wave" />
               <Skeleton animation="wave" />
               <Skeleton animation="wave" />
             </div>
           )}
-        </div>
-        </ToggleButtonGroup>
       </div>
     </>
   );

@@ -51,7 +51,7 @@ export default function ProblemPatient({
       });
     } else {
       Swal.fire({
-        title: 'حذف نوبت',
+        title: 'ثبت درخواست',
         text: `آیا درخواست شما برای ${titleServices} با هزینه ${priceServices} تومان برای ${nameDoctor} ثبت شود؟`,
         showCancelButton: true,
         showDenyButton: true,

@@ -104,15 +104,15 @@ export default function UserCard({patient }) {
           </span>
         </div>
       </div>
-      <div className="flex p-2 text-lg">
+      <div className="flex p-2">
         <span>موبایل/ایمیل : </span>
         <span className="px-1"> {patient.abroad ? patient.userEmail : patient.userPhoneNumber} </span>
       </div>
-      <div className="flex p-2 text-lg">
+      <div className="flex p-2">
         <span>شماره پرونده : </span>
         <span className="px-1"> {patient.fileNumber? patient.fileNumber : '______'} </span>
       </div>
-      <div className="flex p-2 text-lg">
+      <div className="flex p-2">
         <span>آدرس : </span>
         <span className="px-1"> {patient.address?patient.address:'______'} </span>
       </div>

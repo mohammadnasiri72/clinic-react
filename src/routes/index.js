@@ -46,7 +46,8 @@ export default function Router() {
   const [account, setAccount] = useState('');
   const [change, setChang] = useState(false);
   const [flagNotif, setFlagNotif] = useState(false);
-  const [changeStatePages , setChangeStatePages] = useState(false)
+  const [changeStatePages, setChangeStatePages] = useState(false);
+  const [totalUnRead, setTotalUnRead] = useState(0);
 
   const url = useLocation();
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ export default function Router() {
     let role = localStorage.getItem('roles') ? localStorage.getItem('roles') : 'patient';
     if (role.includes('Doctor')) {
       role = 'Doctor';
-    }else if (role.includes('Staff')) {
+    } else if (role.includes('Staff')) {
       role = 'Staff';
     }
 
@@ -101,7 +102,16 @@ export default function Router() {
     },
     {
       path: '/dashboard',
-      element: <DashboardLayout setChangeStatePages={setChangeStatePages} account={account} flagNotif={flagNotif} setFlagNotif={setFlagNotif} />,
+      element: (
+        <DashboardLayout
+          setChangeStatePages={setChangeStatePages}
+          account={account}
+          flagNotif={flagNotif}
+          setFlagNotif={setFlagNotif}
+          totalUnRead={totalUnRead}
+          setTotalUnRead={setTotalUnRead}
+        />
+      ),
       children: [
         { element: <Navigate to="/dashboard/home" replace />, index: true },
         { path: 'home', element: <HomePage account={account} /> },
@@ -112,12 +122,12 @@ export default function Router() {
         { path: 'reserve', element: <MainPageReserve account={account} /> },
         { path: 'viewReservation', element: <ViewReservation account={account} /> },
         { path: 'sicknessList', element: <SicknessList /> },
-        { path: 'counseling', element: <Counseling account={account} changeStatePages={changeStatePages}/> },
-        { path: 'historyVisit', element: <HistoryVisit account={account} changeStatePages={changeStatePages}/> },
-        { path: 'visit', element: <Visit account={account} /> },
-        { path: 'patientListStaff', element: <PatientListStaff account={account} /> },
-        { path: 'reception', element: <Reception account={account} /> },
-        { path: 'reservHistory', element: <ReservHistory /> },
+        { path: 'counseling', element: <Counseling account={account} changeStatePages={changeStatePages} /> },
+        { path: 'historyVisit', element: <HistoryVisit account={account} changeStatePages={changeStatePages} /> },
+        { path: 'visit', element: <Visit changeStatePages={changeStatePages}/> },
+        { path: 'patientListStaff', element: <PatientListStaff changeStatePages={changeStatePages} /> },
+        { path: 'reception', element: <Reception account={account} changeStatePages={changeStatePages} /> },
+        { path: 'reservHistory', element: <ReservHistory changeStatePages={changeStatePages} /> },
         { path: 'manageDrug', element: <ManageDrug /> },
         { path: 'manageServices', element: <ManageServices /> },
         { path: 'managStaff', element: <ManagStaff /> },
@@ -125,7 +135,17 @@ export default function Router() {
         { path: 'managReserve', element: <ManagReserve /> },
         { path: 'managInformation', element: <ManagInformation /> },
         { path: 'managInsuranceCompany', element: <ManagInsuranceCompany /> },
-        { path: 'mymessage', element: <Mymessage flagNotif={flagNotif} setFlagNotif={setFlagNotif} /> },
+        {
+          path: 'mymessage',
+          element: (
+            <Mymessage
+              flagNotif={flagNotif}
+              setFlagNotif={setFlagNotif}
+              totalUnRead={totalUnRead}
+              setTotalUnRead={setTotalUnRead}
+            />
+          ),
+        },
       ],
     },
     // {

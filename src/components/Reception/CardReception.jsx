@@ -40,6 +40,7 @@ export default function CardReception({
   setPatientId,
   setOpenBoxMessage,
   setUserId,
+  setUserSelected
 }) {
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -169,6 +170,21 @@ export default function CardReception({
                       handleClose();
                       setShowDetailsPatient(true);
                       setPatientId(reception.patientNationalId);
+                      if (reception?.patientNationalId) {
+                        axios
+                          .get(`${mainDomain}/api/Patient/GetList`, {
+                            params: {
+                              query: reception.patientNationalId,
+                            },
+                            headers: {
+                              Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            },
+                          })
+                          .then((res) => {
+                            setUserSelected(res.data[0]);
+                          })
+                          .catch((err) => {});
+                      }
                     }}
                   >
                     <FaEye />

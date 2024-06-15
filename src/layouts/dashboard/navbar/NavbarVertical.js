@@ -64,9 +64,9 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar , account
       }}
     >
       <Stack
-        spacing={3}
+        spacing={1}
         sx={{
-          pt: 3,
+          pt: 0,
           pb: 2,
           px: 2.5,
           flexShrink: 0,

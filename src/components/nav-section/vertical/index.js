@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { List, Box, ListSubheader } from '@mui/material';
+import { List, Box, ListSubheader, MenuItem } from '@mui/material';
+import { CiLogout } from 'react-icons/ci';
 //
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 import { NavListRoot } from './NavList';
+import { mainDomain } from '../../../utils/mainDomain';
 
 // ----------------------------------------------------------------------
 
@@ -27,9 +31,23 @@ NavSectionVertical.propTypes = {
   navConfig: PropTypes.array,
 };
 
-export default function NavSectionVertical({setChangeStatePages , account , navConfig, isCollapse = false, ...other}) {
+export default function NavSectionVertical({ setChangeStatePages, account, navConfig, isCollapse = false, ...other }) {
+  const navigate = useNavigate();
+  const logOutHandler = () => {
+    axios
+      .post(`${mainDomain}/api/Authenticate/Logout`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        localStorage.removeItem('token');
+        navigate('/login');
+      })
+      .catch((err) => {});
+  };
   return (
-    <Box {...other}>
+    <Box sx={{pb:10}} {...other}>
       {navConfig.map((group) => (
         <List key={group.subheader} disablePadding sx={{ px: 2 }}>
           {/* <ListSubheaderStyle
@@ -42,23 +60,34 @@ export default function NavSectionVertical({setChangeStatePages , account , navC
             {group.subheader}
           </ListSubheaderStyle> */}
 
-          {
-          localStorage.getItem('roles').includes(group.subheader) &&
-         
-          group.items.map((list) => (
-            <NavListRoot  key={list.title} list={list} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
-            
-          ))
-          }
-          {
-            group.subheader==='General' &&
+          {localStorage.getItem('roles').includes(group.subheader) &&
             group.items.map((list) => (
-              <NavListRoot key={list.title} list={list} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
-              
-            ))
-          }
+              <NavListRoot
+                key={list.title}
+                list={list}
+                isCollapse={isCollapse}
+                setChangeStatePages={setChangeStatePages}
+              />
+            ))}
+          {group.subheader === 'General' &&
+            group.items.map((list) => (
+              <NavListRoot
+                key={list.title}
+                list={list}
+                isCollapse={isCollapse}
+                setChangeStatePages={setChangeStatePages}
+              />
+            ))}
         </List>
       ))}
+      <div className='px-4'>
+      <MenuItem sx={{py:2 , borderRadius:2}} onClick={logOutHandler}>
+        <div className="flex items-center">
+          <CiLogout className="text-2xl" />
+          <span className="px-2 text-sm text-[#666]">خروج از حساب کاربری</span>
+        </div>
+      </MenuItem>
+      </div>
     </Box>
   );
 }

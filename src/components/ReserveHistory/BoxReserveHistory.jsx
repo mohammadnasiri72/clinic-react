@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, IconButton, Tooltip } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, IconButton, Skeleton, Tooltip } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { AiOutlineMessage } from 'react-icons/ai';
@@ -16,15 +16,21 @@ export default function BoxReserveHistory({
   setIsLoading,
   listReserveHistory,
   setListReserveHistory,
+  isLoading,
+  flag,
+  setFlag,
+  setReceptionSelected,
+  patient,
+  setPatient,
+  setPageStateReserveHistory,
 }) {
   const [showDetailsPatient, setShowDetailsPatient] = useState(false);
-  const [patient, setPatient] = useState({});
+
   const [historyReception, setHistoryReception] = useState([]);
   const [patientId, setPatientId] = useState('');
   const [openBoxMessage, setOpenBoxMessage] = useState(false);
   const [userId, setUserId] = useState([]);
   const [listReserveChecked, setListReserveChecked] = useState([]);
-  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -70,7 +76,6 @@ export default function BoxReserveHistory({
         .catch((err) => {});
     }
   }, [patient]);
-  
 
   useEffect(() => {
     if (patientId.length > 0) {
@@ -125,6 +130,7 @@ export default function BoxReserveHistory({
       setListReserveChecked(arr);
     }
   }, [listReserveChecked, statusId, listReserveHistory]);
+
   return (
     <>
       {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length > 0 && (
@@ -167,7 +173,7 @@ export default function BoxReserveHistory({
           </Tooltip>
         </div>
       )}
-      {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length === 0 && (
+      {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length === 0 && !isLoading && (
         <div className="mt-2 w-full">
           <div className="flex justify-center">
             <svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,6 +224,13 @@ export default function BoxReserveHistory({
           <p>موردی موجود نیست</p>
         </div>
       )}
+      {listReserveHistory.filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev)).length === 0 && isLoading && (
+        <div>
+          <Skeleton height={50} animation="wave" />
+          <Skeleton height={50} animation="wave" />
+          <Skeleton height={50} animation="wave" />
+        </div>
+      )}
       <div className="flex flex-wrap">
         {listReserveHistory
           .filter((ev) => (statusId >= 0 ? ev.statusId === statusId : ev))
@@ -244,6 +257,8 @@ export default function BoxReserveHistory({
         setShowDetailsPatient={setShowDetailsPatient}
         patient={patient}
         historyReception={historyReception}
+        setReceptionSelected={setReceptionSelected}
+        setPageStateReserveHistory={setPageStateReserveHistory}
       />
       <MessageHandler open={openBoxMessage} setOpen={setOpenBoxMessage} userId={userId} setIsLoading={setIsLoading} />
       <Box

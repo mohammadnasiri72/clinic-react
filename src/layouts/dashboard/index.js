@@ -42,7 +42,14 @@ const MainStyle = styled('main', {
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ account, flagNotif, setFlagNotif , setChangeStatePages}) {
+export default function DashboardLayout({
+  account,
+  flagNotif,
+  setFlagNotif,
+  setChangeStatePages,
+  totalUnRead,
+  setTotalUnRead,
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { collapseClick, isCollapse } = useCollapseDrawer();
@@ -68,12 +75,19 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif , set
           setIsLoading={setIsLoading}
           open={openSetting}
           setOpen={setOpenSetting}
+          totalUnRead={totalUnRead}
+          setTotalUnRead={setTotalUnRead}
         />
 
         {isDesktop ? (
-          <NavbarHorizontal account={account} setChangeStatePages={setChangeStatePages}/>
+          <NavbarHorizontal account={account} setChangeStatePages={setChangeStatePages} />
         ) : (
-          <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)}  setChangeStatePages={setChangeStatePages}/>
+          <NavbarVertical
+            account={account}
+            isOpenSidebar={open}
+            onCloseSidebar={() => setOpen(false)}
+            setChangeStatePages={setChangeStatePages}
+          />
         )}
 
         <Box
@@ -91,7 +105,7 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif , set
           }}
         >
           <Outlet />
-          <DashboardFooter setChangeStatePages={setChangeStatePages}/>
+          <DashboardFooter setChangeStatePages={setChangeStatePages} />
           {localStorage.getItem('token') && <Settings open={openSetting} setOpen={setOpenSetting} />}
         </Box>
         {isLoading && <SimpleBackdrop />}
@@ -115,14 +129,21 @@ export default function DashboardLayout({ account, flagNotif, setFlagNotif , set
         setIsLoading={setIsLoading}
         open={openSetting}
         setOpen={setOpenSetting}
+        totalUnRead={totalUnRead}
+        setTotalUnRead={setTotalUnRead}
       />
 
-      <NavbarVertical account={account} isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} setChangeStatePages={setChangeStatePages}/>
+      <NavbarVertical
+        account={account}
+        isOpenSidebar={open}
+        onCloseSidebar={() => setOpen(false)}
+        setChangeStatePages={setChangeStatePages}
+      />
 
       <MainStyle collapseClick={collapseClick}>
         <Outlet />
       </MainStyle>
-      <DashboardFooter setChangeStatePages={setChangeStatePages}/>
+      <DashboardFooter setChangeStatePages={setChangeStatePages} />
       {isLoading && <SimpleBackdrop />}
       {localStorage.getItem('token') && <Settings open={openSetting} setOpen={setOpenSetting} />}
     </Box>

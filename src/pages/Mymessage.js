@@ -4,18 +4,20 @@ import useSettings from '../hooks/useSettings';
 import MainPageMyMessage from '../components/MyMessage/MainPageMyMessage';
 // ----------------------------------------------------------------------
 
-export default function Mymessage({ flagNotification, setFlagNotification, flagNotif, setFlagNotif }) {
+export default function Mymessage({
+  flagNotification,
+  setFlagNotification,
+  flagNotif,
+  setFlagNotif,
+  totalUnRead,
+  setTotalUnRead,
+}) {
   const { themeStretch } = useSettings();
   return (
     <>
       <Page title="پیغام های من">
         <Container maxWidth={themeStretch ? false : 'xl'}>
-          <MainPageMyMessage
-            flagNotification={flagNotification}
-            setFlagNotification={setFlagNotification}
-            flagNotif={flagNotif}
-            setFlagNotif={setFlagNotif}
-          />
+          <MainPageMyMessage totalUnRead={totalUnRead} setTotalUnRead={setTotalUnRead} />
         </Container>
       </Page>
     </>

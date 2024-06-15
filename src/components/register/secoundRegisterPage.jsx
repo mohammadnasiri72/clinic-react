@@ -151,7 +151,7 @@ export default function SecoundRegisterPage({
       >
         <div className={setPageState? "w-full p-3 shadow-lg rounded-lg min-h-screen": "lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen"}>
           <div className="flex justify-center">
-            <img src={'/favicon/favicon.ico'} alt="" />
+            <img src={'/favicon/lgo.png'} alt="" />
           </div>
           <div className="text-start px-5">
            

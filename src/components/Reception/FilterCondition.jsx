@@ -2,6 +2,7 @@ import { Button, MenuList, ToggleButton, ToggleButtonGroup } from '@mui/material
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
+import ToggleFilterCondition from './ToggleFilterCondition';
 
 export default function FilterCondition({
   receptions,
@@ -10,16 +11,17 @@ export default function FilterCondition({
   fromPersianDate,
   toPersianDate,
   pageStateReception,
-  setIsLoading
+  setIsLoading,
+  setFlagCondition
 }) {
   const [conditionList, setConditionList] = useState([]);
   const [focus, setFocus] = useState(true);
   useEffect(() => {
     setFocus(true);
-    setStatusCondition('')
+    setStatusCondition('');
   }, [userSelected, fromPersianDate, toPersianDate]);
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .get(`${mainDomain}/api/Appointment/GetStatusList`, {
         headers: {
@@ -27,22 +29,18 @@ export default function FilterCondition({
         },
       })
       .then((res) => {
-        setIsLoading(false)
+        setIsLoading(false);
         setConditionList(Object.values(res.data));
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }, [pageStateReception]);
-  const filterHandler = (e) => {
-    setFocus(false);
-    setStatusCondition(e);
-    // setReceptions(receptions.filter((ev)=>ev.status=== e.target.innerText))
-  };
+
   return (
     <>
       <div className="mt-3 rounded-md border p-2 flex justify-center items-center">
-        <div className=" rounded-md">
+        {/* <div className=" rounded-md">
           <Button
             onClick={() => setStatusCondition('')}
             color="info"
@@ -69,7 +67,14 @@ export default function FilterCondition({
               </span>
             </Button>
           </div>
-        ))}
+        ))} */}
+        <ToggleFilterCondition
+          receptions={receptions}
+          conditionList={conditionList}
+          setFocus={setFocus}
+          setStatusCondition={setStatusCondition}
+          setFlagCondition={setFlagCondition}
+        />
       </div>
     </>
   );

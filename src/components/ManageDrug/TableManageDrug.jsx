@@ -10,11 +10,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { FaRegWindowClose } from "react-icons/fa";
+import { FaRegWindowClose } from 'react-icons/fa';
 import { GoCheckbox } from 'react-icons/go';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
@@ -39,12 +39,11 @@ export default function TableManageDrug({
   setIsEdit,
   setEditId,
   setShowManageCategoryDrug,
-  query
+  query,
+  setNumPages,
+  totalPages,
+  drugList,
 }) {
-  const [drugList, setDrugList] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [numPages, setNumPages] = useState(1);
-
   // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
@@ -54,24 +53,6 @@ export default function TableManageDrug({
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-
-  useEffect(() => {
-    axios
-      .get(`${mainDomain}/api/Medication/GetListPaged`, {
-        params:{
-          pageIndex:numPages,
-          query,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setDrugList(res.data.items);
-        setTotalPages(res.data.totalPages);
-      })
-      .catch((err) => {});
-  }, [flag , numPages , query]);
 
   const deleteDrugHandler = (e) => {
     Swal.fire({
@@ -118,8 +99,7 @@ export default function TableManageDrug({
           <TableHead className="">
             <TableRow>
               <TableCell align="center">نام دارو</TableCell>
-              <TableCell align="center">توضیحات</TableCell>
-              <TableCell align="center">مشخصات دارو</TableCell>
+              <TableCell align="center">دسته بندی</TableCell>
               <TableCell align="center">وضعیت</TableCell>
               <TableCell align="center">اولویت</TableCell>
               <TableCell align="center">عملیات</TableCell>
@@ -131,36 +111,40 @@ export default function TableManageDrug({
               .map((drug) => (
                 <TableRow key={drug.medicationId}>
                   <TableCell align="center">
-                    {drug.medicalCategoryTitle} / {drug.name}
-                  </TableCell>
-                  <TableCell align="center">{drug.description}</TableCell>
-                  <TableCell align="center">
-                    <div className="flex justify-center">
-                      <div className="px-1">
-                        <Chip className="mt-2" label={drug.defaultDosage} />
-                      </div>
-                      <div className="px-1">
-                        <Chip className="mt-2" label={drug.defaultForm} />
-                      </div>
-                      <div className="px-1">
-                        <Chip className="mt-2" label={drug.defaultFrequency} />
+                    <div className="flex flex-col">
+                      <span>{drug.name}</span>
+                      <div className="flex justify-center">
+                        {drug.defaultDosage && (
+                          <div className="px-1">
+                            <Chip className="mt-2" label={drug.defaultDosage} />
+                          </div>
+                        )}
+                        {drug.defaultForm && (
+                          <div className="px-1">
+                            <Chip className="mt-2" label={drug.defaultForm} />
+                          </div>
+                        )}
+                        {drug.defaultFrequency && (
+                          <div className="px-1">
+                            <Chip className="mt-2" label={drug.defaultFrequency} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </TableCell>
-                  
+                  <TableCell align="center">{drug.medicalCategoryTitle}</TableCell>
+
                   <TableCell align="center">
-                    {
-                      drug.isActive &&
-                    <div className="flex justify-center">
-                      <GoCheckbox className="text-2xl text-green-500" />
-                    </div>
-                    }
-                    {
-                       !drug.isActive &&
-                       <div className="flex justify-center">
-                      <FaRegWindowClose className="text-2xl text-red-500" />
-                    </div>
-                    }
+                    {drug.isActive && (
+                      <div className="flex justify-center">
+                        <GoCheckbox className="text-2xl text-green-500" />
+                      </div>
+                    )}
+                    {!drug.isActive && (
+                      <div className="flex justify-center">
+                        <FaRegWindowClose className="text-2xl text-red-500" />
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell align="center">{drug.priority}</TableCell>
                   <TableCell align="center">
@@ -179,7 +163,7 @@ export default function TableManageDrug({
                             setisActive(drug.isActive);
                             setIsEdit(true);
                             setEditId(drug.medicationId);
-                            setShowManageCategoryDrug(false)
+                            setShowManageCategoryDrug(false);
                           }}
                         >
                           <Iconify icon={'eva:edit-fill'} />
@@ -202,10 +186,15 @@ export default function TableManageDrug({
         </Table>
       </TableContainer>
       <div className="flex justify-center">
-            <Stack spacing={2}>
-              <Pagination onChange={(e)=> setNumPages(Number(e.target.textContent))} count={totalPages} />
-            </Stack>
-          </div>
+        <Stack spacing={2}>
+          <Pagination
+            onChange={(e, value) => {
+              setNumPages(value);
+            }}
+            count={totalPages}
+          />
+        </Stack>
+      </div>
     </>
   );
 }

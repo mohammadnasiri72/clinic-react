@@ -16,18 +16,18 @@ import SimpleBackdrop from '../backdrop';
 export default function TableReqPatient({
   setPageState,
   setAccountUpdate,
-  searchValue,
-  valStatusFilter,
+  
   patient,
   setPatient,
   setReceptionSelected,
   statusList,
   patientList,
   setPatientList,
+  setNumPages,
+totalPages
 }) {
   const [flag, setFlag] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [numPages, setNumPages] = useState(1);
+  
   const [PatientRelative, setPatientRelative] = useState([]);
   const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
   const [isOpenAddRelative, setIsOpenAddRelative] = useState(false);
@@ -59,26 +59,26 @@ export default function TableReqPatient({
   }, [patient, isOpenAccompanying, isOpenAddRelative, flag]);
 
   // get list patient
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`${mainDomain}/api/Patient/GetListPaged`, {
-        params:{
-          pageIndex: numPages
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        setPatientList(res.data.items);
-        setTotalPages(res.data.totalPages)
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, [flag]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   axios
+  //     .get(`${mainDomain}/api/Patient/GetListPaged`, {
+  //       params:{
+  //         pageIndex: numPages
+  //       },
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       setIsLoading(false);
+  //       setPatientList(res.data.items);
+  //       setTotalPages(res.data.totalPages)
+  //     })
+  //     .catch((err) => {
+  //       setIsLoading(false);
+  //     });
+  // }, [flag]);
 
   useEffect(() => {
     axios
@@ -190,28 +190,15 @@ export default function TableReqPatient({
           </TableContainer>
           <div className="flex justify-center">
             <Stack spacing={2}>
-              <Pagination onChange={(e) => setNumPages(Number(e.target.textContent))} count={totalPages} />
+              <Pagination onChange={(e , value) => setNumPages(value)} count={totalPages} />
             </Stack>
           </div>
         </div>
       )}
-      {patientList.filter(
-        (ev) =>
-          ((ev.firstName.includes(searchValue) ||
-            ev.lastName.includes(searchValue) ||
-            ev.nationalId.includes(searchValue)) &&
-            ev.status === valStatusFilter) ||
-          valStatusFilter === 'همه'
-      ).length === 0 &&
+      {patientList
+      .length === 0 &&
         !isLoading && <p className="border p-3 rounded-lg">بیماری یافت نشد</p>}
-      {patientList.filter(
-        (ev) =>
-          ((ev.firstName.includes(searchValue) ||
-            ev.lastName.includes(searchValue) ||
-            ev.nationalId.includes(searchValue)) &&
-            ev.status === valStatusFilter) ||
-          valStatusFilter === 'همه'
-      ).length === 0 &&
+      {patientList.length === 0 &&
         isLoading && (
           <div className="w-full">
             <Skeleton animation="wave" />

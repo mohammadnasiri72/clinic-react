@@ -156,7 +156,7 @@ export default function UploadDocuments({
       <div className="relative">
         {!patSelected && (
           <div>
-            <h2 className="text-xl font-semibold pb-4">در صورت داشتن مدارک پزشکی آن را برای دکتر ارسال کنید</h2>
+            <h2 className="text-xl font-semibold pb-4">در صورت تمایل میتوانید مدارک یا فایل های خود را برای پزشک ارسال کنید</h2>
           </div>
         )}
         <div className="px-4 w-full flex flex-wrap justify-start items-center" dir="rtl">
@@ -218,7 +218,7 @@ export default function UploadDocuments({
               onClick={selectFileHandler}
               variant="contained"
             >
-              <span className="px-2">آپلود فایل</span>
+              <span className="px-2">ارسال فایل</span>
               <MdDriveFolderUpload className="text-3xl" />
             </Button>
           </div>

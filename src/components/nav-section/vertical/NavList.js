@@ -45,6 +45,7 @@ export function NavListRoot({ list, isCollapse , setChangeStatePages}) {
   return (
     <>
     <NavItemRoot item={list} active={active} isCollapse={isCollapse} setChangeStatePages={setChangeStatePages}/>
+    
     </>
   );
 }

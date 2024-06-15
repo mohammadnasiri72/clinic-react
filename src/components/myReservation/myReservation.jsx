@@ -1,3 +1,4 @@
+import { Skeleton } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
@@ -54,7 +55,7 @@ export default function MyReservation({ setPageState, account }) {
       <div className="text-start">
         <h3 className="text-3xl font-bold">نوبت های {setPageState ? 'بیمار' : 'من'}</h3>
       </div>
-      {reserveList.filter((e) => e.statusId === 1).length === 0 && (
+      {reserveList.filter((e) => e.statusId === 1).length === 0 && !isLoading && (
         <div className="w-5/6 mx-auto border rounded-lg mt-5 pt-2 pb-6">
           <div className="flex justify-center">
             <svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,6 +106,13 @@ export default function MyReservation({ setPageState, account }) {
           <p className="mt-3">نوبت های {setPageState ? 'بیمار' : 'شما'} خالی است</p>
         </div>
       )}
+      {reserveList.filter((e) => e.statusId === 1).length === 0 && isLoading && (
+        <div className="w-full">
+          <Skeleton height={70} animation="wave" />
+          <Skeleton height={70} animation="wave" />
+          <Skeleton height={70} animation="wave" />
+        </div>
+      )}
       {reserveList
         .filter((e) => e.statusId === 1)
         .map((list) => (
@@ -119,7 +127,7 @@ export default function MyReservation({ setPageState, account }) {
           </div>
         ))}
       <p className="text-xl text-start font-semibold mt-6">نوبت های ویزیت شده</p>
-      {reserveList.filter((e) => e.statusId !== 1).length === 0 && (
+      {reserveList.filter((e) => e.statusId !== 1).length === 0 && !isLoading && (
         <div>
           <div className="flex justify-center">
             <svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,6 +176,13 @@ export default function MyReservation({ setPageState, account }) {
             </svg>
           </div>
           <p className="mt-3">نوبت ویزیت شده ای موجود نیست</p>
+        </div>
+      )}
+      {reserveList.filter((e) => e.statusId !== 1).length === 0 && isLoading && (
+        <div className="w-full">
+          <Skeleton height={70} animation="wave" />
+          <Skeleton height={70} animation="wave" />
+          <Skeleton height={70} animation="wave" />
         </div>
       )}
       {reserveList.filter((e) => e.statusId !== 1).length > 0 && (

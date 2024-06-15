@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, InputAdornment, TextField } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
@@ -14,11 +14,11 @@ export default function InputPatientList({
   query,
   setQuery,
 }) {
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!editeUser) {
-      setUserSelected([]);
-    }
+    // if (!editeUser) {
+    //   setUserSelected({});
+    // }
     if (editeUser?.patientNationalId) {
       axios
         .get(`${mainDomain}/api/Patient/GetList`, {
@@ -37,7 +37,8 @@ export default function InputPatientList({
   }, [pageStateReception]);
 
   useEffect(() => {
-    if (query.length > 0) {
+    if (query.length > 2) {
+      setLoading(true);
       axios
         .get(`${mainDomain}/api/Patient/GetList`, {
           params: {
@@ -48,9 +49,12 @@ export default function InputPatientList({
           },
         })
         .then((res) => {
+          setLoading(false);
           setPatientList(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setLoading(false);
+        });
     } else {
       setPatientList([]);
     }
@@ -58,9 +62,12 @@ export default function InputPatientList({
 
   const changValPatientHandler = (event, newValue) => {
     if (newValue) {
-      setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
-    }
-    if (!newValue) {
+      if (patientList.find((ev) => newValue.includes(ev.nationalId))) {
+        setUserSelected(patientList.find((ev) => newValue.includes(ev.nationalId)));
+      } else {
+        setUserSelected([]);
+      }
+    } else {
       setUserSelected([]);
     }
   };
@@ -68,6 +75,7 @@ export default function InputPatientList({
     <>
       <div className="min-w-80">
         <Autocomplete
+          loading={query.length > 2}
           value={
             userSelected.nationalId
               ? `${userSelected.firstName} ${userSelected.lastName} (  ${userSelected.nationalId} )`

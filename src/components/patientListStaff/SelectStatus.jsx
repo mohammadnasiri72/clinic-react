@@ -22,7 +22,6 @@ export default function SelectStatus({pat , setIsLoading , statusList}) {
     setValStatus(pat.statusId)
   },[pat])
 
- 
 
   const changeStatusHandler = (e)=>{
     Swal.fire({

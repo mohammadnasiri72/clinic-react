@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa6';
@@ -6,45 +6,37 @@ import { mainDomain } from '../../utils/mainDomain';
 
 export default function NavBarListPatient({
   setPageState,
-  searchValue,
-  setSearchValue,
   setIsLoading,
-  valStatusFilter,
-  setValStatusFilter,
   patientList,
-  setPatientList
+  setPatientList,
+  numPages,
+  setTotalPages,
 }) {
   const [statusList, setStatusList] = useState([]);
-  console.log(patientList);
+  const [valStatusFilter, setValStatusFilter] = useState(-1);
+  const [searchValue, setSearchValue] = useState('');
 
-  const filterPatientHandler = (e) => {
-    setSearchValue(e.target.value);
-if (e.target.value.length > 0) {
-  axios
-  .get(`${mainDomain}/api/Patient/GetList`, {
-    params: {
-      query: e.target.value,
-    },
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  })
-  .then((res) => {
-    setPatientList(res.data);
-  })
-  .catch((err) => {});
-  
-}
-
-    // setPatientListFilter(
-    //   patientList.filter(
-    //     (ev) =>
-    //       ev.firstName.includes(e.target.value) ||
-    //       ev.lastName.includes(e.target.value) ||
-    //       ev.nationalId.includes(e.target.value)
-    //   )
-    // );
-  };
+  useEffect(() => {
+    axios
+      .get(`${mainDomain}/api/Patient/GetListPaged`, {
+        params: {
+          pageIndex: numPages,
+          query: searchValue,
+          statusId: valStatusFilter,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        setPatientList(res.data.items);
+        setTotalPages(res.data.totalPages);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, [valStatusFilter, searchValue, numPages]);
 
   // get status list
   useEffect(() => {
@@ -70,12 +62,15 @@ if (e.target.value.length > 0) {
         <div className="flex flex-wrap px-5">
           <div className="md:w-44 w-full">
             <TextField
-              onChange={(e) => filterPatientHandler(e)}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+              }}
               className="w-full"
               id="outlined-multiline-flexible"
               label="کدملی / نام / نام خانوادگی"
               value={searchValue}
               minRows={1}
+              
             />
           </div>
           <div className="md:pr-3 pr-0 md:mt-0 mt-3 md:w-auto w-full">
@@ -92,9 +87,9 @@ if (e.target.value.length > 0) {
                 color="primary"
                 onChange={(e) => setValStatusFilter(e.target.value)}
               >
-                <MenuItem value={'همه'}>همه</MenuItem>
+                <MenuItem value={-1}>همه</MenuItem>
                 {statusList.map((e, i) => (
-                  <MenuItem key={i} value={e}>
+                  <MenuItem key={i} value={i + 100}>
                     {e}
                   </MenuItem>
                 ))}
@@ -105,6 +100,7 @@ if (e.target.value.length > 0) {
         <div className="md:w-auto w-full text-start md:mt-0 mt-3 px-5">
           <Button
             sx={{
+              color:'white',
               py: 1,
               boxShadow: 'none',
               backgroundColor: 'rgb(16 185 129)',

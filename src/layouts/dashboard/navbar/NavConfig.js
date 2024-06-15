@@ -70,6 +70,7 @@ const sidebarConfig = [
       { title: 'مدیریت بیمه', path: '/dashboard/managInsuranceCompany', icon: <MdSupportAgent /> },
     ],
   },
+ 
 ];
 
 export default sidebarConfig;

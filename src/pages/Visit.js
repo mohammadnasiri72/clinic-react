@@ -8,13 +8,13 @@ import MainPageVisit from '../components/visit/MainPageVisit';
 
 // ----------------------------------------------------------------------
 
-export default function Visit({account}) {
+export default function Visit({changeStatePages}) {
   const { themeStretch } = useSettings();
 
   return (
     <Page title="ویزیت">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-      <MainPageVisit account={account}/>
+      <MainPageVisit changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

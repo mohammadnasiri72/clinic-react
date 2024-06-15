@@ -69,6 +69,8 @@ export default function DashboardHeader({
   setIsLoading,
   open,
   setOpen,
+  totalUnRead,
+  setTotalUnRead,
 }) {
   const isOffset = useOffSetTop(HEADER.DASHBOARD_DESKTOP_HEIGHT) && !verticalLayout;
 
@@ -76,7 +78,7 @@ export default function DashboardHeader({
 
   const showSettingBox = () => {
     // alert('sdf')
-    setOpen(true)
+    setOpen(true);
   };
   return (
     <>
@@ -100,14 +102,19 @@ export default function DashboardHeader({
 
           <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
             {/* <Settings /> */}
-            
+
             {!open && <ToggleButton open={open} onToggle={showSettingBox} />}
             {/* <LanguagePopover /> */}
-            <NotificationsPopover flagNotif={flagNotif} setFlagNotif={setFlagNotif} />
+            <NotificationsPopover
+              flagNotif={flagNotif}
+              setFlagNotif={setFlagNotif}
+              totalUnRead={totalUnRead}
+              setTotalUnRead={setTotalUnRead}
+            />
             {localStorage.getItem('roles') !== 'Patient' && (
               <ContactsPopover account={account} setIsLoading={setIsLoading} />
             )}
-            <AccountPopover account={account} />
+            <AccountPopover account={account} setIsLoading={setIsLoading}/>
           </Stack>
         </Toolbar>
       </RootStyle>

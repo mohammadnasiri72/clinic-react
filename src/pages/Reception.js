@@ -8,7 +8,7 @@ import MainPageReception from '../components/Reception/MainPageReception';
 
 // ----------------------------------------------------------------------
 
-export default function Reception({account}) {
+export default function Reception({account , changeStatePages}) {
   const { themeStretch } = useSettings();
 
   return (
@@ -17,7 +17,7 @@ export default function Reception({account}) {
         <Typography variant="h3" component="h1" paragraph>
             پذیرش
         </Typography>
-        <MainPageReception account={account}/>
+        <MainPageReception account={account} changeStatePages={changeStatePages}/>
       </Container>
     </Page>
   );

@@ -3,12 +3,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputTypeReception({valType , setValType , editeUser}) {
-  useEffect(()=>{
+export default function InputTypeReception({ valType, setValType, editeUser }) {
+  useEffect(() => {
     if (editeUser?.type) {
-      setValType(editeUser.typeId)
+      setValType(editeUser.typeId);
     }
-  },[editeUser])
+  }, [editeUser]);
   const [typeReception, setTypeReception] = useState([]);
   useEffect(() => {
     axios
@@ -19,8 +19,6 @@ export default function InputTypeReception({valType , setValType , editeUser}) {
       })
       .then((res) => {
         setTypeReception(res.data);
-        console.log(res.data);
-        
       })
       .catch((err) => {});
   }, []);
@@ -40,7 +38,7 @@ export default function InputTypeReception({valType , setValType , editeUser}) {
             value={valType}
           >
             {[typeReception[1], typeReception[2]].map((e, i) => (
-              <MenuItem value={i+1} key={i+1}>
+              <MenuItem value={i + 1} key={i + 1}>
                 {e}
               </MenuItem>
             ))}

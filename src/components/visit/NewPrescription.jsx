@@ -1,4 +1,4 @@
-import { Autocomplete, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -7,7 +7,7 @@ import { mainDomain } from '../../utils/mainDomain';
 
 export default function NewPrescription({ patSelected, setIsLoading, setFlag }) {
   const [categoryDrug, setCategoryDrug] = useState([]);
-  const [valCategoryDrug, setValCategoryDrug] = useState([]);
+  const [valCategoryDrug, setValCategoryDrug] = useState('');
   const [drugList, setDrugList] = useState([]);
   const [valDrugList, setValDrugList] = useState({});
   const [drugForm, setDrugForm] = useState([]);
@@ -35,6 +35,8 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           ? drugForm.find((e) => e.name === valDrugList.defaultForm)
           : {}
       );
+    }else {
+      setValDrugForm({})
     }
     if (drugDose.length > 0 && valDrugList.defaultDosage) {
       setValDrugDose(
@@ -42,6 +44,8 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           ? drugDose.find((e) => e.name === valDrugList.defaultDosage)
           : {}
       );
+    }else{
+      setValDrugDose({})
     }
     if (drugUseCycle.length > 0 && valDrugList.defaultFrequency) {
       setValDrugUseCycle(
@@ -160,7 +164,7 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
   return (
     <>
       <div className="w-full">
-        <FormControl color="primary" className="w-full">
+        {/* <FormControl color="primary" className="w-full">
           <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
             لیست دسته بندی دارو ها
           </InputLabel>
@@ -178,7 +182,30 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
+        <Autocomplete
+          value={categoryDrug}
+          onChange={(event, newValue) => {
+            setValDrugList({});
+            if (newValue) {
+              
+              setValCategoryDrug(newValue.medicationCategoryId)
+            }else{
+              setValCategoryDrug('')
+            }
+          }}
+          freeSolo
+          autoHighlight
+          options={categoryDrug}
+          getOptionLabel={(option) => (option.title ? option.title : '')}
+          renderOption={(props, option) => (
+            <Box dir='ltr' component="li" sx={{fontSize:14 , textAlign:'start'}} {...props}>
+              
+              {option.title} 
+            </Box>
+          )}
+          renderInput={(params) => <TextField {...params} label={'لیست دسته بندی دارو ها'} placeholder="انتخاب دسته بندی دارو" />}
+        />
       </div>
       <div className="w-full mt-5">
         <Autocomplete
@@ -193,6 +220,12 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           freeSolo
           autoHighlight
           options={drugList.length > 0 ? drugList.filter((e) => e.medicalCategoryId === valCategoryDrug) : []}
+           renderOption={(props, option) => (
+            <Box dir='ltr' component="li" sx={{fontSize:12 , textAlign:'start'}} {...props}>
+              
+              {option.name} 
+            </Box>
+          )}
           getOptionLabel={(option) => (option.name ? option.name : '')}
           renderInput={(params) => <TextField {...params} label={'لیست دارو ها'} placeholder="انتخاب دارو" />}
         />
@@ -205,7 +238,13 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           autoHighlight
           options={drugForm}
           getOptionLabel={(option) => (option.name ? option.name : '')}
-          renderInput={(params) => <TextField {...params} label={'شکل دارو ها'} placeholder="انتخاب شکل دارو" />}
+          renderOption={(props, option) => (
+            <Box dir='ltr' component="li" sx={{fontSize:12 , textAlign:'start'}} {...props}>
+              
+              {option.name} 
+            </Box>
+          )}
+          renderInput={(params) => <TextField sx={{fontSize:10}} {...params} label={'شکل دارو ها'} placeholder="انتخاب شکل دارو" />}
         />
       </div>
       <div className="w-full mt-5">
@@ -235,6 +274,12 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           autoHighlight
           options={drugDose}
           getOptionLabel={(option) => (option.name ? option.name : '')}
+          renderOption={(props, option) => (
+            <Box dir='ltr' component="li" sx={{fontSize:12 , textAlign:'start'}} {...props}>
+              
+              {option.name} 
+            </Box>
+          )}
           renderInput={(params) => <TextField {...params} label={'دوز دارو ها'} placeholder="انتخاب دوز دارو" />}
         />
       </div>
@@ -290,6 +335,7 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
         </button> */}
         <Button
           sx={{
+            color:'white',
             py: 1,
             boxShadow: 'none',
             // fontSize: 20,

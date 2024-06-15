@@ -14,7 +14,6 @@ export default function MyReserveBox({ list, doctor, setFlag, setIsLoading, setP
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-  console.log(list);
 
   const deleteReservationHandler = () => {
     const reservationIdData = new FormData();

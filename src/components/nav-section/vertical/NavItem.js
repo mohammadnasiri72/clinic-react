@@ -52,7 +52,10 @@ export function NavItemRoot({ item, isCollapse, open = false, active, onOpen ,se
       {renderContent}
     </ListItemStyle>
   ) : (
-    <ListItemStyle onClick={()=>setChangeStatePages((e)=>!e)} component={RouterLink} to={path} activeRoot={active}>
+    <ListItemStyle onClick={()=>{
+      setChangeStatePages((e)=>!e)
+      
+    }} component={RouterLink} to={path} activeRoot={active}>
       {renderContent}
     </ListItemStyle>
   );

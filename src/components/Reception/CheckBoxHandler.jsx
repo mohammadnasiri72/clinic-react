@@ -14,7 +14,7 @@ export default function CheckBoxHandler({ e, changConditionHandler, medicalRecor
   }, [medicalRecord]);
   return (
     <>
-      <div className="px-10">
+      <div className="px-2">
         <FormControlLabel
           onChange={()=>{
             changConditionHandler(e)

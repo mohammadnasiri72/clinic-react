@@ -44,34 +44,60 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
     }
   }, [userSelected]);
   const setInsuranceHandler = () => {
-    setIsLoading(true);
-    const data = {
-      insuranceCompanyId: valInsurance,
-      patientId: userSelected.patientId,
-      policyNumber,
-      coverageType,
-      coverageAmount,
-      startDateFa,
-      endDateFa,
-    };
-    axios
-      .post(`${mainDomain}/api/Insurance/Add`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        Toast.fire({
-          icon: 'success',
-          text: 'بیمه با موفقیت ثبت شد',
-        });
-        setShowAddInsurance(false);
-        setFlag((e) => !e);
-      })
-      .catch((err) => {
-        setIsLoading(false);
+    if (!startDateFa || !endDateFa) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا تاریخ بیمه را وارد کنید',
       });
+    }
+    if (!coverageAmount) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا درصد پوشش بیمه را وارد کنید',
+      });
+    }
+    if (!coverageType) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نوع پوشش بیمه را وارد کنید',
+      });
+    }
+    if (!policyNumber) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا شماره بیمه را وارد کنید',
+      });
+    }
+    if (coverageAmount && coverageType && policyNumber && startDateFa && endDateFa) {
+      setIsLoading(true);
+      const data = {
+        insuranceCompanyId: valInsurance,
+        patientId: userSelected.patientId,
+        policyNumber: policyNumber.toString(),
+        coverageType,
+        coverageAmount,
+        startDateFa,
+        endDateFa,
+      };
+      axios
+        .post(`${mainDomain}/api/Insurance/Add`, data, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setIsLoading(false);
+          Toast.fire({
+            icon: 'success',
+            text: 'بیمه با موفقیت ثبت شد',
+          });
+          setShowAddInsurance(false);
+          setFlag((e) => !e);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    }
   };
   return (
     <>
@@ -104,7 +130,15 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
       </div>
       <div className=" text-start mt-3" dir="rtl">
         <TextField
-          onChange={(e) => setPolicyNumber(e.target.value)}
+          onChange={(e) => {
+            if (Number(e.target.value)) {
+              setPolicyNumber(Number(e.target.value));
+            } else if (!e.target.value) {
+              setPolicyNumber('');
+            } else {
+              setPolicyNumber(policyNumber);
+            }
+          }}
           className="w-full text-end"
           id="outlined-multiline-flexible"
           label="شماره بیمه"
@@ -128,55 +162,63 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
       </div>
       <div className=" text-start mt-3" dir="rtl">
         <TextField
-          onChange={(e) => setCoverageAmount(e.target.value)}
+          onChange={(e) => {
+            if (Number(e.target.value) >= 0 && Number(e.target.value) <= 100) {
+              setCoverageAmount(e.target.value);
+            } else if (!e.target.value) {
+              setCoverageAmount('');
+            } else {
+              setCoverageAmount(coverageAmount);
+            }
+          }}
           className="w-full text-end"
           id="outlined-multiline-flexible"
-          label="درصد پوشش بیمه"
+          label="درصد پوشش بیمه(از صفر تا صد)"
           multiline
           dir="rtl"
           value={coverageAmount}
           maxRows={4}
         />
       </div>
-     <div className='flex'>
-     <div className="mt-4 w-1/2 px-1">
-        <DatePicker
-          ref={datePicStart}
-          inputClass="outline-none border rounded-lg w-full h-14 px-3"
-          locale={persianFa}
-          calendar={persian}
-          value={startDateFa}
-          onChange={(event) => {
-            setStartDateFa(event.format());
-          }}
-          placeholder="تاریخ شروع بیمه"
-        />
+      <div className="flex">
+        <div className="mt-4 w-1/2 px-1">
+          <DatePicker
+            ref={datePicStart}
+            inputClass="outline-none border rounded-lg w-full h-14 px-3"
+            locale={persianFa}
+            calendar={persian}
+            value={startDateFa}
+            onChange={(event) => {
+              setStartDateFa(event.format());
+            }}
+            placeholder="تاریخ شروع بیمه"
+          />
+        </div>
+        <div className="mt-4 w-1/2 px-1">
+          <DatePicker
+            ref={datePicEnd}
+            inputClass="outline-none border rounded-lg w-full h-14 px-3"
+            locale={persianFa}
+            calendar={persian}
+            onChange={(event) => {
+              setEndDateFa(event.format());
+            }}
+            value={endDateFa}
+            placeholder="تاریخ اتمام بیمه"
+          />
+        </div>
       </div>
-      <div className="mt-4 w-1/2 px-1">
-        <DatePicker
-          ref={datePicEnd}
-          inputClass="outline-none border rounded-lg w-full h-14 px-3"
-          locale={persianFa}
-          calendar={persian}
-          onChange={(event) => {
-            setEndDateFa(event.format());
-          }}
-          value={endDateFa}
-          placeholder="تاریخ اتمام بیمه"
-        />
-      </div>
-     </div>
       <div className="mt-4">
         <Button
-        sx={{
-          py:1,
-          boxShadow: 'none',
-          color: 'white',
-          backgroundColor: 'rgb(16 185 129)',
-          '&:hover': {
-            backgroundColor: 'rgb(5 150 105)',
-          },
-        }}
+          sx={{
+            py: 1,
+            boxShadow: 'none',
+            color: 'white',
+            backgroundColor: 'rgb(16 185 129)',
+            '&:hover': {
+              backgroundColor: 'rgb(5 150 105)',
+            },
+          }}
           onClick={setInsuranceHandler}
           className="bg-green-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-green-600"
         >

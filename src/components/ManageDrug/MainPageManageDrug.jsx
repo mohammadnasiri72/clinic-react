@@ -42,6 +42,10 @@ export default function MainPageManageDrug() {
   const [editId, setEditId] = useState('');
   const [drugList, setDrugList] = useState([]);
   const [query, setQuery] = useState('');
+  const [flagCat, setFlagCat] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [numPages, setNumPages] = useState(1);
+
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -52,10 +56,8 @@ export default function MainPageManageDrug() {
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-
-  // get description drug
   useEffect(() => {
-    setIsLoading(true)
+    // category
     axios
       .get(`${mainDomain}/api/MedicationCategory/GetList`, {
         headers: {
@@ -63,13 +65,18 @@ export default function MainPageManageDrug() {
         },
       })
       .then((res) => {
-        setIsLoading(false)
+        setIsLoading(false);
         setCategoryDrug(res.data);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
+  }, [flagCat]);
+  // get description drug
+  useEffect(() => {
+    setIsLoading(true);
 
+    // form drug
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugForm/GetList`, {
         headers: {
@@ -77,13 +84,14 @@ export default function MainPageManageDrug() {
         },
       })
       .then((res) => {
-        setIsLoading(false)
+        setIsLoading(false);
         setDrugForm(res.data);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
 
+    // dose drug
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugDose/GetList`, {
         headers: {
@@ -92,12 +100,13 @@ export default function MainPageManageDrug() {
       })
       .then((res) => {
         setDrugDose(res.data);
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
 
+    // UseCycle drug
     axios
       .get(`${mainDomain}/api/BasicInfo/DrugUseCycle/GetList`, {
         headers: {
@@ -106,12 +115,12 @@ export default function MainPageManageDrug() {
       })
       .then((res) => {
         setDrugUseCycle(res.data);
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-  }, [flag]);
+  }, []);
 
   // set new drug
   const newDrugHandler = () => {
@@ -202,7 +211,7 @@ export default function MainPageManageDrug() {
               text: 'دسته بندی جدید با موفقیت ثبت شد',
             });
             setIsLoading(false);
-            setFlag((e) => !e);
+            setFlagCat((e) => !e);
             setTitleNewCategory('');
             setDescNewCategory('');
           })
@@ -268,32 +277,31 @@ export default function MainPageManageDrug() {
 
   // get list drug
   useEffect(() => {
-    if (query.length > 0) {
+   
       axios
-        .get(`${mainDomain}/api/Medication/GetList`, {
+        .get(`${mainDomain}/api/Medication/GetListPaged`, {
           params: {
             query,
+            pageIndex: numPages,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((res) => {
-          setDrugList(res.data);
+          setDrugList(res.data.items);
+          setTotalPages(res.data.totalPages);
         })
         .catch((err) => {});
-    }else{
-      setDrugList([])
-    }
-  }, [flag , query]);
+    
+  }, [flag, query, numPages]);
 
-  
   return (
     <>
       <div className="text-start relative">
         {!isEdit && (
-          <div className="flex">
-            <div>
+          <div className="flex flex-wrap">
+            <div className='sm:w-auto w-full'>
               <Button
                 sx={{
                   py: 2,
@@ -311,20 +319,17 @@ export default function MainPageManageDrug() {
                 {showManageDrug && <MdOutlineMinimize />}
               </Button>
             </div>
-            <div className="min-w-80 pr-3">
-              <Autocomplete
-                // value={
-                //   userSelected.nationalId
-                //     ? `${userSelected.firstName} ${userSelected.lastName} (  ${userSelected.nationalId} )`
-                //     : ''
-                // }
+            <div className="sm:w-auto w-full sm:mt-0 mt-3 sm:pr-3 pr-0">
+              {/* <Autocomplete
+               
                 onChange={(event, newValue) => setQuery(newValue)}
                 freeSolo
                 options={drugList.map((option) => option.name)}
                 renderInput={(params) => (
                   <TextField onChange={(e) => setQuery(e.target.value)} {...params} label={'لیست دارو ها'} />
                 )}
-              />
+              /> */}
+               <TextField className='sm:w-auto w-4/5' onChange={(e)=> setQuery(e.target.value)} label={'جستجوی دارو...'}/>
             </div>
           </div>
         )}
@@ -333,7 +338,7 @@ export default function MainPageManageDrug() {
             // transform: !showManageDrug ? 'translateY(-100%)' : 'translateY(0%)',
             opacity: showManageDrug ? '1' : '0',
             visibility: showManageDrug ? 'visible' : 'hidden',
-            height: showManageDrug ? '22rem' : '0',
+            maxHeight: showManageDrug ? '40rem' : '0',
             zIndex: '12',
           }}
           className="border overflow-hidden sticky top-12 mt-4 left-0 right-0 bottom-0 duration-500 px-3 bg-white shadow-lg"
@@ -458,11 +463,11 @@ export default function MainPageManageDrug() {
               </Button>
             </div>
           </div>
-          <div className="flex">
-            <div className="text-start mt-3" dir="rtl">
+          <div className="flex flex-wrap">
+            <div className="text-start mt-3 sm:w-1/2 w-full" dir="rtl">
               <TextField
                 onChange={(e) => setNameDrug(e.target.value)}
-                className=" text-end"
+                className=" text-end w-full"
                 id="outlined-multiline-flexible"
                 label="نام دارو"
                 multiline
@@ -471,7 +476,7 @@ export default function MainPageManageDrug() {
                 maxRows={4}
               />
             </div>
-            <div className="w-44 mt-3 pr-2">
+            <div className="sm:w-1/2 w-full mt-3 sm:pr-2 pr-0">
               <Autocomplete
                 value={valDrugForm}
                 onChange={(event, newValue) => setValDrugForm(newValue)}
@@ -479,10 +484,10 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugForm}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'شکل دارو ها'} placeholder="انتخاب شکل دارو" />}
+                renderInput={(params) => <TextField {...params} label={'شکل پیش فرض دارو ها'} placeholder="انتخاب شکل دارو" />}
               />
             </div>
-            <div className="w-44 mt-3 pr-2">
+            <div className="sm:w-1/2 w-full mt-3">
               <Autocomplete
                 value={valDrugDose}
                 onChange={(event, newValue) => setValDrugDose(newValue)}
@@ -490,10 +495,10 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugDose}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'دوز دارو ها'} placeholder="انتخاب دوز دارو" />}
+                renderInput={(params) => <TextField {...params} label={'دوز پیش فرض دارو ها'} placeholder="انتخاب دوز دارو" />}
               />
             </div>
-            <div className="w-44 mt-3 pr-2">
+            <div className="sm:w-1/2 w-full mt-3 sm:pr-2 pr-0">
               <Autocomplete
                 value={valDrugUseCycle}
                 onChange={(event, newValue) => setValDrugUseCycle(newValue)}
@@ -501,7 +506,7 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugUseCycle}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'چرخه مصرف'} placeholder="انتخاب چرخه مصرف" />}
+                renderInput={(params) => <TextField {...params} label={'چرخه پیش فرض مصرف'} placeholder="انتخاب چرخه مصرف" />}
               />
             </div>
           </div>
@@ -624,6 +629,9 @@ export default function MainPageManageDrug() {
             setEditId={setEditId}
             setShowManageCategoryDrug={setShowManageCategoryDrug}
             query={query}
+            setNumPages={setNumPages}
+            totalPages={totalPages}
+            drugList={drugList}
           />
         </div>
       </div>

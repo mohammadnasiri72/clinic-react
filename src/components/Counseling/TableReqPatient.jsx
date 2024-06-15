@@ -1,4 +1,4 @@
-import { Button, IconButton, Skeleton, TextField, Tooltip } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,17 +7,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
-import { useState } from 'react';
 import { BsCloudUploadFill } from 'react-icons/bs';
 import { FaEye, FaTrashAlt } from 'react-icons/fa';
-import { PiUserList } from 'react-icons/pi';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { GiNotebook } from 'react-icons/gi';
+import { IoMdTime } from 'react-icons/io';
+import { IoCalendarOutline } from 'react-icons/io5';
 import { MdDoneOutline, MdOutlineSupportAgent } from 'react-icons/md';
-import { TbBrandCashapp } from 'react-icons/tb';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
-import DetailsRequest from './DetailsRequest';
 
 export default function TableReqPatient({
   reqPatient,
@@ -31,7 +29,8 @@ export default function TableReqPatient({
   setAppointmentId,
   setReceptionSelected,
 }) {
-  console.log(reqPatient);
+
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -40,6 +39,7 @@ export default function TableReqPatient({
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
+  
   const goToUploadPage = (req) => {
     setApointmentId(req.appointmentId);
     setPageNumber(4);
@@ -93,7 +93,8 @@ export default function TableReqPatient({
               <TableHead>
                 <TableRow>
                   <TableCell>ردیف</TableCell>
-                  <TableCell>نام دکتر</TableCell>
+                  <TableCell><span className='pr-3'>نام دکتر</span></TableCell>
+                  <TableCell align="center">تاریخ و زمان درخواست</TableCell>
                   <TableCell align="center">وضعیت</TableCell>
                   <TableCell align="center">پرداخت</TableCell>
                   <TableCell align="center">عملیات</TableCell>
@@ -109,6 +110,7 @@ export default function TableReqPatient({
                       {req.doctorFirstName}
                       {req.doctorLastName}
                     </TableCell>
+                    <TableCell align="center">{req.startTime.slice(0,5)} , {req.appointmentDateFA}</TableCell>
                     <TableCell align="center">{req.status}</TableCell>
                     <TableCell align="center">
                       {req.paid ? (
@@ -178,11 +180,19 @@ export default function TableReqPatient({
                     </div>
                     <div className="flex flex-col px-1">
                       <span className="font-semibold whitespace-nowrap text-sm">{`${req.doctorFirstName} ${req.doctorLastName}`}</span>
-                      <span className="text-[#42181899] flex items-center">
+                      <div className="text-[#42181899] flex items-center">
                         <GiNotebook className="text-3xl px-1" />
                         <span className="px-1 text-xs">{req.status}</span>
                         <span className="text-xs whitespace-nowrap">{req.paid ? '' : '(در انتظار پرداخت)'}</span>
-                      </span>
+                      </div>
+                      <div className='flex items-center'>
+                      <IoCalendarOutline className='text-xl'/>
+                        <span className='text-sm px-1'>{req.appointmentDateFA}</span>
+                      </div>
+                      <div className='flex items-center'>
+                      <IoMdTime className='text-xl'/>
+                        <span className='text-sm px-1'>{req.startTime.slice(0,5)}</span>
+                      </div>
                     </div>
                   </div>
                   <div className="w-1/5">

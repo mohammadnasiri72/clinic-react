@@ -17,7 +17,9 @@ export default function FormHistoryVisit({
   account,
   setPageState,
   setIsShowDetails,
-  isLoading
+  isLoading,
+  setPageStateReception,
+  setPageStateReserveHistory
 }) {
 
   
@@ -59,6 +61,10 @@ export default function FormHistoryVisit({
                 setPageState(0);
               }else if (setIsShowDetails) {
                 setIsShowDetails(false)
+              }else if (setPageStateReception) {
+                setPageStateReception(0)
+              }else if (setPageStateReserveHistory) {
+                setPageStateReserveHistory(0)
               }
             }}
           >

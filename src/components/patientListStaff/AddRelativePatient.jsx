@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import { Button } from '@mui/material';
+import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import InputFullName from './InputFullName';
 import InputRelative from './InputRelative';
@@ -173,7 +174,11 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
               className="text-xl text-slate-700"
             />
           </button> */}
-          <Button
+           <IoClose
+          onClick={() => setIsOpenAddRelative(false)}
+          className="absolute right-3 top-2 text-4xl hover:scale-125 cursor-pointer duration-300 rounded-full bg-slate-300 p-2"
+        />
+          {/* <Button
             sx={{
               py: 2,
               boxShadow: 'none',
@@ -193,7 +198,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
               style={{ transform: isOpenAddRelative ? 'rotate(0deg)' : 'rotate(180deg)' }}
               className="text-xl text-slate-700"
             />
-          </Button>
+          </Button> */}
           <div className="text-center py-2 text-2xl font-semibold">
             {
               editRelative.patientId && 
@@ -222,6 +227,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
             !editRelative.patientId &&
           <Button
             sx={{
+              color:'white',
               py: 2,
              mb:2,
               boxShadow: 'none',
@@ -243,6 +249,7 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
 
           <Button
             sx={{
+              color:'white',
               py: 2,
               boxShadow: 'none',
               // fontSize: 20,

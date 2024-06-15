@@ -15,20 +15,24 @@ import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 import { mainDomain } from '../../utils/mainDomain';
 import MainPageRegister from '../register/MainPageRegister';
 
-export default function MainpatientListStaff() {
+export default function MainpatientListStaff({ changeStatePages }) {
   const [pageState, setPageState] = useState(0);
   const [accountUpdate, setAccountUpdate] = useState([]);
   const [isRegister, setIsRegister] = useState(false);
   const [registerModel, setRegisterModel] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const [totalPages, setTotalPages] = useState(0);
+  const [numPages, setNumPages] = useState(1);
   const [flag, setFlag] = useState(false);
-  const [valStatusFilter, setValStatusFilter] = useState('همه');
   const [receptionSelected, setReceptionSelected] = useState({});
   const [patient, setPatient] = useState({});
   const [statusList, setStatusList] = useState([]);
   const [patientList, setPatientList] = useState([]);
-  
+
+
+  useEffect(()=>{
+    setPageState(0)
+  },[changeStatePages])
 
   // get status list
   useEffect(() => {
@@ -42,7 +46,6 @@ export default function MainpatientListStaff() {
       .then((res) => {
         setIsLoading(false);
         setStatusList(Object.values(res.data));
-        
       })
       .catch((err) => {
         setIsLoading(false);
@@ -56,26 +59,24 @@ export default function MainpatientListStaff() {
           <div>
             <NavBarListPatient
               setPageState={setPageState}
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
               setIsLoading={setIsLoading}
-              valStatusFilter={valStatusFilter}
-              setValStatusFilter={setValStatusFilter}
               patientList={patientList}
               setPatientList={setPatientList}
+              numPages={numPages}
+              setTotalPages={setTotalPages}
             />
             <div className="mt-5 w-11/12 mx-auto">
               <TableListPatient
                 setPageState={setPageState}
                 setAccountUpdate={setAccountUpdate}
-                searchValue={searchValue}
-                valStatusFilter={valStatusFilter}
                 patient={patient}
                 setPatient={setPatient}
                 setReceptionSelected={setReceptionSelected}
                 statusList={statusList}
                 patientList={patientList}
                 setPatientList={setPatientList}
+                setNumPages={setNumPages}
+                totalPages={totalPages}
               />
             </div>
           </div>
@@ -113,15 +114,15 @@ export default function MainpatientListStaff() {
             </div>
             <div className="flex justify-center flex-wrap">
               <div className="lg:w-1/3 w-full p-4">
-                <UploaderImage account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient/>
+                <UploaderImage account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient />
               </div>
-              <FormUpdateProfile account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient/>
+              <FormUpdateProfile account={accountUpdate} setPageState={setPageState} setChang={setFlag} patient />
             </div>
           </div>
         )}
         {pageState === 2 && (
           <div>
-            <MainPageRegister setPageState={setPageState} pageState={pageState}/>
+            <MainPageRegister setPageState={setPageState} pageState={pageState} />
           </div>
         )}
         {pageState === 3 && (
