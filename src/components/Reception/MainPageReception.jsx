@@ -23,7 +23,7 @@ import ServicesList from './ServicesList';
 import TableInsuranceSelected from './TableInsuranceSelected';
 import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function MainPageReception({ account , changeStatePages}) {
+export default function MainPageReception({ account, changeStatePages }) {
   const [pageStateReception, setPageStateReception] = useState(0);
   const [valReservPatient, setValReservPatient] = useState('');
   const [userSelected, setUserSelected] = useState({});
@@ -69,11 +69,23 @@ export default function MainPageReception({ account , changeStatePages}) {
   const [query, setQuery] = useState('');
   const [doctorMedicalSystemId, setDoctorMedicalSystemId] = useState(-1);
   const [receptionSelected, setReceptionSelected] = useState({});
-  const [flagCondition , setFlagCondition] = useState(false)
+  const [flagCondition, setFlagCondition] = useState(false);
 
-  useEffect(()=>{
-    setPageStateReception(0)
-  },[changeStatePages])
+  useEffect(() => {
+    setValInsurance([]);
+    setInsuranceListSelected([]);
+    setListServices([]);
+    setValCondition([]);
+    setStatusId(1);
+    setValTimeStart('');
+    setValTimeEnd('');
+    setPaid(false);
+    setNotes('');
+  }, [userSelected]);
+
+  useEffect(() => {
+    setPageStateReception(0);
+  }, [changeStatePages]);
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -208,7 +220,7 @@ export default function MainPageReception({ account , changeStatePages}) {
     changStatusCondition,
     pageStateReception,
     doctorMedicalSystemId,
-    flagCondition
+    flagCondition,
   ]);
 
   useEffect(() => {
@@ -535,7 +547,13 @@ export default function MainPageReception({ account , changeStatePages}) {
             </div>
           </div>
           <div className="mt-4">
-            <TableInsuranceSelected insuranceListSelected={insuranceListSelected} />
+            <TableInsuranceSelected
+              insuranceListSelected={insuranceListSelected}
+              setIsLoading={setIsLoading}
+              setInsuranceListSelected={setInsuranceListSelected}
+              setFlag={setFlag}
+              setValInsurance={setValInsurance}
+            />
           </div>
           <div>
             <ServicesList
@@ -551,6 +569,7 @@ export default function MainPageReception({ account , changeStatePages}) {
               valCondition={valCondition}
               setValCondition={setValCondition}
               medicalRecord={medicalRecord}
+              userSelected={userSelected}
             />
           </div>
           <div className="mt-5 flex items-center">
@@ -610,7 +629,7 @@ export default function MainPageReception({ account , changeStatePages}) {
           </div>
           <div
             style={{ zIndex: '1300', transform: showAddInsurance ? 'translateX(0)' : 'translateX(-100%)' }}
-            className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
+            className="fixed top-0 bottom-0 lg:right-2/3 sm:right-1/2 right-0 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
           >
             <AddInsurance userSelected={userSelected} setShowAddInsurance={setShowAddInsurance} setFlag={setFlag} />
           </div>

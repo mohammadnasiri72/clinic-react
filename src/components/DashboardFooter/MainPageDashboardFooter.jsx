@@ -13,100 +13,23 @@ import { LiaUserEditSolid } from 'react-icons/lia';
 import { useNavigate } from 'react-router';
 
 export default function MainPageDashboardFooter({setChangeStatePages}) {
-  const [valueButton, setValueButton] = useState('home');
 
     const navigate = useNavigate()
+    const url =  window.location.pathname
+    
   
 
   return (
-    // <div className="fixed bottom-0 left-0 right-0 h-20 border bg-white sm:hidden flex flex-wrap">
-    //   <Stack direction="row">
-    //     <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
-    //       <ToggleButton sx={{width:'20%'}} value="home" aria-label="left aligned">
-    //         <div className=" flex flex-col justify-center items-center">
-    //           <CiHome className='text-xl text-slate-700'/>
-    //           <Button
-    //             sx={{
-    //               fontSize: 12,
-    //               color:'rgb(51 65 85)',
-    //             }}
-    //             className="whitespace-nowrap"
-    //           >
-    //             خانه
-    //           </Button>
-    //         </div>
-    //       </ToggleButton>
-    //       <ToggleButton sx={{width:'20%'}} value="home" aria-label="left aligned">
-    //         <div className=" flex flex-col justify-center items-center">
-    //           <CiHome className='text-xl text-slate-700'/>
-    //           <Button
-    //             sx={{
-    //               fontSize: 12,
-    //               color:'rgb(51 65 85)',
-    //             }}
-    //             className="whitespace-nowrap"
-    //           >
-    //             خانه
-    //           </Button>
-    //         </div>
-    //       </ToggleButton>
-    //       <ToggleButton sx={{width:'20%'}} value="home" aria-label="left aligned">
-    //         <div className=" flex flex-col justify-center items-center">
-    //           <CiHome className='text-xl text-slate-700'/>
-    //           <Button
-    //             sx={{
-    //               fontSize: 12,
-    //               color:'rgb(51 65 85)',
-    //             }}
-    //             className="whitespace-nowrap"
-    //           >
-    //             خانه
-    //           </Button>
-    //         </div>
-    //       </ToggleButton>
-    //       <ToggleButton sx={{width:'20%'}} value="home" aria-label="left aligned">
-    //         <div className=" flex flex-col justify-center items-center">
-    //           <CiHome className='text-xl text-slate-700'/>
-    //           <Button
-    //             sx={{
-    //               fontSize: 12,
-    //               color:'rgb(51 65 85)',
-    //             }}
-    //             className="whitespace-nowrap"
-    //           >
-    //             خانه
-    //           </Button>
-    //         </div>
-    //       </ToggleButton>
-    //       <ToggleButton sx={{width:'20%'}} value="home" aria-label="left aligned">
-    //         <div className=" flex flex-col justify-center items-center">
-    //           <CiHome className='text-xl text-slate-700'/>
-    //           <Button
-    //             sx={{
-    //               fontSize: 12,
-    //               color:'rgb(51 65 85)',
-    //             }}
-    //             className="whitespace-nowrap"
-    //           >
-    //             خانه
-    //           </Button>
-    //         </div>
-    //       </ToggleButton>
-
-    //     </ToggleButtonGroup>
-    //   </Stack>
-    // </div>
     <div style={{zIndex:'8798798798'}} className="fixed bottom-0 left-0 right-0 border border-[#0001] bg-white sm:hidden flex flex-wrap rounded-t-3xl">
       <div className="w-1/5 flex flex-col justify-center items-center">
         <Button
           onClick={() => {
-            setValueButton('home')
             navigate('/dashboard/home')
           }}
-          value={valueButton}
           sx={{
             fontSize: 12,
-            color:valueButton==='home'? '#1ccaff' : '#0005',
+            // color:valueButton==='home'? 'rgb(20 184 166)' : '#0005',
+            color: url.includes('home')?  'rgb(20 184 166)' : '#0005'
           }}
           className="whitespace-nowrap flex flex-col h-full"
         >
@@ -117,14 +40,12 @@ export default function MainPageDashboardFooter({setChangeStatePages}) {
       <div className="w-1/5 flex flex-col justify-center items-center">
         <Button
           onClick={() => {
-            setValueButton('counseling')
             setChangeStatePages((e)=>!e)
             navigate('/dashboard/counseling')
           }}
-          value={valueButton}
           sx={{
             fontSize: 12,
-            color:valueButton==='counseling'? '#1ccaff' : '#0005',
+            color: url.includes('counseling')?  'rgb(20 184 166)' : '#0005',
           }}
           className="whitespace-nowrap flex flex-col h-full"
         >
@@ -135,12 +56,11 @@ export default function MainPageDashboardFooter({setChangeStatePages}) {
       <div className="w-1/5 flex flex-col justify-center items-center">
         <Button
           onClick={() => {
-            setValueButton('reserve')
             navigate('/dashboard/reserve')
           }}
-          value={valueButton}
           sx={{
             fontSize: 12,
+            color: url.includes('reserve')?  'rgb(20 184 166)' : '#0005',
             backgroundColor: 'white',
             '&:hover': {
               backgroundColor: 'white',
@@ -155,13 +75,11 @@ export default function MainPageDashboardFooter({setChangeStatePages}) {
       <div className="w-1/5 flex flex-col justify-center items-center">
         <Button
           onClick={() => {
-            setValueButton('mySickness')
             navigate('/dashboard/sicknessList')
           }}
-          value={valueButton}
           sx={{
             fontSize: 12,
-            color:valueButton==='mySickness'? '#1ccaff' : '#0005',
+            color: url.includes('sicknessList')?  'rgb(20 184 166)' : '#0005',
           }}
           className="whitespace-nowrap flex flex-col h-full"
         >
@@ -172,13 +90,11 @@ export default function MainPageDashboardFooter({setChangeStatePages}) {
       <div className="w-1/5 flex flex-col justify-center items-center">
         <Button
           onClick={() => {
-            setValueButton('profile')
             navigate('/dashboard/updateProfile')
           }}
-          value={valueButton}
           sx={{
             fontSize: 12,
-            color:valueButton==='profile'? '#1ccaff' : '#0005',
+            color: url.includes('updateProfile')?  'rgb(20 184 166)' : '#0005',
           }}
           className=" whitespace-nowrap flex flex-col h-full"
         >

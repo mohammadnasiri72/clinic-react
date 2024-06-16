@@ -4,13 +4,13 @@ import useSettings from '../hooks/useSettings';
 import MainPageManageDrug from '../components/ManageDrug/MainPageManageDrug';
 // ----------------------------------------------------------------------
 
-export default function ManageDrug() {
+export default function ManageDrug({changeStatePages}) {
   const { themeStretch } = useSettings();
   return (
     <>
       <Page title="مدیریت دارو">
         <Container maxWidth={themeStretch ? false : 'xl'}>
-          <MainPageManageDrug />
+          <MainPageManageDrug changeStatePages={changeStatePages}/>
         </Container>
       </Page>
     </>

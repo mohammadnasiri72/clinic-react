@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
 import { IoClose } from 'react-icons/io5';
 import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import BoxReceptionPatient from '../VisitHistory/BoxReceptionPatient';
 import UserCard from './UserCard';
+import MessageHandler from '../Reception/MessageHandler';
 
 export default function DetailsPatient({
   showDetailsPatient,
@@ -13,10 +15,16 @@ export default function DetailsPatient({
   setReceptionSelected,
   historyReception,
   setPageStateReception,
-  setPageStateReserveHistory
+  setPageStateReserveHistory,
+  setIsLoading,
 }) {
-  
- 
+  const [openBoxMessage, setOpenBoxMessage] = useState(false);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    setUserId([patient.userId]);
+  }, [patient]);
+
   return (
     <>
       <div
@@ -27,30 +35,28 @@ export default function DetailsPatient({
           onClick={() => setShowDetailsPatient(false)}
           className="absolute right-3 top-2 text-4xl hover:scale-125 cursor-pointer duration-300 rounded-full bg-slate-300 p-2"
         />
-        
-        <div className='mt-8'>
-        <UserCard patient={patient}/>
+
+        <div className="mt-8">
+          <UserCard patient={patient} setOpenBoxMessage={setOpenBoxMessage} setShowDetailsPatient={setShowDetailsPatient}/>
         </div>
-        
-        
-       
-        <div className='mt-5'>
+
+        <div className="mt-5">
           <p className="text-xl font-semibold">اطلاعات پذیرش ها</p>
-          {
-          historyReception.length>0 &&
-          historyReception.map((e) => (
-            <div key={e.appointmentId} className="w-full px-3 mt-3">
-              <BoxReceptionPatient
-                reception={e}
-                setPageState={setPageState}
-                setReceptionSelected={setReceptionSelected}
-                setPageStateReception={setPageStateReception}
-                setPageStateReserveHistory={setPageStateReserveHistory}
-              />
-            </div>
-          ))}
+          {historyReception.length > 0 &&
+            historyReception.map((e) => (
+              <div key={e.appointmentId} className="w-full px-3 mt-3">
+                <BoxReceptionPatient
+                  reception={e}
+                  setPageState={setPageState}
+                  setReceptionSelected={setReceptionSelected}
+                  setPageStateReception={setPageStateReception}
+                  setPageStateReserveHistory={setPageStateReserveHistory}
+                />
+              </div>
+            ))}
         </div>
       </div>
+      <MessageHandler open={openBoxMessage} setOpen={setOpenBoxMessage} userId={userId} setIsLoading={setIsLoading} />
     </>
   );
 }

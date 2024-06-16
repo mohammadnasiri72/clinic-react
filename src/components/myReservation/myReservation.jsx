@@ -5,8 +5,10 @@ import { mainDomain } from '../../utils/mainDomain';
 import MyReserveBox from './MyReserveBox';
 import MyVisitedBox from './MyVisitedBox';
 import SimpleBackdrop from '../backdrop';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
 export default function MyReservation({ setPageState, account }) {
+  const [pageStateMyReserv , setPageStateMyReserv] = useState(false)
   const [doctors, setDoctors] = useState([]);
   const [doctor, setDoctor] = useState('');
   const [reserveList, setReserveList] = useState([]);
@@ -186,19 +188,27 @@ export default function MyReservation({ setPageState, account }) {
         </div>
       )}
       {reserveList.filter((e) => e.statusId !== 1).length > 0 && (
-        <div className="flex w-5/6 mx-auto">
+        <div className="flex w-5/6 mx-auto flex-wrap">
           {reserveList
             .filter((e) => e.statusId !== 1)
             .map((list) => (
               <div key={list.reservationId} className="lg:w-1/3 sm:w-1/2 w-full p-2">
                 <div className="border rounded-lg ">
-                  <MyVisitedBox list={list} doctor={doctor} />
+                  <MyVisitedBox list={list} doctor={doctor} setPageStateMyReserv={setPageStateMyReserv}/>
                 </div>
               </div>
             ))}
         </div>
       )}
+       {/* <FormHistoryVisit
+          setPageStateMyReserv={setPageStateMyReserv}
+          receptionSelected={receptionSelected}
+          setIsLoading={setIsLoading}
+          account={account}
+          isLoading={isLoading}
+        /> */}
       {isLoading && <SimpleBackdrop />}
+
     </>
   );
 }

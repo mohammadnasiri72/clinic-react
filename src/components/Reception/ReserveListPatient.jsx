@@ -9,15 +9,15 @@ export default function ReserveListPatient({
   userSelected,
   setReservUser,
   reservUser,
-  pageStateReception
+  pageStateReception,
 }) {
-  
   useEffect(() => {
     if (userSelected.userId) {
       axios
         .get(`${mainDomain}/api/Reservation/GetList`, {
           params: {
             patientUserId: userSelected.userId,
+            statusId: 1,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -25,14 +25,14 @@ export default function ReserveListPatient({
         })
         .then((res) => {
           setReservUser(res.data);
-          setValReservPatient(res.data.length !==0 ? res.data[0].reservationTimeId : '');
+          setValReservPatient(res.data.length !== 0 ? res.data[0].reservationId : '');
         })
         .catch((err) => {});
-    }else{
-      setReservUser([])
-      setValReservPatient([])
+    } else {
+      setReservUser([]);
+      setValReservPatient([]);
     }
-  }, [userSelected , pageStateReception]);
+  }, [userSelected, pageStateReception]);
   return (
     <>
       <div className="w-64 mt-3">
@@ -50,18 +50,15 @@ export default function ReserveListPatient({
           >
             {reservUser.length > 0 &&
               reservUser.map((e) => (
-                <MenuItem key={e.reservationId} value={e.reservationTimeId}>
+                <MenuItem key={e.reservationId} value={e.reservationId}>
                   <span>{e.reservationTimeDateFA}</span>
                   <span>
                     ساعت {e.reservationTimeFromTime} تا {e.reservationTimeToTime}
                   </span>
                 </MenuItem>
               ))}
-              {
-                userSelected.length===0 && 
-                <MenuItem disabled>لطفا ابتدا بیمار را ثبت کنید</MenuItem>
-              }
-            {reservUser.length === 0 && userSelected.length!==0 && <MenuItem disabled>صفحه رزرو خالی است</MenuItem>}
+            {userSelected.length === 0 && <MenuItem disabled>لطفا ابتدا بیمار را ثبت کنید</MenuItem>}
+            {reservUser.length === 0 && userSelected.length !== 0 && <MenuItem disabled>صفحه رزرو خالی است</MenuItem>}
           </Select>
         </FormControl>
       </div>

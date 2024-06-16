@@ -119,8 +119,8 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
             </div>
           </div>
           {!setPageState && (
-            <div className="px-3 mt-5 text-start lg:w-2/3 w-full mx-auto">
-              <Button
+            <div className="px-3 mt-5 flex justify-start lg:w-2/3 w-full mx-auto">
+              {/* <Button
                 size="medium"
                 className="px-5 py-2 rounded-md text-white duration-300"
                 sx={{
@@ -134,7 +134,9 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
                 variant="contained"
               >
                 <Link to={'/login'}>قبلا حساب ساخته ام</Link>
-              </Button>
+              </Button> */}
+              <p className='pl-3'>قبلا ثبت نام کرده اید؟ </p>
+              <Link className='text-teal-500 hover:text-teal-600 duration-300 font-semibold underline' to={'/login'}>وارد شوید</Link>
             </div>
           )}
           {setPageState && (

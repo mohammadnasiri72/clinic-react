@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { FaTrashCan } from "react-icons/fa6";
+import { TiDelete } from 'react-icons/ti';
 
 export default function TableServices({ listServices , setListServices}) {
   const deletServiceHandler = (e)=>{
@@ -48,7 +48,7 @@ export default function TableServices({ listServices , setListServices}) {
                 <TableCell align="center">{e.rate}</TableCell>
                 <TableCell align="center">
                   <div className="flex justify-center">
-                    <FaTrashCan onClick={()=> deletServiceHandler(e)} className="cursor-pointer text-xl text-red-500" />
+                    <TiDelete onClick={()=> deletServiceHandler(e)} className="cursor-pointer text-4xl text-red-500 hover:text-red-600 duration-300" />
                   </div>
                 </TableCell>
               </TableRow>

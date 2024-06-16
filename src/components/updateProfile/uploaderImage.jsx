@@ -35,9 +35,9 @@ export default function UploaderImage({ account, setChang, patient }) {
         },
       })
       .then((res) => {
-        setIsLoading(false);
         setFileAtt(res.data);
         setAvatarTemporary(`${mainDomain}/uploads/temp_up/${res.data}`);
+        
       })
       .catch((err) => {
         setIsLoading(false);
@@ -110,6 +110,7 @@ export default function UploaderImage({ account, setChang, patient }) {
   useEffect(() => {
     if (avatarTemporary) {
       setSrc(avatarTemporary);
+      setIsLoading(false);
     } else {
       setSrc(mainDomain + account.avatar);
     }

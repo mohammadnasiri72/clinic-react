@@ -28,6 +28,7 @@ body{
 }
 .toast-modal{
     margin-top: 70px;
+    z-index: 999999999999999999999999999;
 }
 .swal2-container {
     z-index: 99999999999999999999999;

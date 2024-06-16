@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -47,6 +48,12 @@ export default function MedicineList({ isPatientActive, setMedicationIdList , va
             id="tags-outlined"
             options={medicines}
             getOptionLabel={(option) => option.name}
+            renderOption={(props, option) => (
+              <Box dir='ltr' component="li" sx={{textAlign:'start'}} {...props}>
+                
+                {option.name} 
+              </Box>
+            )}
             filterSelectedOptions
             renderInput={(params) => <TextField {...params} label="دارو های مورد استفاده" placeholder="انتخاب دارو" />}
           />

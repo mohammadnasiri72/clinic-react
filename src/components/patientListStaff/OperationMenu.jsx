@@ -32,6 +32,7 @@ export default function OperationMenu({
   historyReception,
   setPatientRelative
 }) {
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [editRelative, setEditRelative] = useState({});
@@ -207,6 +208,8 @@ export default function OperationMenu({
         setPageState={setPageState}
         setReceptionSelected={setReceptionSelected}
         historyReception={historyReception}
+        setIsLoading={setIsLoading}
+       
       />
       {(isOpenAccompanying || isOpenAddRelative) && (
         <Paper

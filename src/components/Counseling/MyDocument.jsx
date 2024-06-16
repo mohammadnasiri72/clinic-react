@@ -207,69 +207,8 @@ export default function MyDocumentSend({
               <div className="flex flex-wrap">
                 {filesUpload.map((file, index) => (
                   <div key={file.id} className="sm:w-1/2 w-full p-2">
-                    {/* <Card >
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {file.medicalItemName}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {file.description}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <div className="flex justify-center">
-                      {file.medicalItemName === 'ویدئو' && (
-                        <Button
-                          onClick={() => {
-                            setIsShowVideo(true);
-                            setSrcVideo(file.attachmentSrc);
-                          }}
-                        >
-                          <RiFileVideoLine className="hover:text-green-700 duration-300" />
-                          <span className="px-1">مشاهده ویدئو</span>
-                        </Button>
-                      )}
-                      {file.medicalItemName === 'سند' && (
-                         <a target="_blank" rel="noreferrer" href={mainDomain + file.attachmentSrc}>
-                        <Button>
-                         
-                            <IoIosDocument className="hover:text-green-700 duration-300" />
-                          
-                          <span className="px-1">مشاهده سند</span>
-                        </Button>
-                        </a>
-                      )}
-                      {file.medicalItemName === 'تصویر' && (
-                        <Button
-                          onClick={() => {
-                            setIsShowImg(true);
-                            setSrc(file.attachmentSrc);
-                          }}
-                        >
-                          <FaImage className="hover:text-green-700 duration-300" />
-                          <span className="px-1">مشاهده تصویر</span>
-                        </Button>
-                      )}
-                      {file.medicalItemName === 'صوت' && (
-                        <Button
-                          onClick={() => {
-                            setIsShowAudio(true);
-                            setSrcAudio(file.attachmentSrc);
-                          }}
-                        >
-                          <MdAudioFile className="hover:text-green-700 duration-300" />
-                          <span className="px-1">پخش صوت</span>
-                        </Button>
-                      )}
-                    </div>
-                    <Button onClick={() => deleteFileHandler(file)} sx={{color:'red'}} >
-                      <FaTrashAlt  />
-                      <span>حذف</span>
-                    </Button>
-                  </CardActions>
-                </Card> */}
-                    <div className="border rounded-lg bg-slate-50 flex ">
-                      <div className="w-1/4">
+                    <div className="border rounded-lg bg-slate-50 flex flex-wrap">
+                      <div className="w-1/6">
                         {file.medicalItemName === 'تصویر' && (
                           <div className="flex justify-center items-center pt-2">
                             <FaImage className="  text-3xl text-slate-700" />
@@ -305,27 +244,33 @@ export default function MyDocumentSend({
                           {file.description}
                         </Typography>
                       </div>
-                      <div className="w-1/4 flex justify-center items-center">
-                        <FaEye
-                          onClick={() => {
-                            if (file.medicalItemId === 4) {
-                              setIsShowImg(true);
-                              setSrc(file.attachmentSrc);
-                            } else if (file.medicalItemId === 5) {
-                              setIsShowVideo(true);
-                              setSrcVideo(file.attachmentSrc);
-                            } else if (file.medicalItemId === 6) {
-                              setIsShowAudio(true);
-                              setSrcAudio(file.attachmentSrc);
-                            } else {
-                              btnDoc.current.click();
-                            }
-                          }}
-                          className="text-3xl cursor-pointer text-teal-500"
-                        />
-                        <Button size="small" onClick={() => deleteFileHandler(file)} sx={{ color: 'red' }}>
-                          <FaTrashAlt className="text-xl" />
-                        </Button>
+                      <div className="w-1/3 flex justify-center items-center">
+                        <Tooltip title="مشاهده جزئیات">
+                          <IconButton
+                            onClick={() => {
+                              if (file.medicalItemId === 4) {
+                                setIsShowImg(true);
+                                setSrc(file.attachmentSrc);
+                              } else if (file.medicalItemId === 5) {
+                                setIsShowVideo(true);
+                                setSrcVideo(file.attachmentSrc);
+                              } else if (file.medicalItemId === 6) {
+                                setIsShowAudio(true);
+                                setSrcAudio(file.attachmentSrc);
+                              } else {
+                                btnDoc.current.click();
+                              }
+                            }}
+                          >
+                            <FaEye className="text-xl cursor-pointer text-teal-500" />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="حذف مدرک">
+                          <IconButton onClick={() => deleteFileHandler(file)}>
+                            <FaTrashAlt className="text-lg cursor-pointer duration-300 text-red-500 hover:text-red-600" />
+                          </IconButton>
+                        </Tooltip>
                       </div>
                     </div>
                   </div>

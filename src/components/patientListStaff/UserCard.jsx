@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Avatar, Box, Card, Divider, Typography } from '@mui/material';
+import { Avatar, Box, Card, Divider, IconButton, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { AiOutlineMessage } from 'react-icons/ai';
 // utils
 import cssStyles from '../../utils/cssStyles';
 // components
 import { mainDomain } from '../../utils/mainDomain';
-import SvgIconStyle from '../SvgIconStyle';
 
 // ----------------------------------------------------------------------
 
@@ -26,12 +26,11 @@ UserCard.propTypes = {
   patient: PropTypes.object.isRequired,
 };
 
-export default function UserCard({patient }) {
-
+export default function UserCard({ patient, setOpenBoxMessage , setShowDetailsPatient}) {
   return (
     <Card sx={{ textAlign: 'center' }}>
       <Box sx={{ position: 'relative' }}>
-      {/* <SvgIconStyle
+        {/* <SvgIconStyle
           src="https://minimal-assets-api.vercel.app/assets/icons/shape-avatar.svg"
           sx={{
             width: 144,
@@ -60,9 +59,7 @@ export default function UserCard({patient }) {
           }}
         />
         {/* <OverlayStyle /> */}
-        <div className="w-full h-20 overflow-hidden">
-          <img src={'/images/bg.jpg'} alt="timeline" />
-        </div>
+        <div className="w-full h-14 overflow-hidden bg-teal-500" />
       </Box>
 
       <div className="flex justify-between px-4">
@@ -72,9 +69,19 @@ export default function UserCard({patient }) {
             {patient.firstName} {patient.lastName}
           </Typography>
 
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {patient.nationalId}
-          </Typography>
+          <div className="flex items-center justify-center">
+            <Typography className="px-2" variant="body2" sx={{ color: 'text.secondary' }}>
+              {patient.nationalId}
+            </Typography>
+            <Tooltip title="ارسال پیام">
+              <IconButton onClick={()=>{
+                setOpenBoxMessage(true)
+                setShowDetailsPatient(false)
+              }}>
+                <AiOutlineMessage className="text-xl cursor-pointer hover:text-teal-500 duration-300" />
+              </IconButton>
+            </Tooltip>
+          </div>
         </div>
         <span className="mt-10 w-1/6 whitespace-nowrap">{patient.abroad ? 'خارج ایران' : 'ساکن ایران'}</span>
       </div>
@@ -99,8 +106,7 @@ export default function UserCard({patient }) {
         <div className="w-2/3 flex p-2 justify-end">
           <span>استان/شهر : </span>
           <span className="px-1">
-           
-            {patient.province?patient.province:'______'} / {patient.city?patient.city:'______'}
+            {patient.province ? patient.province : '______'} / {patient.city ? patient.city : '______'}
           </span>
         </div>
       </div>
@@ -110,11 +116,11 @@ export default function UserCard({patient }) {
       </div>
       <div className="flex p-2">
         <span>شماره پرونده : </span>
-        <span className="px-1"> {patient.fileNumber? patient.fileNumber : '______'} </span>
+        <span className="px-1"> {patient.fileNumber ? patient.fileNumber : '______'} </span>
       </div>
       <div className="flex p-2">
         <span>آدرس : </span>
-        <span className="px-1"> {patient.address?patient.address:'______'} </span>
+        <span className="px-1"> {patient.address ? patient.address : '______'} </span>
       </div>
     </Card>
   );

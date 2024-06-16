@@ -11,8 +11,8 @@ export default function NavBarListPatient({
   setPatientList,
   numPages,
   setTotalPages,
+  statusList
 }) {
-  const [statusList, setStatusList] = useState([]);
   const [valStatusFilter, setValStatusFilter] = useState(-1);
   const [searchValue, setSearchValue] = useState('');
 
@@ -38,23 +38,7 @@ export default function NavBarListPatient({
       });
   }, [valStatusFilter, searchValue, numPages]);
 
-  // get status list
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`${mainDomain}/api/Patient/GetStatusList`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        setStatusList(Object.values(res.data));
-      })
-      .catch((err) => {
-        setIsLoading(false);
-      });
-  }, []);
+  
 
   return (
     <>

@@ -166,6 +166,8 @@ export default function SelectFieldOrder({ patSelected, setIsLoading, setFlag , 
         </button> */}
         <Button
         sx={{
+          color: 'white',
+          mt:2,
           py: 1,
           boxShadow: 'none',
           // fontSize: 20,

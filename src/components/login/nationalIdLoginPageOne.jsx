@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -116,7 +116,7 @@ export default function NationalIdLoginPageOne({ abroad, setAbroad, setIsLoading
         </div>
         <div className="px-5 text-start mt-4 lg:w-2/3 w-full mx-auto">
           <div>
-            <Button
+            {/* <Button
               size="medium"
               sx={{
                 py: 1,
@@ -131,10 +131,11 @@ export default function NationalIdLoginPageOne({ abroad, setAbroad, setIsLoading
               variant="contained"
             >
               فراموشی رمز عبور
-            </Button>
+            </Button> */}
+            <Typography sx={{fontWeight:'bold'}} className='cursor-pointer text-emerald-500 hover:text-emerald-600 duration-300 underline' onClick={() => setForgotPassword(true)}>رمز عبور خود را فراموش کرده‌ام!</Typography>
           </div>
-          <div className="mt-4">
-            <Button
+          <div className="mt-4 flex justify-start">
+            {/* <Button
               size="medium"
               sx={{
                 py: 1,
@@ -148,7 +149,9 @@ export default function NationalIdLoginPageOne({ abroad, setAbroad, setIsLoading
               variant="contained"
             >
               <Link to={'/register'}>ساخت حساب جدید</Link>
-            </Button>
+            </Button> */}
+            <p className='pl-3'>حساب کاربری ندارید؟ </p>
+              <Link className='text-teal-500 hover:text-teal-600 duration-300 font-semibold underline' to={'/register'}>ثبت نام کنید</Link>
           </div>
           {/* <button
           onClick={() => setForgotPassword(true)}

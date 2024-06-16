@@ -128,7 +128,7 @@ export default function Router() {
         { path: 'patientListStaff', element: <PatientListStaff changeStatePages={changeStatePages} /> },
         { path: 'reception', element: <Reception account={account} changeStatePages={changeStatePages} /> },
         { path: 'reservHistory', element: <ReservHistory changeStatePages={changeStatePages} /> },
-        { path: 'manageDrug', element: <ManageDrug /> },
+        { path: 'manageDrug', element: <ManageDrug changeStatePages={changeStatePages}/> },
         { path: 'manageServices', element: <ManageServices /> },
         { path: 'managStaff', element: <ManagStaff /> },
         { path: 'managDoctor', element: <ManagDoctor /> },

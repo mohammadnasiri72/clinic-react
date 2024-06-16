@@ -1,9 +1,12 @@
 import { IoCalendarOutline } from 'react-icons/io5';
+import { Button } from '@mui/material';
 import React from 'react';
 import { IoMdTime } from 'react-icons/io';
 import { mainDomain } from '../../utils/mainDomain';
+import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 
-export default function MyVisitedBox({ list, doctor }) {
+export default function MyVisitedBox({ list, doctor , setPageStateMyReserv}) {
+
   return (
     <>
       <div className="flex items-center">
@@ -33,6 +36,28 @@ export default function MyVisitedBox({ list, doctor }) {
           </p>
         </div>
       </div>
+      <div className='text-start pb-3 mt-3 pr-3'>
+      <Button
+          size='small'
+            sx={{
+              py: 1,
+              boxShadow: 'none',
+              fontSize: 12,
+              color: 'white',
+              backgroundColor: 'rgb(20 184 166)',
+              '&:hover': {
+                backgroundColor: 'rgb(13 148 136)',
+              },
+            }}
+            className="rounded-md duration-300 mt-2 whitespace-nowrap"
+            onClick={()=> setPageStateMyReserv(true)}
+            variant="contained"
+          >
+          مشاهده جزئیات
+          </Button>
+      </div>
+
+     
     </>
   );
 }

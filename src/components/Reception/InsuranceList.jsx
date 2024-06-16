@@ -46,6 +46,9 @@ export default function InsuranceList({
           setInsuranceList(res.data);
         })
         .catch((err) => {});
+    }else{
+      setInsuranceList([])
+      
     }
   }, [userSelected, flag]);
   

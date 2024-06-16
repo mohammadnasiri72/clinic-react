@@ -10,7 +10,7 @@ export default function OrderHistoryVisit({ receptionSelected, setIsLoading }) {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`${mainDomain} /api/MedicalRecord/Order/GetList`, {
+      .get(`${mainDomain}/api/MedicalRecord/Order/GetList`, {
         params: {
           appointmentId: receptionSelected.appointmentId,
         },
@@ -22,10 +22,11 @@ export default function OrderHistoryVisit({ receptionSelected, setIsLoading }) {
         setIsLoading(false);
         setListOrder(res.data);
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoading(false);
       });
   }, []);
+  console.log(listOrder);
   return (
     <>
       <div>
@@ -63,13 +64,16 @@ export default function OrderHistoryVisit({ receptionSelected, setIsLoading }) {
                 value={e.doctorComments}
               />
             </div>
+            {
+              e.result &&
             <Tooltip title="دانلود فایل">
               <IconButton>
-                <a target="_blank" rel="noreferrer" href={mainDomain} download>
+                <a target="_blank" rel="noreferrer" href={`${mainDomain}/uploads/temp_up/${e.result}`} download>
                   <FaDownload className="text-lg" />
                 </a>
               </IconButton>
             </Tooltip>
+            }
           </div>
         ))}
         {

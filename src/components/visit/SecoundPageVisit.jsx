@@ -50,7 +50,7 @@ function a11yProps(index) {
   };
 }
 
-export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading }) {
+export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading, setPageState }) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [infoPat, setInfoPat] = React.useState({});
@@ -69,12 +69,15 @@ export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading 
   useEffect(() => {
     axios
       .get(`${mainDomain}/api/Patient/GetList`, {
+        params: {
+          query: patSelected.patientNationalId,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       .then((res) => {
-        setInfoPat(res.data.find((e) => e.nationalId === patSelected.patientNationalId));
+        setInfoPat(res.data[0]);
       })
       .catch((err) => {});
   }, []);
@@ -107,8 +110,8 @@ export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading 
             aria-label="action tabs example"
           >
             <Tab label="اطلاعات بیمار" {...a11yProps(0)} />
-            <Tab label="معاینه" {...a11yProps(1)} />
-            <Tab label="دارو ها" {...a11yProps(2)} />
+            {!setPageState && <Tab label="معاینه" {...a11yProps(1)} />}
+            {!setPageState && <Tab label="دارو ها" {...a11yProps(2)} />}
             <Tab label="اردرها" {...a11yProps(2)} />
             <Tab label="فایل های ضمیمه" {...a11yProps(2)} />
           </Tabs>
@@ -122,10 +125,40 @@ export default function SecoundPageVisit({ patSelected, setIsLoading, isLoading 
             <InformationPatient infoPat={infoPat} setIsLoading={setIsLoading} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            <DiagnosisPatient patSelected={patSelected} setIsLoading={setIsLoading} />
+            {setPageState && (
+              <Order
+                patSelected={patSelected}
+                setIsLoading={setIsLoading}
+                setIsOpenOrder={setIsOpenOrder}
+                setOrderEdit={setOrderEdit}
+                setFlag={setFlag}
+                flag={flag}
+              />
+            )}
+            {!setPageState && <DiagnosisPatient patSelected={patSelected} setIsLoading={setIsLoading} />}
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <DrugPatient patSelected={patSelected} setIsLoading={setIsLoading} />
+            {setPageState && (
+              <UploadDocumentsDoctor
+                patSelected={patSelected}
+                setIsLoading={setIsLoading}
+                filesUpload={filesUpload}
+                setFilesUpload={setFilesUpload}
+                isShowImg={isShowImg}
+                setIsShowImg={setIsShowImg}
+                isShowAudio={isShowAudio}
+                setIsShowAudio={setIsShowAudio}
+                isShowVideo={isShowVideo}
+                setIsShowVideo={setIsShowVideo}
+                src={src}
+                setSrc={setSrc}
+                srcVideo={srcVideo}
+                setSrcVideo={setSrcVideo}
+                srcAudio={srcAudio}
+                setSrcAudio={setSrcAudio}
+              />
+            )}
+            {!setPageState && <DrugPatient patSelected={patSelected} setIsLoading={setIsLoading} />}
           </TabPanel>
           <TabPanel value={value} index={3} dir={theme.direction}>
             <Order

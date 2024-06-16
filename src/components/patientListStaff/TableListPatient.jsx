@@ -81,23 +81,26 @@ totalPages
   // }, [flag]);
 
   useEffect(() => {
-    axios
-      .get(`${mainDomain}/api/Appointment/GetList`, {
-        params: {
-          typeId: 1,
-          patientNationalId: patient.nationalId,
-          doctorMedicalSystemId: -1,
-
-          statusId: -1,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setHistoryReception(res.data);
-      })
-      .catch((err) => {});
+    if (patient.nationalId) {
+      axios
+        .get(`${mainDomain}/api/Appointment/GetList`, {
+          params: {
+            typeId: 1,
+            patientNationalId: patient.nationalId,
+            doctorMedicalSystemId: -1,
+  
+            statusId: -1,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setHistoryReception(res.data);
+        })
+        .catch((err) => {});
+      
+    }
   }, [patient]);
 
   

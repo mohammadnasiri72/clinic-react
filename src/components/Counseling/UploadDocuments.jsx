@@ -56,6 +56,7 @@ export default function UploadDocuments({
       })
       .then((res) => {
         setFileType(res.data);
+        setFileVal(res.data[0].itemId)
       })
       .catch((err) => {});
   }, []);

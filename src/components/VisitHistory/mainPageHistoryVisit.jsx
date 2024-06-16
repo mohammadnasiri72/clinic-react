@@ -6,6 +6,7 @@ import BoxReceptionPatient from './BoxReceptionPatient';
 import FormHistoryVisit from './FormHistoryVisit';
 import InputTypeVisit from '../visit/inputTypeVisit';
 import InputDateVisit from '../visit/InputDateVisit';
+import InputDateVisitHistory from './InputDateVisitHistory';
 
 export default function MainPageVisitHistory({ account , changeStatePages}) {
   const [pageStateVisitHistory, setPageStateVisitHistory] = useState(0);
@@ -50,7 +51,7 @@ export default function MainPageVisitHistory({ account , changeStatePages}) {
         <div>
           <div className="flex ">
             <InputTypeVisit valType={valType} setValType={setValType} setIsLoading={setIsLoading} />
-            <InputDateVisit setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
+            <InputDateVisitHistory setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
           </div>
           <hr className="mt-3" />
           <div className="flex flex-wrap px-5">
@@ -59,7 +60,6 @@ export default function MainPageVisitHistory({ account , changeStatePages}) {
                 <div key={e.appointmentId} className="lg:w-1/3 sm:w-1/2 w-full px-3 mt-3">
                   <BoxReceptionPatient
                     reception={e}
-                    setPageStateVisitHistory={setPageStateVisitHistory}
                     setReceptionSelected={setReceptionSelected}
                   />
                 </div>
@@ -130,6 +130,12 @@ export default function MainPageVisitHistory({ account , changeStatePages}) {
           isLoading={isLoading}
         />
       )}
+      {
+        pageStateVisitHistory === 2 &&
+        <div>
+          s
+        </div>
+      }
 
       {isLoading && <SimpleBackdrop />}
     </>

@@ -15,12 +15,14 @@ export default function SelectServicesNotPersonal({service , setService , setTit
       })
       .then((res) => {
         setServices(res.data);
-        setService(res.data[0])
-        setTitleServices(res.data[0].title)
-        setPriceServices(res.data[0].rate)
+        setService(res.data.filter((ev)=>ev.medicalCategoryId === 12)[0])
+        setTitleServices(res.data.filter((ev)=>ev.medicalCategoryId === 12)[0].title)
+        setPriceServices(res.data.filter((ev)=>ev.medicalCategoryId === 12)[0].rate)
       })
       .catch((err) => {});
   }, []);
+
+  console.log(service);
   return (
     <>
       <div className=" mx-auto flex items-center mt-5">

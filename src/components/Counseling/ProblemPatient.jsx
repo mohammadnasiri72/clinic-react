@@ -1,5 +1,6 @@
 import { Autocomplete, Button, Stack, TextField } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
@@ -15,13 +16,15 @@ export default function ProblemPatient({
   account,
   titleServices,
   priceServices,
-  nameDoctor
+  nameDoctor,
 }) {
   const [problemList, setProblemList] = useState([]);
   const [desc, setDesc] = useState('');
   const [valProblem, setValProblem] = useState([]);
   const [complaints, setComplaints] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate()
 
   const Toast = Swal.mixin({
     toast: true,
@@ -63,48 +66,86 @@ export default function ProblemPatient({
         confirmButtonText: 'تایید و پرداخت',
       }).then((result) => {
         if (result.isConfirmed) {
-          //  //////////
-        }else if (result.isDenied) {
-          setIsLoading(true)
-      const data = {
-        patientUserId: account.userId,
-        doctorId: valDoctor.doctorId,
-        notes: desc,
-        serviceList:[
-            {
-                appointmentId:0,
-                medicalServiceId:service.medicalServiceId,
-                number:1
-            }
-        ],
-        complaints,
-      };
-      axios
-      .post(`${mainDomain}/api/AppointmentCounseling/Add`, data , {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false)
-        setApointmentId(res.data);
-        setPageNumber(4);
-        setFlagUpload(!flagUpload)
-        Toast.fire({
-          icon: 'success',
-          text: 'مشخصات شما با موفقیت ثبت شد',
-        });
-      })
-      .catch((err) => {
-        setIsLoading(false)
-        Toast.fire({
-          icon: 'error',
-          text: err.response.data,
-        });
-      });
+          setIsLoading(true);
+          const data = {
+            patientUserId: account.userId,
+            doctorId: valDoctor.doctorId,
+            notes: desc,
+            serviceList: [
+              {
+                appointmentId: 0,
+                medicalServiceId: service.medicalServiceId,
+                number: 1,
+              },
+            ],
+            complaints,
+            payment:true,
+          };
+          axios
+            .post(`${mainDomain}/api/AppointmentCounseling/Add`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              setApointmentId(res.data);
+              navigate('/dashboard/counseling')
+              setPageNumber(0);
+              setFlagUpload(!flagUpload);
+              Toast.fire({
+                icon: 'success',
+                text: 'مشخصات شما با موفقیت ثبت شد',
+              });
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: err.response.data,
+              });
+            });
+        } else if (result.isDenied) {
+          setIsLoading(true);
+          const data = {
+            patientUserId: account.userId,
+            doctorId: valDoctor.doctorId,
+            notes: desc,
+            serviceList: [
+              {
+                appointmentId: 0,
+                medicalServiceId: service.medicalServiceId,
+                number: 1,
+              },
+            ],
+            complaints,
+            payment:false,
+          };
+          axios
+            .post(`${mainDomain}/api/AppointmentCounseling/Add`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              setIsLoading(false);
+              setApointmentId(res.data);
+              setPageNumber(4);
+              setFlagUpload(!flagUpload);
+              Toast.fire({
+                icon: 'success',
+                text: 'مشخصات شما با موفقیت ثبت شد',
+              });
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: err.response.data,
+              });
+            });
         }
       });
-      
     }
   };
   const changProblem = (event, newValue) => {

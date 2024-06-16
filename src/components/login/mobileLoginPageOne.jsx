@@ -120,8 +120,8 @@ export default function MobileLoginPageOne({
                 مرحله بعد
               </Button>
             </div>
-            <div className="text-start mt-4 ">
-              <Button
+            <div className="flex justify-start mt-4 ">
+              {/* <Button
                 size="medium"
                 sx={{
                   py: 1,
@@ -135,7 +135,9 @@ export default function MobileLoginPageOne({
                 variant="contained"
               >
                 <Link to={'/register'}>ساخت حساب جدید</Link>
-              </Button>
+              </Button> */}
+              <p className='pl-3'>حساب کاربری ندارید؟ </p>
+              <Link className='text-teal-500 hover:text-teal-600 duration-300 font-semibold underline' to={'/register'}>ثبت نام کنید</Link>
             </div>
           </div>
         </div>

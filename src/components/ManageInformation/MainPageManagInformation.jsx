@@ -36,6 +36,7 @@ export default function MainPageManagInformation() {
   const [descType, setDescType] = useState('');
   const [alignment, setAlignment] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [query, setQuery] = useState('');
   const openOperation = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -287,12 +288,15 @@ export default function MainPageManagInformation() {
             </div>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 flex">
           <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
             <ToggleButton disabled={valTypeCategoryList === -1} value="newItem" aria-label="left aligned">
               افزودن آیتم جدید
             </ToggleButton>
           </ToggleButtonGroup>
+          <div className='pr-3'>
+          <TextField onChange={(e)=> setQuery(e.target.value)} label={'جستجوی ...'}/>
+          </div>
         </div>
         <div
           style={{
@@ -404,6 +408,7 @@ export default function MainPageManagInformation() {
             setIsLoading={setIsLoading}
             flag={flag}
             setFlag={setFlag}
+            query={query}
           />
         </div>
       </div>

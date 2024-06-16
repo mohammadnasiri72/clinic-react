@@ -22,7 +22,6 @@ export default function FormHistoryVisit({
   setPageStateReserveHistory
 }) {
 
-  
   const [medicalRecord, setMedicalRecord] = useState([]);
 
   // get medicalrecoard

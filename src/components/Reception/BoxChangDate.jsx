@@ -42,7 +42,7 @@ export default function BoxChangDate({
   useEffect(() => {
     if (reservUser.length !== 0) {
       reservUser
-        .filter((ev) => ev.reservationTimeId === valReservPatient)
+        .filter((ev) => ev.reservationId === valReservPatient)
         .map((e) => {
           setDate(e.reservationTimeDateFA);
           

@@ -2,6 +2,7 @@ import { Card, CardContent, Chip, IconButton, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { BiDetail } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
+import { GiMedicalPack } from 'react-icons/gi';
 import { IoCalendarOutline } from 'react-icons/io5';
 
 export default function BoxReceptionPatient({
@@ -33,8 +34,9 @@ export default function BoxReceptionPatient({
             <Chip size="small" label={reception.status} color={color} variant="filled" />
 
             <h3 className="font-semibold -translate-y-6">
-              <span className=" md:text-lg text-sm ">مشخصات پذیرش</span>
+              <span className=" md:text-lg text-sm whitespace-nowrap">{reception.doctorFirstName} {reception.doctorLastName}</span>
             </h3>
+            <div className='flex flex-col'>
             <Tooltip title="مشاهده جزئیات" placement="bottom">
               <IconButton
                 onClick={() => {
@@ -53,6 +55,21 @@ export default function BoxReceptionPatient({
                 <FaEye className="text-teal-500" />
               </IconButton>
             </Tooltip>
+           {
+            localStorage.getItem('roles').includes("Staff") &&
+             <Tooltip title="معاینه" placement="bottom">
+             <IconButton
+               onClick={()=>{
+                if (setPageState) {
+                  setPageState(6)
+                }
+               }}
+             >
+               <GiMedicalPack className="text-emerald-500" />
+             </IconButton>
+           </Tooltip>
+           }
+            </div>
           </div>
           <p className="mt-2 flex items-center">
             <IoCalendarOutline className='text-2xl'/>

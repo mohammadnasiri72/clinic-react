@@ -95,34 +95,51 @@ export default function ContactsPopover({ account, setIsLoading }) {
   };
 
   const sendMessageHandler = () => {
-    const data = {
-      userIdList,
-      subject,
-      body,
-      sendNotification: isActiveNotif,
-    };
-    setIsLoading(true);
-    axios
-      .post(`${mainDomain}/api/Message/Add`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setIsLoading(false);
-        handleClose();
-        Toast.fire({
-          icon: 'success',
-          text: 'پیام با موفقیت ارسال شد',
-        });
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        Toast.fire({
-          icon: 'error',
-          text: err.response ? err.response.data : 'خطای شبکه',
-        });
+    if (userIdList.length === 0) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا مخاطب مورد نظر خود را وارد کنید',
       });
+    } else if (!subject) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا موضوع پیام خود را وارد کنید',
+      });
+    } else if (!body) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا متن پیام خود را وارد کنید',
+      });
+    } else {
+      const data = {
+        userIdList,
+        subject,
+        body,
+        sendNotification: isActiveNotif,
+      };
+      setIsLoading(true);
+      axios
+        .post(`${mainDomain}/api/Message/Add`, data, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setIsLoading(false);
+          handleClose();
+          Toast.fire({
+            icon: 'success',
+            text: 'پیام با موفقیت ارسال شد',
+          });
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          Toast.fire({
+            icon: 'error',
+            text: err.response ? err.response.data : 'خطای شبکه',
+          });
+        });
+    }
   };
 
   return (

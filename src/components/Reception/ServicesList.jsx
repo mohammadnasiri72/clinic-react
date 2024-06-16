@@ -9,6 +9,13 @@ export default function ServicesList({ userSelected , setServiceList , servicesU
   const [services, setServices] = useState([]);
   const [service, setService] = useState('');
   const [numberService, setNumberService] = useState(1);
+
+
+  useEffect(()=>{
+    setService(services[0])
+    setNumberService(1)
+  },[userSelected])
+  
   useEffect(()=>{
     const arr = []
     services.filter((e)=>{

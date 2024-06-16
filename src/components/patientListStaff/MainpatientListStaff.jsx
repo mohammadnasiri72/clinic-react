@@ -14,6 +14,7 @@ import MyReservation from '../myReservation/myReservation';
 import FormHistoryVisit from '../VisitHistory/FormHistoryVisit';
 import { mainDomain } from '../../utils/mainDomain';
 import MainPageRegister from '../register/MainPageRegister';
+import SecoundPageVisit from '../visit/SecoundPageVisit';
 
 export default function MainpatientListStaff({ changeStatePages }) {
   const [pageState, setPageState] = useState(0);
@@ -64,6 +65,7 @@ export default function MainpatientListStaff({ changeStatePages }) {
               setPatientList={setPatientList}
               numPages={numPages}
               setTotalPages={setTotalPages}
+              statusList={statusList}
             />
             <div className="mt-5 w-11/12 mx-auto">
               <TableListPatient
@@ -228,6 +230,12 @@ export default function MainpatientListStaff({ changeStatePages }) {
             account={patient}
           />
         )}
+        {
+          pageState === 6 &&
+          <div>
+            <SecoundPageVisit patSelected={patient} setIsLoading={setIsLoading} isLoading={isLoading} setPageState={setPageState}/>
+          </div>
+        }
       </div>
       {isLoading && <SimpleBackdrop />}
     </>

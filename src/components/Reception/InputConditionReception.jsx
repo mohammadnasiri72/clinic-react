@@ -3,10 +3,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputConditionReception({statusId , setStatusId , editeUser}) {
-  useEffect(()=>{
-    setStatusId(editeUser.statusId)
-  },[editeUser])
+export default function InputConditionReception({ statusId, setStatusId, editeUser }) {
+  useEffect(() => {
+    if (editeUser.statusId) {
+      setStatusId(editeUser.statusId);
+    }
+  }, [editeUser]);
   const [conditionList, setConditionList] = useState([]);
   // const [valCondition , setValCondition] = useState(1)
   useEffect(() => {
@@ -36,8 +38,10 @@ export default function InputConditionReception({statusId , setStatusId , editeU
             color="primary"
             value={statusId}
           >
-            {conditionList.slice(0,2).map((e, i) => (
-              <MenuItem value={i+1} key={i}><span>{e}</span></MenuItem>
+            {conditionList.slice(0, 2).map((e, i) => (
+              <MenuItem value={i + 1} key={i}>
+                <span>{e}</span>
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

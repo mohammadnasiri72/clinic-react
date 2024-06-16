@@ -42,6 +42,7 @@ export default function ShowNotPopUp({ showNote, setShowNote }) {
         </button> */}
           <Button
             sx={{
+              color:'white',
               py: 1,
               boxShadow: 'none',
               // fontSize: 20,

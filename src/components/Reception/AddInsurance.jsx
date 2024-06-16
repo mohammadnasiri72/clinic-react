@@ -7,6 +7,7 @@ import persianFa from 'react-date-object/locales/persian_fa';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
+import InputCoverageAmount from './InputCoverageAmount';
 
 export default function AddInsurance({ userSelected, setShowAddInsurance, setFlag }) {
   const [userInsurance, setUserInsurance] = useState([]);
@@ -161,7 +162,7 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
         />
       </div>
       <div className=" text-start mt-3" dir="rtl">
-        <TextField
+        {/* <TextField
           onChange={(e) => {
             if (Number(e.target.value) >= 0 && Number(e.target.value) <= 100) {
               setCoverageAmount(e.target.value);
@@ -178,7 +179,8 @@ export default function AddInsurance({ userSelected, setShowAddInsurance, setFla
           dir="rtl"
           value={coverageAmount}
           maxRows={4}
-        />
+        /> */}
+        <InputCoverageAmount setCoverageAmount={setCoverageAmount}/>
       </div>
       <div className="flex">
         <div className="mt-4 w-1/2 px-1">

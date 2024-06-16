@@ -19,7 +19,7 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 import TableManageDrug from './TableManageDrug';
 
-export default function MainPageManageDrug() {
+export default function MainPageManageDrug({ changeStatePages }) {
   const [showManageDrug, setShowManageDrug] = useState(false);
   const [showManageCategoryDrug, setShowManageCategoryDrug] = useState(false);
   const [categoryDrug, setCategoryDrug] = useState([]);
@@ -45,7 +45,22 @@ export default function MainPageManageDrug() {
   const [flagCat, setFlagCat] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [numPages, setNumPages] = useState(1);
+  const [atcCode, setAtcCode] = useState('');
 
+  useEffect(() => {
+    setShowManageDrug(false);
+    setShowManageCategoryDrug(false);
+    setValCategoryDrug('');
+    setValDrugForm('');
+    setValDrugDose('');
+    setValDrugUseCycle('');
+    setisActive(true);
+    setPriority(0);
+    setTitleNewCategory('');
+    setDescNewCategory('');
+    setIsEdit(false)
+    setQuery('')
+  }, [changeStatePages]);
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -124,59 +139,72 @@ export default function MainPageManageDrug() {
 
   // set new drug
   const newDrugHandler = () => {
-    Swal.fire({
-      title: 'ثبت دارو',
-      text: 'آیا از ثبت دارو مطمئن هستید؟',
-      showCancelButton: true,
-      confirmButtonColor: 'green',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'انصراف',
-      confirmButtonText: 'تایید ',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const data = {
-          medicalCategoryId: valCategoryDrug,
-          name: nameDrug,
-          description: descDrug,
-          defaultForm: valDrugForm.name,
-          defaultDosage: valDrugDose.name,
-          defaultFrequency: valDrugUseCycle.name,
-          isActive,
-          priority,
-        };
-        axios
-          .post(`${mainDomain}/api/Medication/Add`, data, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          })
-          .then((res) => {
-            Toast.fire({
-              icon: 'success',
-              text: 'دارو با موفقیت ثبت شد',
+    if (!valCategoryDrug) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفاابتدا دسته بندی دارو را وارد کنید',
+      });
+    } else if (!nameDrug) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام دارو را وارد کنید',
+      });
+    } else {
+      Swal.fire({
+        title: 'ثبت دارو',
+        text: 'آیا از ثبت دارو مطمئن هستید؟',
+        showCancelButton: true,
+        confirmButtonColor: 'green',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'انصراف',
+        confirmButtonText: 'تایید ',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setIsLoading(true);
+          const data = {
+            medicalCategoryId: valCategoryDrug,
+            name: nameDrug,
+            description: descDrug,
+            defaultForm: valDrugForm.name,
+            defaultDosage: valDrugDose.name,
+            defaultFrequency: valDrugUseCycle.name,
+            isActive,
+            priority,
+            atcCode,
+          };
+          axios
+            .post(`${mainDomain}/api/Medication/Add`, data, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            })
+            .then((res) => {
+              Toast.fire({
+                icon: 'success',
+                text: 'دارو با موفقیت ثبت شد',
+              });
+              setIsEdit(false);
+              setNameDrug('');
+              setDescDrug('');
+              setValDrugForm({});
+              setValDrugDose({});
+              setValDrugUseCycle({});
+              setisActive(true);
+              setPriority(0);
+              setValCategoryDrug('');
+              setIsLoading(false);
+              setFlag((e) => !e);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              Toast.fire({
+                icon: 'error',
+                text: err.response ? err.response.data : 'خطای شبکه',
+              });
             });
-            setIsEdit(false);
-            setNameDrug('');
-            setDescDrug('');
-            setValDrugForm({});
-            setValDrugDose({});
-            setValDrugUseCycle({});
-            setisActive(true);
-            setPriority(0);
-            setValCategoryDrug('');
-            setIsLoading(false);
-            setFlag((e) => !e);
-          })
-          .catch((err) => {
-            setIsLoading(false);
-            Toast.fire({
-              icon: 'error',
-              text: err.response ? err.response.data : 'خطای شبکه',
-            });
-          });
-      }
-    });
+        }
+      });
+    }
   };
 
   // set new category
@@ -277,23 +305,21 @@ export default function MainPageManageDrug() {
 
   // get list drug
   useEffect(() => {
-   
-      axios
-        .get(`${mainDomain}/api/Medication/GetListPaged`, {
-          params: {
-            query,
-            pageIndex: numPages,
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((res) => {
-          setDrugList(res.data.items);
-          setTotalPages(res.data.totalPages);
-        })
-        .catch((err) => {});
-    
+    axios
+      .get(`${mainDomain}/api/Medication/GetListPaged`, {
+        params: {
+          query,
+          pageIndex: numPages,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setDrugList(res.data.items);
+        setTotalPages(res.data.totalPages);
+      })
+      .catch((err) => {});
   }, [flag, query, numPages]);
 
   return (
@@ -301,7 +327,7 @@ export default function MainPageManageDrug() {
       <div className="text-start relative">
         {!isEdit && (
           <div className="flex flex-wrap">
-            <div className='sm:w-auto w-full'>
+            <div className="sm:w-auto w-full">
               <Button
                 sx={{
                   py: 2,
@@ -329,7 +355,12 @@ export default function MainPageManageDrug() {
                   <TextField onChange={(e) => setQuery(e.target.value)} {...params} label={'لیست دارو ها'} />
                 )}
               /> */}
-               <TextField className='sm:w-auto w-4/5' onChange={(e)=> setQuery(e.target.value)} label={'جستجوی دارو...'}/>
+              <TextField
+                className="sm:w-auto w-4/5"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                label={'جستجوی دارو...'}
+              />
             </div>
           </div>
         )}
@@ -368,13 +399,13 @@ export default function MainPageManageDrug() {
             <div>
               <FormControl color="primary" className="w-56">
                 <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-                  لیست دسته بندی دارو ها
+                  لیست دسته بندی دارو ها*
                 </InputLabel>
                 <Select
                   onChange={(e) => setValCategoryDrug(e.target.value)}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  label="لیست دسته بندی دارو ها"
+                  label="لیست دسته بندی دارو ها*"
                   color="primary"
                   value={valCategoryDrug}
                 >
@@ -469,7 +500,7 @@ export default function MainPageManageDrug() {
                 onChange={(e) => setNameDrug(e.target.value)}
                 className=" text-end w-full"
                 id="outlined-multiline-flexible"
-                label="نام دارو"
+                label="نام دارو*"
                 multiline
                 dir="rtl"
                 value={nameDrug}
@@ -484,7 +515,9 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugForm}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'شکل پیش فرض دارو ها'} placeholder="انتخاب شکل دارو" />}
+                renderInput={(params) => (
+                  <TextField {...params} label={'شکل پیش فرض دارو ها'} placeholder="انتخاب شکل دارو" />
+                )}
               />
             </div>
             <div className="sm:w-1/2 w-full mt-3">
@@ -495,7 +528,9 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugDose}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'دوز پیش فرض دارو ها'} placeholder="انتخاب دوز دارو" />}
+                renderInput={(params) => (
+                  <TextField {...params} label={'دوز پیش فرض دارو ها'} placeholder="انتخاب دوز دارو" />
+                )}
               />
             </div>
             <div className="sm:w-1/2 w-full mt-3 sm:pr-2 pr-0">
@@ -506,7 +541,9 @@ export default function MainPageManageDrug() {
                 autoHighlight
                 options={drugUseCycle}
                 getOptionLabel={(option) => (option.name ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label={'چرخه پیش فرض مصرف'} placeholder="انتخاب چرخه مصرف" />}
+                renderInput={(params) => (
+                  <TextField {...params} label={'چرخه پیش فرض مصرف'} placeholder="انتخاب چرخه مصرف" />
+                )}
               />
             </div>
           </div>
@@ -524,17 +561,28 @@ export default function MainPageManageDrug() {
               />
             </div>
             <div className="flex flex-col justify-center pr-2">
-              <div>
-                <TextField
-                  onChange={(e) => setPriority(e.target.value)}
-                  className=" text-end w-20"
-                  id="outlined-multiline-flexible"
-                  label="اولویت"
-                  multiline
-                  dir="rtl"
-                  value={priority}
-                />
+              <div className="flex">
+                <div>
+                  <TextField
+                    className="sm:w-auto w-4/5"
+                    value={atcCode}
+                    onChange={(e) => setAtcCode(e.target.value)}
+                    label={'ATC'}
+                  />
+                </div>
+                <div className="pr-2">
+                  <TextField
+                    onChange={(e) => setPriority(e.target.value)}
+                    className=" text-end w-20"
+                    id="outlined-multiline-flexible"
+                    label="اولویت"
+                    multiline
+                    dir="rtl"
+                    value={priority}
+                  />
+                </div>
               </div>
+
               <div>
                 <FormControlLabel
                   value={isActive}
@@ -632,6 +680,8 @@ export default function MainPageManageDrug() {
             setNumPages={setNumPages}
             totalPages={totalPages}
             drugList={drugList}
+            isLoading={isLoading}
+            setAtcCode={setAtcCode}
           />
         </div>
       </div>
